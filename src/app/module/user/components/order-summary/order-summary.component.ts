@@ -33,28 +33,26 @@ export class OrderSummaryComponent implements OnInit {
   // Increment or decrement quantity in the cart
   updateQuantity(order: any, change: number) {
     const newQuantity = order.selectedQty + change;
-    if (newQuantity > 0) {
-      this.syncStock(order, change); // Adjust stock
-      this.cartService.updateCart({ ...order, selectedQty: newQuantity });
+    const foodInMenu = this.cartService.getMenuItemById(order.id);
+
+    if (foodInMenu) {
+      const availableQty = foodInMenu.qty - foodInMenu.selectedQty; // Calculate dynamically
+
+      // Ensure the quantity does not exceed available stock and is greater than 0
+      if (newQuantity > 0 && newQuantity <= foodInMenu.qty) {
+        this.cartService.updateCart({ ...order, selectedQty: newQuantity });
+      } else if (newQuantity > foodInMenu.qty) {
+        alert(`Only ${foodInMenu.qty} items are available in stock.`);
+      }
     }
   }
 
-  // Direct update of item quantity
-  // updateCart(item: any, newQuantity: number) {
-  //   const menuItem = this.cartService.getMenuItemById(item.id);
-  //   if (newQuantity > 0 && newQuantity <= menuItem.qty) {
-  //     const quantityChange = newQuantity - item.selectedQty;
-  //     this.syncStock(item, quantityChange); // Adjust stock
-  //     this.cartService.updateCart({ ...item, selectedQty: newQuantity });
-  //   } else {
-  //     alert('Invalid quantity! Ensure it is greater than 0 and within available stock.');
-  //   }
-  // }
 
   syncStock(item: any, change: number) {
     const foodInMenu = this.cartService.getMenuItemById(item.id);
     if (foodInMenu) {
-      foodInMenu.qty -= change; // Adjust stock based on quantity change
+      // Do not modify the original qty here
+      foodInMenu.qty = foodInMenu.qty - (foodInMenu.selectedQty + change);
     }
   }
 

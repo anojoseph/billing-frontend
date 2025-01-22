@@ -17,6 +17,7 @@ import { OrderSummaryComponent } from './module/user/components/order-summary/or
 import { LayoutComponent } from './module/user/components/layout/layout.component';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
+import { ToastrModule } from 'ngx-toastr';
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,7 +38,12 @@ import { MatIconModule } from '@angular/material/icon';
     MatButtonModule,
     HttpClientModule,
     MatSelectModule,
-    MatIconModule
+    MatIconModule,
+    ToastrModule.forRoot({ // Configure Toastr globally
+      timeOut: 3000, // Default timeout in ms
+      positionClass: 'toast-top-right', // Position of the toast
+      preventDuplicates: true, // Prevent duplicate toasts
+    }),
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

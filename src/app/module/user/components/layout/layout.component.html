@@ -1,7 +1,14 @@
 <div class="main-container">
-  <app-food-menu [ngClass]="{'hidden': !showMenu && isMobile}"></app-food-menu>
-  <app-order-summary [ngClass]="{'hidden': !showMenu && isMobile}"></app-order-summary>
+  <!-- Food Menu -->
+  <app-food-menu *ngIf="!isMobile || showMenu" [ngClass]="{'hidden': isMobile && !showMenu}" class="menu-section">
+  </app-food-menu>
+
+  <!-- Order Summary -->
+  <app-order-summary *ngIf="!isMobile || !showMenu" [ngClass]="{'hidden': isMobile && showMenu}" >
+  </app-order-summary>
 </div>
 
-<!-- Cart Icon Button -->
-<button class="cart-icon-btn" (click)="toggleView()"> <i class="fas fa-cart-plus"></i></button>
+<!-- Cart Icon Button for Mobile -->
+<button class="cart-icon-btn" *ngIf="isMobile" (click)="toggleView()">
+  <i class="fas fa-cart-plus"></i>
+</button>

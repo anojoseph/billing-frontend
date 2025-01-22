@@ -225,4 +225,6 @@ export class CartService {
     return of(this.foods); // Wrap the foods array in an observable
   }
 
+  
+
 }

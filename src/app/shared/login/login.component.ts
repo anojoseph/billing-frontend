@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
     private http: HttpClient
   ) {
     this.loginForm = this.fb.group({
-      user_name: ['', Validators.required], // Validate email
+      username: ['', Validators.required], // Validate email
       password: ['', Validators.required] // Example password validation
     });
   }
@@ -29,10 +29,10 @@ export class LoginComponent implements OnInit {
   ngOnInit() { }
 
   onSubmit(): void {
-    const loginData = { username: this.loginForm.value.user_name, password: this.loginForm.value.password };
+    const loginData = { username: this.loginForm.value.username, password: this.loginForm.value.password };
 
     // Replace with your backend's login API URL
-    this.http.post<any>('/api/login', loginData).subscribe({
+    this.http.post<any>('auth_app/auth/login/', loginData).subscribe({
       next: (response) => {
         const { accessToken, refreshToken, userType } = response;
 
@@ -40,7 +40,7 @@ export class LoginComponent implements OnInit {
         this.authService.login(accessToken, refreshToken, userType);
 
         // Redirect to the intended URL or default to the dashboard
-        const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
+        const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/menu';
         this.router.navigate([returnUrl]);
       },
       error: (err) => {

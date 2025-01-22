@@ -1,35 +1,34 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.css']
 })
-export class LayoutComponent {
-  showMenu: boolean = true; // Controls which component is visible
-  isMobile: boolean = false; // Tracks whether it's mobile view or not
+export class LayoutComponent implements OnInit {
+  showMenu: boolean = true; // Tracks if the menu is visible
+  isMobile: boolean = false; // Tracks if the device is mobile
 
-  constructor() {
-    // Check if the screen width is below the mobile breakpoint
-    console.log(window.innerWidth)
+  ngOnInit(): void {
+    this.checkDeviceWidth();
+    // Dynamically check the screen size on window resize
+    window.addEventListener('resize', this.checkDeviceWidth.bind(this));
+  }
+
+  // Determine whether the current view is mobile
+  checkDeviceWidth(): void {
     this.isMobile = window.innerWidth <= 768;
-    console.log(this.isMobile)
-    console.log(this.isMobile)
-    // Listen to window resize events to dynamically update the layout
-    window.addEventListener('resize', this.onResize.bind(this));
+    if (!this.isMobile) {
+      // On desktop, always show both menu and order summary
+      this.showMenu = true;
+    }
   }
 
-  toggleView() {
-    this.showMenu = !this.showMenu; // Toggle visibility of components
-    console.log(this.isMobile)
-    console.log(this.isMobile)
+  // Toggle between menu and order summary on mobile
+  toggleView(): void {
+    if (this.isMobile) {
+      this.showMenu = !this.showMenu; // Switch between the two
+      console.log('Toggled View:', this.showMenu ? 'Showing Menu' : 'Showing Order Summary');
+    }
   }
-
-  // Update isMobile flag on window resize
-  onResize() {
-    this.isMobile = window.innerWidth <= 768;
-    console.log(this.isMobile)
-    console.log(this.isMobile)
-  }
-
 }
