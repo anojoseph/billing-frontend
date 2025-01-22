@@ -1,0 +1,213 @@
+.order-summary {
+  margin: 20px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
+
+.section-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.summary-list {
+  margin-bottom: 20px;
+}
+
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.order-details {
+  flex-grow: 1;
+}
+
+.order-name {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.order-price {
+  font-size: 14px;
+  color: #666;
+}
+
+.quantity-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.quantity-btn {
+  background-color: #ff7f50;
+  color: #fff;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.quantity-btn:hover {
+  background-color: #e06e4e;
+}
+
+.quantity {
+  font-size: 16px;
+}
+
+.remove-btn {
+  background-color: #ff4c4c;
+  color: #fff;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 3px;
+}
+
+.remove-btn:hover {
+  background-color: #e03e3e;
+}
+
+.table-number {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.table-number input {
+  padding: 8px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 100px;
+}
+
+.summary-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.total-price {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.checkout-btn {
+  background-color: #28a745;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.checkout-btn:hover {
+  background-color: #218838;
+}
+
+.checkout-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.no-orders-message {
+  text-align: center;
+  font-size: 18px;
+  color: #777;
+}
+
+/* Responsive Layout */
+@media (max-width: 768px) {
+  /* Mobile Layout: Stack the items and make the order summary take full width */
+  .order-summary {
+    margin: 10px;
+    padding: 15px;
+    max-width: 100%;
+  }
+
+  .section-title {
+    font-size: 20px; /* Smaller title font for mobile */
+  }
+
+  .order-item {
+    flex-direction: column; /* Stack order details and quantity control */
+    align-items: flex-start;
+    padding: 8px;
+  }
+
+  .order-details {
+    margin-bottom: 10px;
+  }
+
+  .quantity-control {
+    margin-top: 10px;
+    align-items: center;
+  }
+
+  .quantity-btn {
+    padding: 5px 8px;
+    font-size: 14px;
+  }
+
+  .quantity {
+    font-size: 14px;
+  }
+
+  .remove-btn {
+    padding: 5px 8px;
+    font-size: 14px;
+  }
+
+  .table-number {
+    margin-top: 15px;
+    text-align: center;
+  }
+
+  .table-number input {
+    width: 80%; /* Adjust input width for mobile */
+  }
+
+  .summary-footer {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .total-price {
+    font-size: 18px;
+  }
+
+  .checkout-btn {
+    width: 100%; /* Make the button full width on mobile */
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .order-item {
+    margin-bottom: 10px;
+  }
+
+  .remove-btn {
+    margin-top: 5px;
+  }
+
+  .table-number input {
+    font-size: 14px; /* Smaller font size for input fields */
+  }
+
+  .checkout-btn {
+    font-size: 14px; /* Smaller font size for the button */
+  }
+}

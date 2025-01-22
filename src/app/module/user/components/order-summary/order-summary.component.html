@@ -1,0 +1,40 @@
+<div class="order-summary">
+  <h2 class="section-title">Order Summary</h2>
+
+  <!-- Display order items if cart has items -->
+  <div *ngIf="cart$().length > 0; else noOrders" class="summary-list">
+    <div *ngFor="let order of cart$()" class="order-item">
+      <div class="order-details">
+        <p class="order-name">{{ order.name }}</p>
+        <p class="order-price">x{{ order.selectedQty }} - ₹{{ (order.price * order.selectedQty).toFixed(2) }}</p>
+      </div>
+
+      <!-- Quantity control buttons -->
+      <div class="quantity-control">
+        <button class="quantity-btn" (click)="updateQuantity(order, -1)">-</button>
+        <span class="quantity">{{ order.selectedQty }}</span>
+        <button class="quantity-btn" (click)="updateQuantity(order, 1)">+</button>
+      </div>
+
+      <!-- Remove button -->
+      <button class="remove-btn" (click)="removeFromCart(order)"> <i class="fa fa-trash" aria-hidden="true"></i></button>
+    </div>
+  </div>
+
+  <!-- No orders message -->
+  <ng-template #noOrders>
+    <p class="no-orders-message">No items in the cart.</p>
+  </ng-template>
+
+  <!-- Table number input -->
+  <div class="table-number">
+    <label for="table-number">Table Number:</label>
+    <input type="number" id="table-number" [(ngModel)]="tableNumber" placeholder="Enter Table Number" />
+  </div>
+
+  <!-- Summary footer -->
+  <div class="summary-footer">
+    <p class="total-price">Total: ₹{{ calculateTotal() }}</p>
+    <button class="checkout-btn" [disabled]="!tableNumber || cart$().length === 0">Checkout</button>
+  </div>
+</div>

@@ -1,0 +1,173 @@
+/* General Styles */
+.menu-section {
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Full viewport height */
+  overflow: hidden; /* Prevent overflow from affecting the layout */
+}
+
+.filters-container {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  padding-top: 10px;
+  justify-content: center;
+}
+.filters{
+margin-right: 10px;
+}
+
+.filters-container.hidden {
+  display: none;
+}
+
+.food-menu {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  overflow-y: auto; /* Enable vertical scrolling */
+  flex-grow: 1; /* Allow the menu to take up remaining space */
+  padding-right: 10px; /* Padding for better scrolling experience */
+  scrollbar-width: thin; /* Custom scrollbar for modern browsers */
+  scrollbar-color: #007bff #f9f9f9;
+  max-height: calc(100vh - 180px); /* Make sure it doesn't exceed viewport height */
+}
+
+/* Food Menu Scrollbar Styles (Webkit Browsers) */
+.food-menu::-webkit-scrollbar {
+  width: 8px;
+}
+
+.food-menu::-webkit-scrollbar-track {
+  background: #f9f9f9;
+}
+
+.food-menu::-webkit-scrollbar-thumb {
+  background: #007bff;
+  border-radius: 4px;
+}
+
+/* Food Card Styles */
+.food-card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  text-align: center;
+}
+
+.food-card .food-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Quantity Selector */
+.quantity-selector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+.quantity-selector button {
+  width: 30px;
+  height: 30px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 4px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.quantity-selector button:hover {
+  background-color: #0056b3;
+}
+
+.quantity-selector span {
+  margin: 0 10px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* Filter Toggle Icon Button */
+.filter-toggle-btn {
+  display: none; /* Hide by default */
+  margin: 0 auto 15px;
+  padding: 8px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+  text-align: center;
+  width: 45px;
+  height: 45px;
+}
+
+.filter-toggle-btn mat-icon {
+  font-size: 24px;
+}
+
+.filter-toggle-btn:hover {
+  background-color: #0056b3;
+}
+
+/* Add Gap to Filters */
+.mat-form-field {
+  margin-bottom: 15px; /* Add gap between form fields */
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  /* Show filter button only on mobile */
+  .filter-toggle-btn {
+    display: block; /* Show the button on mobile */
+  }
+
+  /* Hide images and filters in mobile */
+  .food-card .food-image {
+    display: none;
+  }
+
+  .filters-container {
+    display: none; /* Hide filters by default */
+  }
+
+  .filters-container.hidden {
+    display: flex; /* Show filters when toggled */
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* Adjust food cards */
+  .food-menu {
+    grid-template-columns: 1fr;
+  }
+
+  .food-card {
+    padding: 10px;
+    font-size: 0.9em;
+  }
+}
+
+/* Desktop styles: show filters by default */
+@media (min-width: 769px) {
+  .filter-toggle-btn {
+    display: none; /* Hide the filter button on desktop */
+  }
+
+  .filters-container {
+    display: flex; /* Show filters by default on desktop */
+    flex-direction: row;
+    gap: 20px;
+  }
+}

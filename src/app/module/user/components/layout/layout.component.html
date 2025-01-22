@@ -1,0 +1,7 @@
+<div class="main-container">
+  <app-food-menu [ngClass]="{'hidden': !showMenu && isMobile}"></app-food-menu>
+  <app-order-summary [ngClass]="{'hidden': !showMenu && isMobile}"></app-order-summary>
+</div>
+
+<!-- Cart Icon Button -->
+<button class="cart-icon-btn" (click)="toggleView()"> <i class="fas fa-cart-plus"></i></button>

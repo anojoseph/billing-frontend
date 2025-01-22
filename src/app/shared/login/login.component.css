@@ -1,0 +1,71 @@
+html,
+body {
+  margin: 0; /* Remove any default margin */
+  padding: 0; /* Remove any default padding */
+  width: 100%; /* Ensure full width */
+  height: 100%; /* Ensure full height */
+  overflow: hidden; /* Prevent scrolling */
+}
+
+.login-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* Ensure it spans the full viewport height */
+  background: url('../../../assets/images/bg.webp') no-repeat center center;
+  background-size: cover;
+  margin: 0;
+  padding: 0;
+}
+
+mat-card {
+  width: 100%;
+  max-width: 400px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Soft shadow */
+  border-radius: 12px; /* Rounded corners */
+  background: rgba(255, 255, 255, 0.9); /* Slightly transparent background */
+}
+
+mat-card-title {
+  margin-bottom: 16px;
+  color: #333;
+  text-align: center;
+}
+
+.full-width {
+  margin-bottom: 16px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.input-field mat-label {
+  color: #555;
+}
+
+button.login-button {
+  width: 100%;
+  padding: 10px 0;
+  font-size: 1rem;
+  text-transform: uppercase;
+}
+
+.error-message {
+  color: #d32f2f; /* Material red for errors */
+  font-size: 0.875rem;
+  margin-top: -8px;
+  margin-bottom: 16px;
+}
+
+.button-container {
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  mat-card {
+    padding: 16px;
+    width: 90%; /* Adjust for smaller screens */
+  }
+}

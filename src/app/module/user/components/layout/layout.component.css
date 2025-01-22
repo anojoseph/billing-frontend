@@ -1,0 +1,86 @@
+/* Ensuring body doesn't cause horizontal scrolling */
+body {
+  overflow-x: hidden; /* Prevent any horizontal scroll */
+}
+
+/* Main container setup */
+.main-container {
+  display: flex;
+  gap: 20px;
+  height: 100%;
+  height: 100vh; /* Full viewport height */
+  box-sizing: border-box;
+  flex-direction: row; /* Side-by-side layout for desktop */
+  overflow-y: hidden; /* Prevent horizontal scroll on the main container */
+}
+
+app-food-menu {
+  width: 75%;
+  height: 100%;
+  padding: 20px;
+  box-sizing: border-box; /* Ensure padding doesn't affect width */
+}
+
+app-order-summary {
+  width: 25%;
+  height: 100%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow-y: auto; /* Allow scrolling within the order summary */
+  box-sizing: border-box; /* Ensure padding doesn't affect width */
+}
+
+.cart-icon-btn {
+  display: none; /* Hidden by default */
+  position: fixed;
+  top: 20px; /* Position at the top */
+  right: 20px; /* Position to the right */
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 15px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.cart-icon-btn:hover {
+  background-color: #0056b3;
+}
+
+.hidden {
+  display: none; /* Hide elements when class is applied */
+}
+
+@media (max-width: 768px) {
+  /* Mobile Layout: Toggle between showing food menu or order summary */
+  .main-container {
+    flex-direction: column; /* Stack the food menu and order summary */
+    gap: 0; /* No gap in mobile view */
+  }
+
+  app-food-menu {
+    width: 100%; /* Full width on mobile */
+  }
+
+  app-order-summary {
+    display: none; /* Hide the order summary by default on mobile */
+    width: 100%; /* Ensure full width */
+  }
+
+  /* Show the cart icon button at the top for mobile */
+  .cart-icon-btn {
+    display: block;
+  }
+
+  /* Toggle between food menu and order summary */
+  app-food-menu.hidden {
+    display: none;
+  }
+
+  app-order-summary.hidden {
+    display: none;
+  }
+}
