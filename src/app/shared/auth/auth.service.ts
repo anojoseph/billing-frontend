@@ -12,7 +12,6 @@ export class AuthService {
 
   // Store tokens and user type in localStorage (or another secure storage)
   login(accessToken: string, refreshToken: string, userType: string): void {
-    
     localStorage.setItem(this.accessTokenKey, accessToken);
     localStorage.setItem(this.refreshTokenKey, refreshToken);
     localStorage.setItem(this.userTypeKey, userType);

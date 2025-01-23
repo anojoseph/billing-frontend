@@ -18,13 +18,15 @@ import { LayoutComponent } from './module/user/components/layout/layout.componen
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { ToastrModule } from 'ngx-toastr';
+import { LogoutComponent } from './shared/login/logout.component';
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     FoodMenuComponent,
     OrderSummaryComponent,
-    LayoutComponent
+    LayoutComponent,
+    LogoutComponent
   ],
   imports: [
     BrowserModule,

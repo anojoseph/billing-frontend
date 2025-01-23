@@ -3,38 +3,36 @@
 
   <!-- Filters Toggle Icon Button for Mobile -->
   <button class="filter-toggle-btn" (click)="toggleFilters()">
-    <mat-icon>filter_list</mat-icon> <!-- Material Design filter icon -->
+    <mat-icon>filter_list</mat-icon>
   </button>
 
   <!-- Filters -->
   <div class="filters-container" [class.hidden]="!showFilters">
-    <div >
-      <mat-form-field appearance="outline" class="filters">
-        <mat-label>Food Type</mat-label>
-        <mat-select [(ngModel)]="selectedType">
-          <mat-option value="">All</mat-option>
-          <mat-option value="Veg">Veg</mat-option>
-          <mat-option value="Non-Veg">Non-Veg</mat-option>
-        </mat-select>
-      </mat-form-field>
+    <mat-form-field appearance="outline" class="filters">
+      <mat-label>Food Type</mat-label>
+      <mat-select [(ngModel)]="selectedType">
+        <mat-option value="">All</mat-option>
+        <mat-option value="Veg">Veg</mat-option>
+        <mat-option value="Non-Veg">Non-Veg</mat-option>
+      </mat-select>
+    </mat-form-field>
 
-      <mat-form-field appearance="outline" class="filters">
-        <mat-label>Meal Type</mat-label>
-        <mat-select [(ngModel)]="selectedMealType">
-          <mat-option value="">All</mat-option>
-          <mat-option value="Lunch">Lunch</mat-option>
-          <mat-option value="Dinner">Dinner</mat-option>
-          <mat-option value="Snack">Snack</mat-option>
-          <mat-option value="Cool Drink">Cool Drink</mat-option>
-        </mat-select>
-      </mat-form-field>
+    <mat-form-field appearance="outline" class="filters">
+      <mat-label>Meal Type</mat-label>
+      <mat-select [(ngModel)]="selectedMealType">
+        <mat-option value="">All</mat-option>
+        <mat-option value="Lunch">Lunch</mat-option>
+        <mat-option value="Dinner">Dinner</mat-option>
+        <mat-option value="Snack">Snack</mat-option>
+        <mat-option value="Cool Drink">Cool Drink</mat-option>
+      </mat-select>
+    </mat-form-field>
 
-      <!-- Search -->
-      <mat-form-field appearance="outline" class="filters">
-        <mat-label>Search</mat-label>
-        <input matInput placeholder="Search by food name" [(ngModel)]="searchQuery" />
-      </mat-form-field>
-    </div>
+    <!-- Search -->
+    <mat-form-field appearance="outline" class="filters">
+      <mat-label>Search</mat-label>
+      <input matInput placeholder="Search by food name" [(ngModel)]="searchQuery" />
+    </mat-form-field>
   </div>
 
   <!-- Food Menu Display -->

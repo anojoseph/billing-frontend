@@ -15,7 +15,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const accessToken = this.authService.getAccessToken();
-
+    console.log(accessToken)
     // Prepend the base URL
     const apiUrl = environment.baseUrl + req.url;
 

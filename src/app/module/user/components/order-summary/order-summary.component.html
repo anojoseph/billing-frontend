@@ -14,10 +14,10 @@
         <button class="quantity-btn" (click)="updateQuantity(order, -1)">-</button>
         <span class="quantity">{{ order.selectedQty }}</span>
         <button class="quantity-btn" (click)="updateQuantity(order, 1)">+</button>
+        <button class="remove-btn" (click)="removeFromCart(order)"> <i class="fa fa-trash" aria-hidden="true"></i></button>
       </div>
 
       <!-- Remove button -->
-      <button class="remove-btn" (click)="removeFromCart(order)"> <i class="fa fa-trash" aria-hidden="true"></i></button>
     </div>
   </div>
 
