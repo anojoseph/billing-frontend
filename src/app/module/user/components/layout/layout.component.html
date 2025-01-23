@@ -11,4 +11,6 @@
 <!-- Cart Icon Button for Mobile -->
 <button class="cart-icon-btn" *ngIf="isMobile" (click)="toggleView()">
   <i class="fas fa-cart-plus"></i>
+  <!-- Cart Badge -->
+  <span class="cart-badge" *ngIf="getCartItemCount() > 0">{{ getCartItemCount() }}</span>
 </button>

@@ -2,15 +2,15 @@ import { Injectable, signal } from '@angular/core';
 import { of } from 'rxjs';
 
 export interface CartItem {
-  id: string | number;
+  id: any;
   name: string;
   price: number;
   selectedQty: number;
-  availableQty: number; // Add available quantity for menu synchronization
+  availableQty: number;
 }
 
 export interface Food {
-  id: number;
+  id: any;
   name: string;
   price: number;
   qty: number;
@@ -20,8 +20,9 @@ export interface Food {
   providedIn: 'root',
 })
 export class CartService {
-  // Signal for cart items
+  
   private cartSignal = signal<CartItem[]>([]);
+  private availableQtySignal = signal<Record<number, number>>({});
 
   foods = [
     {
@@ -136,95 +137,86 @@ export class CartService {
     },
   ];
 
-
-  constructor() { }
-
-  // Add item to cart
-  addToCart(item: CartItem) {
-    if (item.selectedQty <= 0 || item.price < 0) {
-      throw new Error('Invalid item data');
-    }
-
-    const cart = this.cartSignal();
-    const existingItem = cart.find(i => i.id === item.id);
-
-    if (existingItem) {
-      // Update the selected quantity and available quantity
-      existingItem.selectedQty += item.selectedQty;
-      existingItem.availableQty -= item.selectedQty;
-    } else {
-      // Add the item to the cart and reduce its available quantity
-      item.availableQty -= item.selectedQty;
-      cart.push({ ...item });
-    }
-
-    this.cartSignal.set(cart);
+  constructor() {
+    const initialQty = this.foods.reduce((acc, food) => {
+      acc[food.id] = food.qty;
+      return acc;
+    }, {} as Record<number, number>);
+    this.availableQtySignal.set(initialQty);
   }
 
-
-  // Remove item from cart
-  removeFromCart(itemId: string | number) {
-    const cart = this.cartSignal();
-    const itemToRemove = cart.find(i => i.id === itemId);
-
-    if (itemToRemove) {
-      // Restore the available quantity
-      itemToRemove.availableQty += itemToRemove.selectedQty;
-      const updatedCart = cart.filter(i => i.id !== itemId);
-      this.cartSignal.set(updatedCart);
-    }
-  }
-
-
-  // Update item in cart
-  updateCart(updatedItem: CartItem) {
-    if (updatedItem.selectedQty <= 0) {
-      this.removeFromCart(updatedItem.id);
-      return;
-    }
-
-    const cart = this.cartSignal();
-    const existingItem = cart.find(i => i.id === updatedItem.id);
-
-    if (existingItem) {
-      // Adjust available quantity
-      const qtyChange = updatedItem.selectedQty - existingItem.selectedQty;
-      existingItem.selectedQty = updatedItem.selectedQty;
-      existingItem.availableQty -= qtyChange;
-
-      this.cartSignal.set(cart);
-    }
-  }
-
-  // Clear cart
-  clearCart() {
-    this.cartSignal.set([]);
-  }
-
-  // Calculate total price
   calculateTotal(): number {
     const cart = this.cartSignal();
     return cart.reduce((total, item) => total + item.price * item.selectedQty, 0);
   }
 
-  // Get current cart items (read-only)
-  getCartItems(): CartItem[] {
+  getMenuItemById(id: number) {
+    return this.foods.find((item) => item.id === id);
+  }
+
+  updateCart(updatedItem: CartItem) {
+    if (updatedItem.selectedQty <= 0) {
+      this.removeFromCart(updatedItem.id);
+      return;
+    }
+    const cart = this.cartSignal();
+    const existingItem = cart.find(i => i.id === updatedItem.id);
+    if (existingItem) {
+      const qtyChange = updatedItem.selectedQty - existingItem.selectedQty;
+      existingItem.selectedQty = updatedItem.selectedQty;
+      this.updateAvailableQty(updatedItem.id, -qtyChange);
+      this.cartSignal.set(cart);
+    }
+  }
+
+  addToCart(item: CartItem) {
+    if (item.selectedQty <= 0 || item.price < 0) {
+      throw new Error('Invalid item data');
+    }
+    const cart = this.cartSignal();
+    const existingItem = cart.find((i) => i.id === item.id);
+    const availableQty = this.availableQtySignal()[item.id];
+    if (availableQty < item.selectedQty) {
+      throw new Error('Not enough stock available');
+    }
+    if (existingItem) {
+      existingItem.selectedQty += item.selectedQty;
+    } else {
+      cart.push({ ...item });
+    }
+    this.updateAvailableQty(item.id, -item.selectedQty);
+    this.cartSignal.set(cart);
+  }
+
+  removeFromCart(itemId: string | number) {
+    const cart = this.cartSignal();
+    const itemToRemove = cart.find((i) => i.id === itemId);
+    if (itemToRemove) {
+      this.updateAvailableQty(itemToRemove.id, itemToRemove.selectedQty);
+      const updatedCart = cart.filter((i) => i.id !== itemId);
+      this.cartSignal.set(updatedCart);
+    }
+  }
+
+  private updateAvailableQty(itemId: number, change: number) {
+    const currentQty = this.availableQtySignal()[itemId] || 0;
+    const newQty = currentQty + change;
+    this.availableQtySignal.update((qty) => ({ ...qty, [itemId]: newQty }));
+  }
+
+  get availableQty$() {
+    return this.availableQtySignal.asReadonly();
+  }
+
+  getCartItems() {
     return this.cartSignal();
   }
 
-  // Expose the cart signal (for live tracking)
   get cart$() {
-    return this.cartSignal.asReadonly(); // Expose as readonly signal
-  }
-
-  getMenuItemById(id: number) {
-    return this.foods.find((item: { id: number; name: string; price: number; qty: number }) => item.id === id);
+    return this.cartSignal.asReadonly();
   }
 
   getMenuItems() {
-    return of(this.foods); // Wrap the foods array in an observable
+    return of(this.foods);
   }
-
-  
-
 }

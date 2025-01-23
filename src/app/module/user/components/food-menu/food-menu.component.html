@@ -37,24 +37,25 @@
 
   <!-- Food Menu Display -->
   <div class="food-menu">
-    <mat-card *ngFor="let food of filteredFoods; trackBy: trackById" class="food-card">
+    <mat-card *ngFor="let food of filteredFoods; trackBy: trackByFoodId" class="food-card">
       <img mat-card-image [src]="food.image" [alt]="food.name" class="food-image" />
       <mat-card-title>{{ food.name }}</mat-card-title>
       <mat-card-content>
         <p><strong>Price:</strong> {{ food.price | currency: 'INR' }}</p>
+        <p><strong>Available Qty: <span style="color: red;"> {{ cartService.availableQty$()[food.id] || 0 }}</span></strong> </p>
       </mat-card-content>
 
       <div class="quantity-selector">
-        <button mat-button color="primary" (click)="decreaseQuantity(food)" [disabled]="food.selectedQty === 0">
+        <button mat-button color="primary" (click)="decreaseQuantity(food)" [disabled]="cartService.availableQty$()[food.id] <= 0">
           -
         </button>
         <span>{{ food.selectedQty || 0 }}</span>
-        <button mat-button color="primary" (click)="increaseQuantity(food)" [disabled]="food.selectedQty >= food.qty">
+        <button mat-button color="primary" (click)="increaseQuantity(food)" [disabled]="cartService.availableQty$()[food.id] <= 0">
           +
         </button>
       </div>
 
-      <button mat-raised-button color="accent" (click)="addToCart(food)" [disabled]="food.qty === 0">
+      <button mat-raised-button color="accent" (click)="addToCart(food)" [disabled]="cartService.availableQty$()[food.id] <= 0">
         Add to Cart
       </button>
     </mat-card>

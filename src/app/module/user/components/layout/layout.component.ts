@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CartService } from '../cart.service';
 
 @Component({
   selector: 'app-layout',
@@ -8,7 +9,9 @@ import { Component, OnInit } from '@angular/core';
 export class LayoutComponent implements OnInit {
   showMenu: boolean = true; // Tracks if the menu is visible
   isMobile: boolean = false; // Tracks if the device is mobile
+  cart$ = this.cartService.cart$;
 
+  constructor(private cartService: CartService){}
   ngOnInit(): void {
     this.checkDeviceWidth();
     // Dynamically check the screen size on window resize
@@ -30,5 +33,10 @@ export class LayoutComponent implements OnInit {
       this.showMenu = !this.showMenu; // Switch between the two
       console.log('Toggled View:', this.showMenu ? 'Showing Menu' : 'Showing Order Summary');
     }
+  }
+
+  getCartItemCount(): number {
+    const cartItems = this.cart$();  // Access the value of the Signal
+    return cartItems.reduce((total, item) => total + item.selectedQty, 0);  // Use reduce on the array
   }
 }

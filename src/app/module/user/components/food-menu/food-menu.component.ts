@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, effect, inject, Injector, Input, OnChanges, OnInit, runInInjectionContext } from '@angular/core'; // Import Injector
 import { CartService } from '../cart.service';
 import { ToastrService } from 'ngx-toastr';
 
@@ -7,50 +7,60 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './food-menu.component.html',
   styleUrls: ['./food-menu.component.css'],
 })
-export class FoodMenuComponent implements OnInit {
+export class FoodMenuComponent implements OnInit, OnChanges {
   foods: any[] = [];
   selectedType = '';
   selectedMealType = '';
   searchQuery = '';
+  injector = inject(Injector);
+  availableQty: Record<number, number> = {};
+  @Input() orderQuantity: any;
+  maxQuantity: number = 10;
+  allowAddQty: any
+  showFilters: boolean = true;
 
-  constructor(private cartService: CartService,
-    private tosatr:ToastrService
-  ) { }
+  constructor(
+    public cartService: CartService,
+    private toastr: ToastrService) { }
+
+  ngOnChanges() {
+    if (this.orderQuantity < this.maxQuantity) {
+      this.allowAddQty = true;
+    } else {
+      this.allowAddQty = false;
+    }
+  }
 
   ngOnInit(): void {
     this.fetchMenuItems();
 
-   }
+    runInInjectionContext(this.injector, () => {
+      effect(() => {
+        this.availableQty = this.cartService.availableQty$();
+      });
+    });
+  }
+
   fetchMenuItems(): void {
     this.cartService.getMenuItems().subscribe((data: any[]) => {
       this.foods = data;
     });
   }
 
-  updateStock(food: any, quantityChange: number) {
-    const foodInMenu = this.foods.find((f) => f.id === food.id);
-    if (foodInMenu) {
-      foodInMenu.qty += quantityChange; // Adjust stock
-    }
-    food.selectedQty = 0; // Reset user selection
-  }
-
-
   addToCart(food: any) {
-    if (this.isValidSelection(food)) {
-      this.cartService.addToCart({ ...food, selectedQty: food.selectedQty });
-      this.updateStock(food, -food.selectedQty); // Deduct stock
-    } else {
-      alert('Invalid selection. Please check the quantity.');
+    const availableQty = this.availableQty[food.id] || 0;
+    if (food.selectedQty > availableQty) {
+      this.toastr.error(`Not enough stock available. Only ${availableQty} left.`);
+      food.selectedQty = availableQty;
+      return;
     }
+    this.cartService.addToCart({ ...food, selectedQty: food.selectedQty });
+    this.toastr.success(`${food.selectedQty} ${food.name} is added to Cart`)
+    food.selectedQty = 1;
   }
 
-   removeFromCart(food: any) {
-    const cartItem = this.cartService.getCartItems().find(item => item.id === food.id);
-    if (cartItem) {
-      this.updateStock(food, cartItem.selectedQty); // Restock the full selected quantity
-    }
-    this.cartService.removeFromCart(food.id);
+  trackByFoodId(index: number, food: any): number {
+    return food.id;
   }
 
   increaseQuantity(food: any): void {
@@ -58,6 +68,7 @@ export class FoodMenuComponent implements OnInit {
       food.selectedQty++;
     } else {
       alert('No more stock available!');
+      return;
     }
   }
 
@@ -67,11 +78,8 @@ export class FoodMenuComponent implements OnInit {
     }
   }
 
-  isValidSelection(food: any): boolean {
-    return food.selectedQty > 0 && food.selectedQty <= food.qty;
-  }
 
-  applyFilters() {
+  get filteredFoods() {
     return this.foods.filter((food) => {
       const matchesType = this.selectedType ? food.type === this.selectedType : true;
       const matchesMealType = this.selectedMealType ? food.mealType === this.selectedMealType : true;
@@ -82,62 +90,7 @@ export class FoodMenuComponent implements OnInit {
     });
   }
 
-  updateCartQuantity(food: any, newQty: number) {
-    if (newQty > 0 && newQty <= food.qty) {
-      const cartItem = this.cartService.getCartItems().find(item => item.id === food.id);
-      const difference = newQty - (cartItem?.selectedQty || 0);
-
-      if (difference > 0) {
-        this.updateStock(food, -difference); // Deduct stock
-      } else if (difference < 0) {
-        this.updateStock(food, -difference); // Restock
-      }
-
-      this.cartService.updateCart({ ...food, selectedQty: newQty });
-    } else {
-      alert('Invalid quantity.');
-    }
-  }
-
-  get filteredFoods() {
-    return this.foods.filter(food => {
-      const matchesType = this.selectedType ? food.type === this.selectedType : true;
-      const matchesMealType = this.selectedMealType ? food.mealType === this.selectedMealType : true;
-      const matchesSearch = this.searchQuery
-        ? food.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-        : true;
-      return matchesType && matchesMealType && matchesSearch;
-    });
-  }
-
-  trackById(index: number, item: any) {
-    return item.id;
-  }
-  syncStock(food: any, change: number): void {
-    const menuItem = this.foods.find((item) => item.id === food.id);
-    if (menuItem) {
-      menuItem.qty -= change;
-    }
-  }
-
-
-  updateQuantity(order: any, change: number) {
-    const newQuantity = order.selectedQty + change;
-    const menuItem = this.cartService.getMenuItemById(order.id);
-
-    if (menuItem && newQuantity > 0 && newQuantity <= menuItem.qty) {
-      this.cartService.updateCart({ ...order, selectedQty: newQuantity });
-      menuItem.qty -= change; // Adjust the stock
-    } else {
-      console.error('Invalid quantity or item not found.');
-    }
-  }
-
-  showFilters: boolean = true;
-
   toggleFilters(): void {
     this.showFilters = !this.showFilters;
   }
-
-
 }
