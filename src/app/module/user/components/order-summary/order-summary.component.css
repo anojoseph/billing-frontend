@@ -1,5 +1,5 @@
 .order-summary {
-  margin: 20px;
+  /* margin: 20px; */
   padding: 20px;
   background-color: #fff;
   border-radius: 8px;
@@ -84,13 +84,13 @@
   text-align: center;
 }
 
-.table-number input {
+/* .table-number input {
   padding: 8px;
   font-size: 16px;
   border-radius: 5px;
   border: 1px solid #ccc;
   width: 100px;
-}
+} */
 
 .summary-footer {
   display: flex;

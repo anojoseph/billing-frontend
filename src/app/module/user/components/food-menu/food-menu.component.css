@@ -2,12 +2,35 @@
 .menu-section {
   padding: 10px;
   background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  /* border-radius: 8px; */
+  /* box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); */
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100%;
   overflow: hidden;
+  width: 100%;
+}
+
+/* Custom Scrollbar Styling for Webkit Browsers (Chrome, Safari) */
+::-webkit-scrollbar {
+  width: 8px; /* Reduce the width of the scrollbar */
+  height: 8px; /* If you want to customize horizontal scrollbar as well */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #007bff; /* Color of the scrollbar thumb */
+  border-radius: 4px; /* Rounded corners for the thumb */
+  border: 2px solid #fff; /* Optional: creates a border around the thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #0056b3; /* Darker color when hovering over the thumb */
+  cursor: pointer;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1; /* Light background for the track */
+  border-radius: 4px; /* Rounded corners for the track */
 }
 
 .filters-container {
@@ -17,6 +40,7 @@
   flex-wrap: wrap;
   /* padding-top: 10px; */
   justify-content: center;
+  margin-top: -40px;
 }
 
 .filters {
@@ -34,7 +58,7 @@
   overflow-y: auto;
   flex-grow: 1;
   padding-right: 10px;
-  max-height: calc(100vh - 180px);
+  max-height: 100%;
   padding-bottom: 20px;
 }
 
@@ -88,10 +112,36 @@
   font-size: 16px;
 }
 
+.no-items-found {
+  text-align: center;
+  padding: 20px;
+  font-size: 1.2em;
+  color: #555;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.button-conf {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: auto;
+  justify-content: flex-end;
+}
+
+.cart-btn {
+  margin-right: -8px;
+}
+
 /* Responsive Styles */
 @media (max-width: 768px) {
   .filter-toggle-btn {
     display: block;
+  }
+
+  .button-conf {
+    justify-content: center;
   }
 
   .filters-container {
@@ -102,10 +152,11 @@
     display: flex; /* Show filters when toggled */
     flex-direction: column;
     gap: 10px;
+    margin-top: 0px;
   }
 
   .food-menu {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(1, 1fr); /* Show two cards per row */
   }
 
   .food-card {
@@ -134,14 +185,15 @@
     gap: 20px;
   }
 }
-.filter-toggle-btn{
-background-color: #0056b3;
-    color: white;
-    width: 35px;
-    border: blue;
-    border-radius: 50%;
-    position: fixed;
-    right: 62px;
-    top: 20px;
-    padding: 4px;
+.filter-toggle-btn {
+  background-color: #0056b3;
+  color: white;
+  width: 35px;
+  border: blue;
+  border-radius: 50%;
+  position: fixed;
+  right: 62px;
+  top: 20px;
+  padding: 7px;
+  font-size: 19px;
 }

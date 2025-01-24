@@ -28,8 +28,10 @@
 
   <!-- Table number input -->
   <div class="table-number">
-    <label for="table-number">Table Number:</label>
-    <input type="number" id="table-number" [(ngModel)]="tableNumber" placeholder="Enter Table Number" />
+    <mat-form-field appearance="outline">
+    <mat-label for="table-number">Table Number</mat-label>
+    <input matInput type="number" id="table-number" [(ngModel)]="tableNumber" placeholder="Enter Table Number" />
+    </mat-form-field>
   </div>
 
   <!-- Summary footer -->

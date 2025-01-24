@@ -3,7 +3,7 @@
 
   <!-- Filters Toggle Icon Button for Mobile -->
   <button class="filter-toggle-btn" (click)="toggleFilters()">
-    <mat-icon>filter_list</mat-icon>
+    <i class="fa fa-filter" aria-hidden="true"></i>
   </button>
 
   <!-- Filters -->
@@ -37,27 +37,38 @@
 
   <!-- Food Menu Display -->
   <div class="food-menu">
+
+    <div *ngIf="filteredFoods.length === 0" class="no-items-found">
+      <p>No items found matching your search criteria.</p>
+    </div>
+
     <mat-card *ngFor="let food of filteredFoods; trackBy: trackByFoodId" class="food-card">
       <img mat-card-image [src]="food.image" [alt]="food.name" class="food-image" />
       <mat-card-title>{{ food.name }}</mat-card-title>
       <mat-card-content>
         <p><strong>Price:</strong> {{ food.price | currency: 'INR' }}</p>
-        <p><strong>Available Qty: <span style="color: red;"> {{ cartService.availableQty$()[food.id] || 0 }}</span></strong> </p>
+        <p><strong>Available Qty: <span style="color: red;"> {{ cartService.availableQty$()[food.id] || 0
+              }}</span></strong> </p>
       </mat-card-content>
 
-      <div class="quantity-selector">
-        <button mat-button color="primary" (click)="decreaseQuantity(food)" [disabled]="cartService.availableQty$()[food.id] <= 0">
-          -
-        </button>
-        <span>{{ food.selectedQty || 0 }}</span>
-        <button mat-button color="primary" (click)="increaseQuantity(food)" [disabled]="cartService.availableQty$()[food.id] <= 0">
-          +
+      <div class="button-conf">
+        <div class="quantity-selector">
+          <button color="primary" (click)="decreaseQuantity(food)"
+            [disabled]="cartService.availableQty$()[food.id] <= 0">
+            -
+          </button>
+          <span style="width: 15px;">{{ food.selectedQty || 0 }}</span>
+          <button color="primary" (click)="increaseQuantity(food)"
+            [disabled]="cartService.availableQty$()[food.id] <= 0">
+            +
+          </button>
+        </div>
+
+        <button class="btn-success cart-btn" (click)="addToCart(food)"
+          [disabled]="cartService.availableQty$()[food.id] <= 0">
+          Add <i class="fa fa-shopping-cart" aria-hidden="true"></i>
         </button>
       </div>
-
-      <button mat-raised-button color="accent" (click)="addToCart(food)" [disabled]="cartService.availableQty$()[food.id] <= 0">
-        Add to Cart
-      </button>
     </mat-card>
   </div>
 </div>
