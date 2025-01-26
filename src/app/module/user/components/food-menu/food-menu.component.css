@@ -153,8 +153,9 @@
   }
 
   .filters-container .search-chip input {
-    width: 300px !important;
+    width: 250px !important;
     height: 30px;
+    justify-content: flex-start;
   }
 
   .filters-container mat-chip-listbox {
@@ -171,7 +172,7 @@
     gap: 10px;
     padding: 10px;
     overflow-x: hidden;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
   }
 
   .food-card {
@@ -180,6 +181,7 @@
     height: auto;
     transition: none;
     height: 280px;
+    margin: 5px;
   }
 
   .food-card .food-image {
@@ -224,6 +226,13 @@
   .search-chip mat-icon {
     font-size: 16px;
   }
+  .filter-toggle {
+    display: block !important;
+    padding: 5px;
+    height: min-content;
+    margin-top: -47px;
+    margin-right: -337px;
+  }
 }
 
 .search-chip {
@@ -267,4 +276,16 @@
   display: flex;
   justify-content: center;
   color: red;
+}
+
+.filter-toggle {
+  display: none;
+}
+
+.hide-chip-filter {
+  display: none;
+}
+
+.show-chip-filter {
+  display: block;
 }

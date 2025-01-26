@@ -10,8 +10,10 @@
           placeholder="Search Food Type" />
       </span>
     </mat-chip-grid>
+    <button class="btn-success filter-toggle" (click)="toggleView()"> <i class="fa fa-filter"
+        aria-hidden="true"></i></button>
 
-    <div class="chip-group">
+    <div class="chip-group" [ngClass]="(isMobile && !filterchip) ? 'hide-chip-filter' : 'show-chip-filter'">
       <mat-chip-listbox>
         <span style="margin-top: 10px;">Food Type:</span>
         <mat-chip-option *ngFor="let type of foodTypes" (click)="selectFoodType(type)"
@@ -21,7 +23,7 @@
       </mat-chip-listbox>
     </div>
 
-    <div class="chip-group">
+    <div class="chip-group" [ngClass]="(isMobile && !filterchip) ? 'hide-chip-filter' : 'show-chip-filter'">
       <mat-chip-listbox>
         <span style="margin-top: 10px;">Meal Type:</span>
         <mat-chip-option *ngFor="let meal of mealTypes" (click)="selectMealType(meal)"

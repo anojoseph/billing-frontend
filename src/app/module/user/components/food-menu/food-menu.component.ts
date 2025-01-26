@@ -9,7 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class FoodMenuComponent implements OnInit, OnChanges {
   foods: any[] = [];
-  selectedType='';
+  selectedType = '';
   selectedMealType = '';
   searchQuery = '';
   injector = inject(Injector);
@@ -17,9 +17,8 @@ export class FoodMenuComponent implements OnInit, OnChanges {
   @Input() orderQuantity: any;
   maxQuantity: number = 10;
   allowAddQty: any
-  showFilters: boolean = false;
-  showSearch: boolean = false;
-
+  isMobile: boolean = false;
+  filterchip: boolean = false;
   constructor(
     public cartService: CartService,
     private toastr: ToastrService) { }
@@ -40,6 +39,9 @@ export class FoodMenuComponent implements OnInit, OnChanges {
         this.availableQty = this.cartService.availableQty$();
       });
     });
+
+    this.checkDeviceWidth();
+    window.addEventListener('resize', this.checkDeviceWidth.bind(this));
   }
 
   fetchMenuItems(): void {
@@ -91,8 +93,8 @@ export class FoodMenuComponent implements OnInit, OnChanges {
     });
   }
 
-  foodTypes = [ 'Veg', 'Non-Veg','Drinks'];
-  mealTypes = [ 'Lunch', 'Dinner', 'Snack'];
+  foodTypes = ['Veg', 'Non-Veg', 'Drinks'];
+  mealTypes = ['Lunch', 'Dinner', 'Snack'];
 
   selectFoodType(type: string) {
     if (type === 'All') {
@@ -106,6 +108,20 @@ export class FoodMenuComponent implements OnInit, OnChanges {
       this.selectedMealType = '';
     } else {
       this.selectedMealType = this.selectedMealType === meal ? '' : meal;
+    }
+  }
+
+  checkDeviceWidth(): void {
+    this.isMobile = window.innerWidth <= 768;
+
+    if (!this.isMobile) {
+      this.filterchip = false;
+    }
+  }
+
+  toggleView(): void {
+    if (this.isMobile) {
+      this.filterchip = !this.filterchip;
     }
   }
 }
