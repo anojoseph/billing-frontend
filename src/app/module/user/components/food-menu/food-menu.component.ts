@@ -91,29 +91,21 @@ export class FoodMenuComponent implements OnInit, OnChanges {
     });
   }
 
-  foodTypes = [ 'Veg', 'Non-Veg','Drincks'];
+  foodTypes = [ 'Veg', 'Non-Veg','Drinks'];
   mealTypes = [ 'Lunch', 'Dinner', 'Snack'];
 
-  // Handle food type selection
   selectFoodType(type: string) {
     if (type === 'All') {
-      this.selectedType = ''; // Reset selection if 'All' is clicked
-    } else {
-      this.selectedType = this.selectedType === type ? '' : type; // Toggle selection
+      this.selectedType = '';
+      this.selectedType = this.selectedType === type ? '' : type;
     }
   }
 
-  // Update selected meal type
   selectMealType(meal: string) {
     if (meal === 'All') {
-      this.selectedMealType = ''; // Reset selection if 'All' is clicked
+      this.selectedMealType = '';
     } else {
-      this.selectedMealType = this.selectedMealType === meal ? '' : meal; // Toggle selection
+      this.selectedMealType = this.selectedMealType === meal ? '' : meal;
     }
   }
-  onSearchInput(event: any): void {
-    console.log('Search Input:', this.searchQuery);
-    // You can further process the input here if needed
-  }
-  onBackspaceKeydown(event:any) { event.stopImmediatePropagation(); }
 }

@@ -1,21 +1,16 @@
 <div class="menu-section">
   <h2 class="section-title">Food Menu</h2>
 
-  <!-- Filters -->
   <div class="filters-container">
 
     <mat-chip-grid #reactiveChipGrid>
       <span class="search-chip">
-        <mat-icon matChipAvatar style="position: relative;
-    left: 11px;
-    top: 2px;
-    font-size: 24px;">search</mat-icon>
+        <mat-icon matChipAvatar class="search-icon">search</mat-icon>
         <input [(ngModel)]="searchQuery" [matChipInputFor]="reactiveChipGrid" autofocus
           placeholder="Search Food Type" />
       </span>
     </mat-chip-grid>
 
-    <!-- Food Type Chips -->
     <div class="chip-group">
       <mat-chip-listbox>
         <span style="margin-top: 10px;">Food Type:</span>
@@ -26,7 +21,6 @@
       </mat-chip-listbox>
     </div>
 
-    <!-- Meal Type Chips -->
     <div class="chip-group">
       <mat-chip-listbox>
         <span style="margin-top: 10px;">Meal Type:</span>
@@ -41,9 +35,8 @@
   <div *ngIf="filteredFoods.length === 0">
     <div class="nodata">No items found matching your search criteria. <mat-icon> insert_emoticon_sad</mat-icon></div>
   </div>
-  <!-- Food Menu Display -->
-  <div class="food-menu">
 
+  <div class="food-menu">
 
     <mat-card *ngFor="let food of filteredFoods; trackBy: trackByFoodId" class="food-card">
       <img mat-card-image [src]="food.image" [alt]="food.name" class="food-image" />

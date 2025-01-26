@@ -126,9 +126,16 @@
   margin-top: auto;
   justify-content: space-between;
 }
-.qty{
+.qty {
   width: 15px;
   font-size: larger;
+}
+
+.search-icon {
+  position: relative;
+  left: 11px;
+  top: 2px;
+  font-size: 24px;
 }
 
 @media (max-width: 768px) {
@@ -140,10 +147,10 @@
     gap: 10px;
   }
 
-  .qty{
-  width: 18px;
-  font-size: small;
-}
+  .qty {
+    width: 18px;
+    font-size: small;
+  }
 
   .filters-container .search-chip input {
     width: 300px !important;
@@ -164,6 +171,7 @@
     gap: 10px;
     padding: 10px;
     overflow-x: hidden;
+    margin-bottom: 30px;
   }
 
   .food-card {
@@ -217,7 +225,6 @@
     font-size: 16px;
   }
 }
-
 
 .search-chip {
   display: flex;
