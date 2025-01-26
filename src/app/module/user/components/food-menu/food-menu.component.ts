@@ -9,7 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class FoodMenuComponent implements OnInit, OnChanges {
   foods: any[] = [];
-  selectedType = '';
+  selectedType='';
   selectedMealType = '';
   searchQuery = '';
   injector = inject(Injector);
@@ -17,7 +17,8 @@ export class FoodMenuComponent implements OnInit, OnChanges {
   @Input() orderQuantity: any;
   maxQuantity: number = 10;
   allowAddQty: any
-  showFilters: boolean = true;
+  showFilters: boolean = false;
+  showSearch: boolean = false;
 
   constructor(
     public cartService: CartService,
@@ -90,7 +91,29 @@ export class FoodMenuComponent implements OnInit, OnChanges {
     });
   }
 
-  toggleFilters(): void {
-    this.showFilters = !this.showFilters;
+  foodTypes = [ 'Veg', 'Non-Veg','Drincks'];
+  mealTypes = [ 'Lunch', 'Dinner', 'Snack'];
+
+  // Handle food type selection
+  selectFoodType(type: string) {
+    if (type === 'All') {
+      this.selectedType = ''; // Reset selection if 'All' is clicked
+    } else {
+      this.selectedType = this.selectedType === type ? '' : type; // Toggle selection
+    }
   }
+
+  // Update selected meal type
+  selectMealType(meal: string) {
+    if (meal === 'All') {
+      this.selectedMealType = ''; // Reset selection if 'All' is clicked
+    } else {
+      this.selectedMealType = this.selectedMealType === meal ? '' : meal; // Toggle selection
+    }
+  }
+  onSearchInput(event: any): void {
+    console.log('Search Input:', this.searchQuery);
+    // You can further process the input here if needed
+  }
+  onBackspaceKeydown(event:any) { event.stopImmediatePropagation(); }
 }

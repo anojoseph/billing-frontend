@@ -19,6 +19,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { ToastrModule } from 'ngx-toastr';
 import { LogoutComponent } from './shared/login/logout.component';
+import { HeaderComponent } from './shared/partials/header/header.component';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { MatChipsModule } from '@angular/material/chips';
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,7 +31,8 @@ import { LogoutComponent } from './shared/login/logout.component';
     FoodMenuComponent,
     OrderSummaryComponent,
     LayoutComponent,
-    LogoutComponent
+    LogoutComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
@@ -46,6 +52,10 @@ import { LogoutComponent } from './shared/login/logout.component';
       positionClass: 'toast-top-right', // Position of the toast
       preventDuplicates: true, // Prevent duplicate toasts
     }),
+    MatToolbarModule,
+    MatSidenavModule,
+    MatListModule,
+    MatChipsModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

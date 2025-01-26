@@ -1,0 +1,68 @@
+.sidenav-container {
+  height: 100%;
+}
+
+.sidenav {
+  width: 250px;
+  padding: 0;
+}
+
+.toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.menu-button {
+  display: none;
+}
+
+.desktop-nav {
+  display: flex;
+  gap: 10px;
+}
+
+.cart-icon {
+  margin-left: 16px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .menu-button {
+    display: block;
+  }
+
+  .desktop-nav {
+    display: none;
+  }
+}
+mat-sidenav .active-menu{
+  background-color: #ffffff !important; /* Ensure it overrides Angular Material styles */
+   border-bottom: 2px solid #e8e8e8;
+  color: rgb(0, 0, 0) !important; /* Ensure proper contrast and text visibility */
+}
+/* Active Menu Styling */
+.active-menu {
+  background-color: #212e79 !important; /* Ensure it overrides Angular Material styles */
+  border-bottom: 2px solid #3f51b5;
+  color: white !important; /* Ensure proper contrast and text visibility */
+}
+
+.mat-list-item.active-menu {
+  background-color: #212e79 !important;
+  color: white !important;
+}
+
+.desktop-nav .mat-button.active-menu {
+  background-color: #212e79 !important;
+  color: white !important;
+  font-weight: bold; /* Optional for further emphasis */
+}
+
+.mdc-list {
+ padding: 0;
+}

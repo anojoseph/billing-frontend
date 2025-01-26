@@ -1,46 +1,49 @@
 <div class="menu-section">
   <h2 class="section-title">Food Menu</h2>
 
-  <!-- Filters Toggle Icon Button for Mobile -->
-  <button class="filter-toggle-btn" (click)="toggleFilters()">
-    <i class="fa fa-filter" aria-hidden="true"></i>
-  </button>
-
   <!-- Filters -->
-  <div class="filters-container" [class.hidden]="!showFilters">
-    <mat-form-field appearance="outline" class="filters">
-      <mat-label>Food Type</mat-label>
-      <mat-select [(ngModel)]="selectedType">
-        <mat-option value="">All</mat-option>
-        <mat-option value="Veg">Veg</mat-option>
-        <mat-option value="Non-Veg">Non-Veg</mat-option>
-      </mat-select>
-    </mat-form-field>
+  <div class="filters-container">
 
-    <mat-form-field appearance="outline" class="filters">
-      <mat-label>Meal Type</mat-label>
-      <mat-select [(ngModel)]="selectedMealType">
-        <mat-option value="">All</mat-option>
-        <mat-option value="Lunch">Lunch</mat-option>
-        <mat-option value="Dinner">Dinner</mat-option>
-        <mat-option value="Snack">Snack</mat-option>
-        <mat-option value="Cool Drink">Cool Drink</mat-option>
-      </mat-select>
-    </mat-form-field>
+    <mat-chip-grid #reactiveChipGrid>
+      <span class="search-chip">
+        <mat-icon matChipAvatar style="position: relative;
+    left: 11px;
+    top: 2px;
+    font-size: 24px;">search</mat-icon>
+        <input [(ngModel)]="searchQuery" [matChipInputFor]="reactiveChipGrid" autofocus
+          placeholder="Search Food Type" />
+      </span>
+    </mat-chip-grid>
 
-    <!-- Search -->
-    <mat-form-field appearance="outline" class="filters">
-      <mat-label>Search</mat-label>
-      <input matInput placeholder="Search by food name" [(ngModel)]="searchQuery" />
-    </mat-form-field>
+    <!-- Food Type Chips -->
+    <div class="chip-group">
+      <mat-chip-listbox>
+        <span style="margin-top: 10px;">Food Type:</span>
+        <mat-chip-option *ngFor="let type of foodTypes" (click)="selectFoodType(type)"
+          [highlighted]="selectedType === type">
+          {{ type }}
+        </mat-chip-option>
+      </mat-chip-listbox>
+    </div>
+
+    <!-- Meal Type Chips -->
+    <div class="chip-group">
+      <mat-chip-listbox>
+        <span style="margin-top: 10px;">Meal Type:</span>
+        <mat-chip-option *ngFor="let meal of mealTypes" (click)="selectMealType(meal)"
+          [highlighted]="selectedMealType === meal">
+          {{ meal }}
+        </mat-chip-option>
+      </mat-chip-listbox>
+    </div>
   </div>
 
+  <div *ngIf="filteredFoods.length === 0">
+    <div class="nodata">No items found matching your search criteria. <mat-icon> insert_emoticon_sad</mat-icon></div>
+  </div>
   <!-- Food Menu Display -->
   <div class="food-menu">
 
-    <div *ngIf="filteredFoods.length === 0" class="no-items-found">
-      <p>No items found matching your search criteria.</p>
-    </div>
 
     <mat-card *ngFor="let food of filteredFoods; trackBy: trackByFoodId" class="food-card">
       <img mat-card-image [src]="food.image" [alt]="food.name" class="food-image" />
@@ -48,7 +51,7 @@
       <mat-card-content>
         <p><strong>Price:</strong> {{ food.price | currency: 'INR' }}</p>
         <p><strong>Available Qty: <span style="color: red;"> {{ cartService.availableQty$()[food.id] || 0
-              }}</span></strong> </p>
+              }}</span></strong></p>
       </mat-card-content>
 
       <div class="button-conf">
@@ -57,7 +60,7 @@
             [disabled]="cartService.availableQty$()[food.id] <= 0">
             -
           </button>
-          <span style="width: 15px;">{{ food.selectedQty || 0 }}</span>
+          <span class="qty">{{ food.selectedQty || 0 }}</span>
           <button color="primary" (click)="increaseQuantity(food)"
             [disabled]="cartService.availableQty$()[food.id] <= 0">
             +
