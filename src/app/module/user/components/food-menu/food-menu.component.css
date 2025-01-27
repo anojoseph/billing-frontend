@@ -242,7 +242,7 @@
   }
 
   .search-chip mat-icon {
-    font-size: 16px;
+    font-size: 30px;
   }
   .filter-toggle {
     display: block !important;
@@ -403,7 +403,7 @@
   }
 
   .search-chip mat-icon {
-    font-size: 14px;
+    font-size: 30px;
   }
 
   .filter-toggle {
