@@ -1,6 +1,7 @@
 import { Component, effect, inject, Injector, Input, OnChanges, OnInit, runInInjectionContext } from '@angular/core'; // Import Injector
 import { CartService } from '../cart.service';
 import { ToastrService } from 'ngx-toastr';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-food-menu',
@@ -21,7 +22,8 @@ export class FoodMenuComponent implements OnInit, OnChanges {
   filterchip: boolean = false;
   constructor(
     public cartService: CartService,
-    private toastr: ToastrService) { }
+    private toastr: ToastrService,
+    private snackBar: MatSnackBar) { }
 
   ngOnChanges() {
     if (this.orderQuantity < this.maxQuantity) {
@@ -53,12 +55,22 @@ export class FoodMenuComponent implements OnInit, OnChanges {
   addToCart(food: any) {
     const availableQty = this.availableQty[food.id] || 0;
     if (food.selectedQty > availableQty) {
-      this.toastr.error(`Not enough stock available. Only ${availableQty} left.`);
+      if(this.isMobile){
+        this.showError(`Not enough stock available. Only ${availableQty} left.`)
+      }
+      else{
+        this.toastr.error(`Not enough stock available. Only ${availableQty} left.`);
+      }
       food.selectedQty = availableQty;
       return;
     }
     this.cartService.addToCart({ ...food, selectedQty: food.selectedQty });
-    this.toastr.success(`${food.selectedQty} ${food.name} is added to Cart`)
+    if(this.isMobile){
+      this.showSuccess(`${food.selectedQty} ${food.name} is added to Cart`)
+    }
+    else{
+      this.toastr.success(`${food.selectedQty} ${food.name} is added to Cart`)
+    }
     food.selectedQty = 1;
   }
 
@@ -124,5 +136,17 @@ export class FoodMenuComponent implements OnInit, OnChanges {
     if (this.isMobile) {
       this.filterchip = !this.filterchip;
     }
+  }
+
+  showSuccess(message: string) {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000
+    });
+  }
+
+  showError(message: string) {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000
+    });
   }
 }

@@ -1,4 +1,4 @@
-<div class="main-container">
+<div class="main-container" *ngIf="cart$().length >= 1">
 
   <div class="order-summary">
     <h2 class="section-title">Order Summary</h2>
@@ -30,7 +30,12 @@
 
     <!-- No orders message -->
     <ng-template #noOrders>
-      <p class="no-orders-message">No items in the cart.</p>
+      <!-- <div class="no-orders-message">
+        <img  src="./assets/images/emptycart.png" alt="" height="150px" width="150px">
+        <p>
+          No items in the cart.</p>
+      </div> -->
+
     </ng-template>
   </div>
 
@@ -46,9 +51,7 @@
     <div class="chip-group">
       <mat-chip-listbox>
         <span style="margin-top: 10px;">Select Table:</span>
-        <mat-chip-option *ngFor="let type of table"
-          [selected]="tableNumber === type.id"
-          (click)="selecttable(type.id)">
+        <mat-chip-option *ngFor="let type of table" [selected]="tableNumber === type.id" (click)="selecttable(type.id)">
           {{ type?.name }}
         </mat-chip-option>
       </mat-chip-listbox>
@@ -59,5 +62,14 @@
       <p class="total-price">Total: ₹{{ calculateTotal() }}</p>
       <button class="btn-success" [disabled]="!tableNumber || cart$().length === 0"> Checkout</button>
     </div>
+  </div>
+</div>
+
+
+<div *ngIf="cart$().length < 1" class="no-data">
+  <div class="no-orders-message">
+    <img src="./assets/images/emptycart.png" alt="" height="150px" width="150px">
+    <p>
+      No items in the cart.</p>
   </div>
 </div>
