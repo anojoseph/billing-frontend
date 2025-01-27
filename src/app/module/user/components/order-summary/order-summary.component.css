@@ -1,3 +1,7 @@
+.main-container {
+  width: 100%;
+  display: flex;
+}
 .order-summary {
   /* margin: 20px; */
   padding: 20px;
@@ -5,6 +9,25 @@
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
+  width: 70%;
+  margin: 10px;
+}
+
+.checkout {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  width: 30%;
+  margin: 10px;
+}
+
+.img {
+  margin-left: 65px;
+  border-radius: 15px;
+  width: 64px;
+  height: 64px;
 }
 
 .section-title {
@@ -29,7 +52,11 @@
 }
 
 .order-details {
-  flex-grow: 1;
+    margin-left: 0;
+    flex-grow: 0.5;
+    position: absolute;
+    display: flow;
+    left: 22%;
 }
 
 .order-name {
@@ -46,10 +73,11 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  margin-right: 80px;
 }
 
 .quantity-btn {
-  background-color: #ff7f50;
+  background-color: #0f1196;
   color: #fff;
   border: none;
   padding: 6px 10px;
@@ -58,7 +86,7 @@
 }
 
 .quantity-btn:hover {
-  background-color: #e06e4e;
+  background-color: #080564;
 }
 
 .quantity {
@@ -83,14 +111,6 @@
   margin-top: 20px;
   text-align: center;
 }
-
-/* .table-number input {
-  padding: 8px;
-  font-size: 16px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  width: 100px;
-} */
 
 .summary-footer {
   display: flex;
@@ -130,11 +150,25 @@
 
 /* Responsive Layout */
 @media (max-width: 768px) {
-  /* Mobile Layout: Stack the items and make the order summary take full width */
+  .main-container {
+    display: block;
+    max-width: 99%;
+  }
+
   .order-summary {
     margin: 10px;
     padding: 15px;
-    max-width: 100%;
+    width: 95%;
+  }
+
+  .checkout {
+    margin: 10px;
+    padding: 15px;
+    width: 95%;
+  }
+
+  .img {
+    margin-left: 0px;
   }
 
   .section-title {
@@ -142,21 +176,22 @@
   }
 
   .order-item {
-    flex-direction: column; /* Stack order details and quantity control */
+    /* flex-direction: column; */
     align-items: flex-start;
     padding: 8px;
   }
 
   .order-details {
-    margin-bottom: 10px;
+    position: absolute;
+    left: 107px;
   }
 
   .quantity-control {
-      margin-top: 17px;
-      align-items: center;
-      display: flex;
-      position: absolute;
-      right: 53px;
+    margin-top: 20px;
+    align-items: center;
+    display: flex;
+    position: absolute;
+    right: -44px;
   }
 
   .quantity-btn {

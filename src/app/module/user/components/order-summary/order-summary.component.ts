@@ -12,11 +12,22 @@ export class OrderSummaryComponent implements OnInit {
   cartItems: any[] = [];
   availableQty: Record<number, number> = {};
 
+  table: any = [
+    { id: 1, name: 'T1' },
+    { id: 2, name: 'T2' },
+    { id: 3, name: 'T3' },
+    { id: 4, name: 'T4' },
+    { id: 5, name: 'T5' },]
+
   constructor(private cartService: CartService) { }
 
   ngOnInit(): void {
     // Access the signal value directly
     this.availableQty = this.cartService.availableQty$();
+  }
+
+  selecttable(type: number): void {
+    this.tableNumber = this.tableNumber === type ? '' : type;
   }
 
   removeFromCart(item: any) {

@@ -1,42 +1,63 @@
-<div class="order-summary">
-  <h2 class="section-title">Order Summary</h2>
+<div class="main-container">
 
-  <!-- Display order items if cart has items -->
-  <div *ngIf="cart$().length > 0; else noOrders" class="summary-list">
-    <div *ngFor="let order of cart$()" class="order-item">
-      <div class="order-details">
-        <p class="order-name">{{ order.name }}</p>
-        <p class="order-price">x{{ order.selectedQty }} - ₹{{ (order.price * order.selectedQty).toFixed(2) }}</p>
+  <div class="order-summary">
+    <h2 class="section-title">Order Summary</h2>
+
+    <!-- Display order items if cart has items -->
+    <div *ngIf="cart$().length > 0; else noOrders" class="summary-list">
+      <div *ngFor="let order of cart$()" class="order-item">
+
+        <img class="img" src="https://www.foodiesfeed.com/wp-content/uploads/2023/06/burger-with-melted-cheese.jpg"
+          alt="order.name">
+
+        <div class="order-details">
+          <div class="order-name">{{ order.name }}</div>
+          <div class="order-price">x{{ order.selectedQty }} - ₹{{ (order.price * order.selectedQty).toFixed(2) }}</div>
+        </div>
+
+        <!-- Quantity control buttons -->
+        <div class="quantity-control">
+          <button class="quantity-btn" (click)="updateQuantity(order, -1)">-</button>
+          <span class="quantity">{{ order.selectedQty }}</span>
+          <button class="quantity-btn" (click)="updateQuantity(order, 1)">+</button>
+          <button class="remove-btn" (click)="removeFromCart(order)"> <i class="fa fa-trash"
+              aria-hidden="true"></i></button>
+        </div>
+
+        <!-- Remove button -->
       </div>
-
-      <!-- Quantity control buttons -->
-      <div class="quantity-control">
-        <button class="quantity-btn" (click)="updateQuantity(order, -1)">-</button>
-        <span class="quantity">{{ order.selectedQty }}</span>
-        <button class="quantity-btn" (click)="updateQuantity(order, 1)">+</button>
-        <button class="remove-btn" (click)="removeFromCart(order)"> <i class="fa fa-trash" aria-hidden="true"></i></button>
-      </div>
-
-      <!-- Remove button -->
     </div>
+
+    <!-- No orders message -->
+    <ng-template #noOrders>
+      <p class="no-orders-message">No items in the cart.</p>
+    </ng-template>
   </div>
 
-  <!-- No orders message -->
-  <ng-template #noOrders>
-    <p class="no-orders-message">No items in the cart.</p>
-  </ng-template>
+  <div class="checkout">
+    <!-- Table number input -->
+    <!-- <div class="table-number">
+      <mat-form-field appearance="outline">
+        <mat-label for="table-number">Table Number</mat-label>
+        <input matInput type="number" id="table-number" [(ngModel)]="tableNumber" placeholder="Enter Table Number" />
+      </mat-form-field>
+    </div> -->
 
-  <!-- Table number input -->
-  <div class="table-number">
-    <mat-form-field appearance="outline">
-    <mat-label for="table-number">Table Number</mat-label>
-    <input matInput type="number" id="table-number" [(ngModel)]="tableNumber" placeholder="Enter Table Number" />
-    </mat-form-field>
-  </div>
+    <div class="chip-group">
+      <mat-chip-listbox>
+        <span style="margin-top: 10px;">Select Table:</span>
+        <mat-chip-option *ngFor="let type of table"
+          [selected]="tableNumber === type.id"
+          (click)="selecttable(type.id)">
+          {{ type?.name }}
+        </mat-chip-option>
+      </mat-chip-listbox>
+    </div>
 
-  <!-- Summary footer -->
-  <div class="summary-footer">
-    <p class="total-price">Total: ₹{{ calculateTotal() }}</p>
-    <button class="checkout-btn" [disabled]="!tableNumber || cart$().length === 0">Checkout</button>
+    <!-- Summary footer -->
+    <div class="summary-footer">
+      <p class="total-price">Total: ₹{{ calculateTotal() }}</p>
+      <button class="btn-success" [disabled]="!tableNumber || cart$().length === 0"> Checkout</button>
+    </div>
   </div>
 </div>
