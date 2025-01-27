@@ -335,14 +335,14 @@
     gap: 5px;
     padding: 5px;
     overflow-x: hidden;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
   }
 
   .food-card {
     padding: 4px;
     font-size: 0.75em;
     height: auto;
-    height: 200px;
+    height: 230px;
     transition: none;
     margin: 5px;
   }
