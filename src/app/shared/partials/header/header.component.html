@@ -38,6 +38,7 @@
       </nav>
       <button mat-icon-button class="cart-icon" aria-label="Cart" routerLink="/cart">
         <mat-icon>shopping_cart</mat-icon>
+        <span class="cart-badge" *ngIf="getCartItemCount() > 0">{{ getCartItemCount() }}</span>
       </button>
     </mat-toolbar>
 

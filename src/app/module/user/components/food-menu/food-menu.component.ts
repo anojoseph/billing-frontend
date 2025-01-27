@@ -93,13 +93,14 @@ export class FoodMenuComponent implements OnInit, OnChanges {
     });
   }
 
-  foodTypes = ['Veg', 'Non-Veg', 'Drinks'];
-  mealTypes = ['Lunch', 'Dinner', 'Snack'];
+  foodTypes = ['Veg', 'Non-Veg'];
+  mealTypes = ['Lunch', 'Dinner', 'Snack', 'Cool Drink'];
 
   selectFoodType(type: string) {
     if (type === 'All') {
-      this.selectedType = '';
-      this.selectedType = this.selectedType === type ? '' : type;
+      this.selectedType = ''; // Reset to show all food items
+    } else {
+      this.selectedType = this.selectedType === type ? '' : type; // Toggle selected type
     }
   }
 

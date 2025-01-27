@@ -20,7 +20,7 @@ export interface Food {
   providedIn: 'root',
 })
 export class CartService {
-  
+
   private cartSignal = signal<CartItem[]>([]);
   private availableQtySignal = signal<Record<number, number>>({});
 

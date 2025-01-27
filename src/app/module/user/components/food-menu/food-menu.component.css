@@ -147,6 +147,14 @@
     gap: 10px;
   }
 
+  p {
+    margin: 4px 4px 4px;
+  }
+
+  mat-card-title {
+    font-size: larger;
+  }
+
   .qty {
     width: 18px;
     font-size: small;
@@ -169,18 +177,18 @@
 
   .food-menu {
     grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    padding: 10px;
+    gap: 1px;
+    padding: 1px;
     overflow-x: hidden;
     margin-bottom: 40px;
   }
 
   .food-card {
-    padding: 10px;
+    padding: 6px;
     font-size: 0.85em;
     height: auto;
     transition: none;
-    height: 280px;
+    height: 20px;
     margin: 5px;
   }
 
@@ -288,4 +296,120 @@
 
 .show-chip-filter {
   display: block;
+}
+@media (max-width: 740px) {
+  .filters-container {
+    flex-direction: column;
+    align-items: center;
+    margin-top: -5px !important;
+    padding: 10px;
+    gap: 8px;
+  }
+
+  mat-card-title {
+    font-size: medium;
+  }
+
+  .qty {
+    width: 14px;
+    font-size: smaller;
+  }
+
+  .filters-container .search-chip input {
+    width: 220px !important;
+    height: 28px;
+    justify-content: flex-start;
+  }
+
+  .filters-container mat-chip-listbox {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .filters-container mat-chip-option {
+    font-size: 12px;
+  }
+
+  .food-menu {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 5px;
+    padding: 5px;
+    overflow-x: hidden;
+    margin-bottom: 30px;
+  }
+
+  .food-card {
+    padding: 4px;
+    font-size: 0.75em;
+    height: auto;
+    height: 200px;
+    transition: none;
+    margin: 5px;
+  }
+
+  .food-card .food-image {
+    width: 100%;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+
+  .quantity-selector {
+    font-size: 12px;
+  }
+
+  .quantity-selector button {
+    width: 22px;
+    height: 22px;
+    font-size: 12px;
+  }
+
+  .quantity-selector span {
+    margin: 0 4px;
+  }
+
+  .button-conf {
+    gap: 4px;
+    justify-content: space-around;
+  }
+
+  .cart-btn {
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+
+  .no-items-found {
+    font-size: 0.9em;
+    padding: 10px;
+  }
+
+  .search-chip input {
+    font-size: 12px;
+  }
+
+  .search-chip mat-icon {
+    font-size: 14px;
+  }
+
+  .filter-toggle {
+    display: block !important;
+    padding: 5px;
+    height: min-content;
+    margin-top: -46px;
+    margin-right: -300px;
+  }
+
+  .nodata {
+    font-size: 14px;
+    color: red;
+  }
+
+  mat-card-title {
+    font-size: medium;
+    line-height: 17px;
+    margin-top: 10px;
+  }
+  p {
+    margin: 4px 4px 4px;
+  }
 }
