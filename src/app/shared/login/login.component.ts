@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
   onSubmit(): void {
     const loginData = { email: this.loginForm.value.email, password: this.loginForm.value.password };
 
-    this.http.post<any>('api/auth/login/', loginData).subscribe({
+    this.http.post<any>('/api/auth/login/', loginData).subscribe({
       next: (response) => {
         console.log(response.access_token);
         const accessToken = response.access_token;
