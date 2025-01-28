@@ -17,9 +17,9 @@
 
         <!-- Quantity control buttons -->
         <div class="quantity-control">
-          <button class="quantity-btn" (click)="updateQuantity(order, -1)">-</button>
+          <button class="btn-primary btn btn-sm" (click)="updateQuantity(order, -1)">-</button>
           <span class="quantity">{{ order.selectedQty }}</span>
-          <button class="quantity-btn" (click)="updateQuantity(order, 1)">+</button>
+          <button class="btn-primary btn btn-sm" (click)="updateQuantity(order, 1)">+</button>
           <button class="remove-btn" (click)="removeFromCart(order)"> <i class="fa fa-trash"
               aria-hidden="true"></i></button>
         </div>
@@ -60,7 +60,7 @@
     <!-- Summary footer -->
     <div class="summary-footer">
       <p class="total-price">Total: ₹{{ calculateTotal() }}</p>
-      <button class="btn-success" [disabled]="!tableNumber || cart$().length === 0"> Checkout</button>
+      <button class="btn btn-success btn-sm" [disabled]="!tableNumber || cart$().length === 0"><i class="fa fa-check" aria-hidden="true"></i> Checkout</button>
     </div>
   </div>
 </div>

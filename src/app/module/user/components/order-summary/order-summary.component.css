@@ -147,7 +147,9 @@
   font-size: 18px;
   color: #777;
 }
-
+.btn-primary{
+  width: 30px;
+}
 /* Responsive Layout */
 @media (max-width: 768px) {
   .main-container {

@@ -62,7 +62,7 @@
           </button>
         </div>
 
-        <button class="btn-success cart-btn" (click)="addToCart(food)"
+        <button class="btn-success cart-btn btn btn-sm" (click)="addToCart(food)"
           [disabled]="cartService.availableQty$()[food.id] <= 0">
           Add <i class="fa fa-shopping-cart" aria-hidden="true"></i>
         </button>

@@ -40,10 +40,14 @@
     display: none;
   }
 }
-mat-sidenav .active-menu{
+mat-sidenav .active-menu {
   background-color: #ffffff !important; /* Ensure it overrides Angular Material styles */
-   border-bottom: 2px solid #e8e8e8;
-  color: rgb(0, 0, 0) !important; /* Ensure proper contrast and text visibility */
+  border-bottom: 2px solid #e8e8e8;
+  color: rgb(
+    0,
+    0,
+    0
+  ) !important; /* Ensure proper contrast and text visibility */
 }
 /* Active Menu Styling */
 .active-menu {
@@ -64,16 +68,17 @@ mat-sidenav .active-menu{
 }
 
 .mdc-list {
- padding: 0;
+  padding: 0;
 }
 
 .cart-badge {
-  position: absolute;
-  top: 2px;
-  right: 2px;
+  top: -21px;
+  right: 7px;
   background-color: red;
   color: white;
   border-radius: 50%;
   padding: 2px 6px;
   font-size: 12px;
+  position: relative;
+  margin-top: 18px;
 }
