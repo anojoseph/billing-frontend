@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
-import {CanActivate,ActivatedRouteSnapshot,RouterStateSnapshot,Router,} from '@angular/router';
+import {
+  CanActivate,
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot,
+  Router,
+} from '@angular/router';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -14,9 +19,9 @@ export class AuthGuard implements CanActivate {
   ): boolean {
     const isAuthenticated = this.authService.isAuthenticated();
     const userType = this.authService.getUserType();
-    const requiredUserType = next.data['userType']; // Pass userType as route data
+    const requiredUserType = next.data['userType'];
 
-    if (isAuthenticated && (!requiredUserType || requiredUserType === userType)) {
+    if (isAuthenticated && this.isAllowedRole(userType)) {
       return true;
     } else {
       this.router.navigate(['/login'], {
@@ -24,5 +29,9 @@ export class AuthGuard implements CanActivate {
       });
       return false;
     }
+  }
+
+  private isAllowedRole(userType: string | null): boolean {
+    return userType === 'admin' || userType === 'superadmin';
   }
 }

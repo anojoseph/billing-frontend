@@ -1,8 +1,8 @@
-<mat-sidenav-container class="sidenav-container">
+<mat-sidenav-container class="sidenav-container" >
 
   <mat-sidenav #drawer class="sidenav" mode="over" [opened]="false" (closedStart)="onCloseSidenav()">
     <mat-nav-list>
-      <a mat-list-item routerLink="/menu" routerLinkActive="active-menu" [routerLinkActiveOptions]="{ exact: true }"
+      <a mat-list-item routerLink="" routerLinkActive="active-menu" [routerLinkActiveOptions]="{ exact: true }"
         (click)="drawer.toggle()">
         <i class="fa fa-list" aria-hidden="true"></i> Menu List
       </a>
@@ -26,7 +26,7 @@
       <span class="title">Billing.Com</span>
       <span class="spacer"></span>
       <nav class="desktop-nav">
-        <a mat-button routerLink="/menu" routerLinkActive="active-menu" [routerLinkActiveOptions]="{ exact: true }">
+        <a mat-button routerLink="" routerLinkActive="active-menu" [routerLinkActiveOptions]="{ exact: true }">
           Menu List
         </a>
         <a mat-button routerLink="/about" routerLinkActive="active-menu" [routerLinkActiveOptions]="{ exact: true }">
@@ -36,14 +36,30 @@
           Contact
         </a>
       </nav>
-      <button mat-icon-button class="cart-icon" aria-label="Cart" routerLink="/cart">
-        <mat-icon>shopping_cart</mat-icon>
-        <span class="cart-badge" *ngIf="getCartItemCount() > 0">{{ getCartItemCount() }}</span>
-      </button>
+      <mat-icon (click)="opencart()" *ngIf="getCartItemCount() <= 0">shopping_cart</mat-icon>
+      <mat-icon (click)="opencart()"  matBadgeSize="small" matBadge="{{ getCartItemCount() }}" matBadgeColor="accent" matBadgePosition="above after"
+        *ngIf="getCartItemCount() > 0">
+        shopping_cart
+      </mat-icon>
+      <mat-icon [matMenuTriggerFor]="menu">person</mat-icon>
+
+
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="viewProfile()">
+      <mat-icon [style.fontSize]="'16px'" aria-hidden="false" class="menu-icon">account_circle</mat-icon>
+      Profile
+    </button>
+    <button mat-menu-item (click)="logout()">
+      <mat-icon [style.fontSize]="'16px'" aria-hidden="false" class="menu-icon">exit_to_app</mat-icon>
+      Logout
+    </button>
+  </mat-menu>
+
+
     </mat-toolbar>
 
-    <div class="content">
+    <!-- <div class="content">
       <router-outlet></router-outlet>
-    </div>
+    </div> -->
   </mat-sidenav-content>
 </mat-sidenav-container>

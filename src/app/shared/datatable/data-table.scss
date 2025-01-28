@@ -1,0 +1,94 @@
+/* Card Styling */
+.data-table-container {
+  margin: 0 20px 20px 20px;
+
+}
+.mat-mdc-card-content {
+  padding:0;
+}
+
+.data-table-card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.data-table-card-head{
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  height: 60px;
+  margin: 15px;
+}
+
+button.mat-raised-button {
+  font-size: 14px;
+}
+
+.filters {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -21px;
+}
+
+.search-input {
+  max-width: 300px;
+}
+
+/* Table Styling */
+table.mat-elevation-z8 {
+  width: 100%;
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+th.mat-header-cell {
+  background-color: #f1f1f1;
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+  color: #333;
+}
+
+td.mat-cell {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+mat-paginator {
+  margin-top: 20px;
+  text-align: center;
+}
+
+/* Button Styling */
+button.mat-button {
+  margin-right: 8px;
+}
+
+/* Styling for Checkbox */
+mat-checkbox {
+  padding: 0;
+}
+/* Style for Left and Right Cards */
+.data-table-card {
+  padding: 16px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Ensure Cards Align Properly */
+.add-button-container {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-start;
+  padding: 10px;
+}
+
+.search-input {
+  width: 100%;
+}
+.no-data-row {
+  background-color: #f2f2f2;
+  color: #777;
+  font-weight: bold;
+}

@@ -1,0 +1,26 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { UserRoutingModule } from './user.routing.module';
+import { FoodMenuComponent } from './food-menu/food-menu.component';
+import { OrderSummaryComponent } from './order-summary/order-summary.component';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatIconModule } from '@angular/material/icon';
+
+
+@NgModule({
+  declarations:[
+    FoodMenuComponent,
+    OrderSummaryComponent
+  ],
+  imports: [
+    CommonModule,
+    UserRoutingModule,
+    MatCardModule,
+    SharedModule,
+    MatChipsModule,
+    MatIconModule
+  ],
+})
+export class UserModule { }

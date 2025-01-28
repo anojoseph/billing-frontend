@@ -1,0 +1,39 @@
+<div class="data-card">
+  <h5 class="data-head">{{actiontype}} Product Item</h5>
+</div>
+
+<div class="data-card">
+
+  <form [formGroup]="producItemForm">
+    <div class="row" style="margin: 10px;">
+      <div class="col-md-3">
+        <mat-form-field appearance="outline" style="width: 100%;margin-top: 20px;">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name" placeholder="Input the name">
+          <mat-error *ngIf="f['name'].hasError('required')">Name is required</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-3">
+        <mat-form-field appearance="outline" style="width: 100%;margin-top: 20px;">
+          <mat-label>Status</mat-label>
+          <mat-select formControlName="status" placeholder="Select status">
+            <mat-option [value]="true">Active</mat-option>
+            <mat-option [value]="false">In Active</mat-option>
+          </mat-select>
+          <mat-error *ngIf="f['name'].hasError('required')">Name is required</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <hr>
+
+    <div class="row" style="padding: 10px;">
+      <div class="pull-right">
+        <button class="btn btn-danger btn-sm" type="button" routerLink="/admin/productitem/"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{'Back'}}</button>
+        <button class="btn btn-primary btn-sm" type="reset"><i class="fa fa-times" aria-hidden="true"></i> Clear</button>
+        <button class="btn btn-success btn-sm" type="submit" (click)="submit()"><i class="fa fa-check" aria-hidden="true"></i> {{formaction}}</button>
+      </div>
+    </div>
+
+  </form>
+</div>

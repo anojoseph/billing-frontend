@@ -15,18 +15,17 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const accessToken = this.authService.getAccessToken();
-    console.log(accessToken)
-    // Prepend the base URL
-    const apiUrl = environment.baseUrl + req.url;
 
-    // Clone the request with the new URL and Authorization header (if token exists)
+    // Only prepend base URL if the request URL is relative
+    const apiUrl = req.url.startsWith('http') ? req.url : environment.baseUrl + req.url;
+
+    // Clone the request with necessary modifications
     const clonedReq = req.clone({
       url: apiUrl,
-      setHeaders: accessToken
-        ? {
-          Authorization: `Bearer ${accessToken}`,
-        }
-        : {},
+      setHeaders: {
+        ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+        'Content-Type': 'application/json',
+      },
     });
 
     return next.handle(clonedReq);

@@ -2,22 +2,21 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './shared/login/login.component';
 import { LogoutComponent } from './shared/login/logout.component';
-import { FoodMenuComponent } from './module/user/food-menu/food-menu.component';
-import { OrderSummaryComponent } from './module/user/order-summary/order-summary.component';
+import { AuthGuard } from './shared/auth/auth.guard';
 
 
 const routes: Routes = [
+  {
+    path: '',
+    loadChildren: () => import('./module/layout.module').then(m => m.LayoutModule),
+    canActivate: [AuthGuard]
+  },
   { path: 'login', component: LoginComponent },
   { path: 'logout', component: LogoutComponent },
-  { path: 'menu', component: FoodMenuComponent  },
-  { path: 'cart', component: OrderSummaryComponent },
-  // { path: '**', redirectTo: '/login', pathMatch: 'full' },
-  // { path: 'admin', component: AdminComponent, canActivate: [AuthGuard], data: { userType: 'admin' } },
-  // { path: 'user', component: UserComponent, canActivate: [AuthGuard], data: { userType: 'user' } },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class AppRoutingModule { }

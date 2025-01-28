@@ -15,25 +15,22 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { ToastrModule } from 'ngx-toastr';
 import { LogoutComponent } from './shared/login/logout.component';
-import { HeaderComponent } from './shared/partials/header/header.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { FoodMenuComponent } from './module/user/food-menu/food-menu.component';
-import { OrderSummaryComponent } from './module/user/order-summary/order-summary.component';
-import { LayoutComponent } from './module/user/layout/layout.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatBadgeModule } from '@angular/material/badge';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    FoodMenuComponent,
-    OrderSummaryComponent,
-    LayoutComponent,
     LogoutComponent,
-    HeaderComponent
+
   ],
   imports: [
     BrowserModule,
@@ -57,7 +54,11 @@ import { LayoutComponent } from './module/user/layout/layout.component';
     MatSidenavModule,
     MatListModule,
     MatChipsModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatMenuModule,
+    MatBadgeModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

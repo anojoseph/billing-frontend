@@ -21,31 +21,31 @@ export class LoginComponent implements OnInit {
     private http: HttpClient
   ) {
     this.loginForm = this.fb.group({
-      username: ['', Validators.required], // Validate email
-      password: ['', Validators.required] // Example password validation
+      email: ['', Validators.required],
+      password: ['', Validators.required]
     });
   }
 
   ngOnInit() { }
 
   onSubmit(): void {
-    const loginData = { username: this.loginForm.value.username, password: this.loginForm.value.password };
+    const loginData = { email: this.loginForm.value.email, password: this.loginForm.value.password };
 
-    // Replace with your backend's login API URL
-    this.http.post<any>('auth_app/auth/login/', loginData).subscribe({
+    this.http.post<any>('api/auth/login/', loginData).subscribe({
       next: (response) => {
-        const { accessToken, refreshToken, userType } = response;
-
-        // Store tokens and user type
-        this.authService.login(accessToken, refreshToken, userType);
-
-        // Redirect to the intended URL or default to the dashboard
-        const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/menu';
+        console.log(response.access_token);
+        const accessToken = response.access_token;
+        const refreshToken = response.refresh_token;
+        const userType = response.user_type;
+        const userDetails = response.user_details;
+        this.authService.login(accessToken, refreshToken, userType, userDetails);
+        const returnUrl = '';
         this.router.navigate([returnUrl]);
       },
       error: (err) => {
-        this.error = 'Invalid username or password'; // Customize error message
+        this.error = 'Invalid username or password';
       },
     });
   }
+
 }

@@ -1,0 +1,68 @@
+<div class="row">
+  <!-- Left Card for Name (Product Item) -->
+  <div class="col-md-6">
+    <div class="data-table-card-head">
+      <h4 style="padding: 20px;font-weight: 600;">Product Item</h4>
+    </div>
+  </div>
+
+  <!-- Right Card for Action Buttons -->
+  <div class="col-md-6">
+    <div class="data-table-card-head">
+      <div class="add-button-container">
+        <button class="btn btn-success btn-sm" style="margin-top: 5px;" (click)="onAdd()"><i
+            class="fa-solid fa-plus"></i> Add</button>
+        <button class="btn btn-info btn-sm" style="margin-top: 5px;color: white;" (click)="onEditSelected()"
+          [disabled]="!selectedRow"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
+        <button class="btn btn-danger btn-sm" style="margin-top: 5px;" (click)="onDeleteSelected()"
+          [disabled]="!selectedRow"><i class="fa fa-trash" aria-hidden="true"></i> Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="data-table-container">
+  <mat-card class="data-table-card">
+    <mat-card-content>
+      <!-- Table with Search Input in Header -->
+      <div class="filters">
+        <mat-form-field appearance="outline" class="search-input">
+          <mat-label>Search Term</mat-label>
+          <input matInput [(ngModel)]="searchValue" (ngModelChange)="onSearch()" />
+        </mat-form-field>
+      </div>
+
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+        <!-- Checkbox Column (First Column) -->
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef> </th>
+          <td mat-cell *matCellDef="let element">
+            <mat-checkbox color="primary" (change)="toggleRowSelection(element, $event)"></mat-checkbox>
+          </td>
+        </ng-container>
+
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" [attr.colspan]="columns.length" style="color: red;text-align: center;">
+            No record found <i class="fa-solid fa-face-sad-tear"></i>
+          </td>
+        </tr>
+
+
+        <!-- Other Columns -->
+        <ng-container *ngFor="let column of columns" [matColumnDef]="column">
+          <th mat-header-cell *matHeaderCellDef>{{ column | titlecase }}</th>
+          <td mat-cell *matCellDef="let element">{{ element[column] }}</td>
+        </ng-container>
+
+
+        <tr mat-header-row *matHeaderRowDef="['select'].concat(columns)"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['select'].concat(columns)" [ngClass]="{'no-data-row': row <= 0}">
+        </tr>
+      </table>
+
+      <mat-paginator [length]="pagination.totalCount" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]"
+        (page)="onPageChange($event.pageIndex + 1)">
+      </mat-paginator>
+    </mat-card-content>
+  </mat-card>
+</div>
