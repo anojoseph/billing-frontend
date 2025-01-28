@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -12,9 +11,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './shared/auth/auth.interceptor';
-import { FoodMenuComponent } from './module/user/components/food-menu/food-menu.component';
-import { OrderSummaryComponent } from './module/user/components/order-summary/order-summary.component';
-import { LayoutComponent } from './module/user/components/layout/layout.component';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { ToastrModule } from 'ngx-toastr';
@@ -25,6 +21,9 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { FoodMenuComponent } from './module/user/food-menu/food-menu.component';
+import { OrderSummaryComponent } from './module/user/order-summary/order-summary.component';
+import { LayoutComponent } from './module/user/layout/layout.component';
 
 @NgModule({
   declarations: [
