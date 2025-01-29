@@ -30,7 +30,6 @@
   flex: 1 1 auto;
 }
 
-/* Responsive Styles */
 @media (max-width: 768px) {
   .menu-button {
     display: block;
@@ -41,19 +40,14 @@
   }
 }
 mat-sidenav .active-menu {
-  background-color: #ffffff !important; /* Ensure it overrides Angular Material styles */
+  background-color: #ffffff !important;
   border-bottom: 2px solid #e8e8e8;
-  color: rgb(
-    0,
-    0,
-    0
-  ) !important; /* Ensure proper contrast and text visibility */
+  color: rgb(0,0,0) !important;
 }
-/* Active Menu Styling */
 .active-menu {
-  background-color: #212e79 !important; /* Ensure it overrides Angular Material styles */
+  background-color: #212e79 !important;
   border-bottom: 2px solid #3f51b5;
-  color: white !important; /* Ensure proper contrast and text visibility */
+  color: white !important;
 }
 
 .mat-list-item.active-menu {
@@ -64,7 +58,7 @@ mat-sidenav .active-menu {
 .desktop-nav .mat-button.active-menu {
   background-color: #212e79 !important;
   color: white !important;
-  font-weight: bold; /* Optional for further emphasis */
+  font-weight: bold;
 }
 
 .mdc-list {
@@ -93,7 +87,7 @@ mat-icon {
 }
 
 .menu-icon {
-  font-size: 16px; /* You can adjust the font size */
-  margin-right: 8px; /* Space between icon and text */
+  font-size: 16px;
+  margin-right: 8px;
   padding:5px;
 }
