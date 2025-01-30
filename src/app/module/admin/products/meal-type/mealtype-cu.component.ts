@@ -56,7 +56,7 @@ export class MealTypeCuComponent implements OnInit {
       if (this.actiontype == 'Add') {
         this.producitemservice.postmealtype(this.mealTypeForm.value).subscribe((response: any) => {
           this.toastr.success('Meal Type Added Successfully');
-          this.router.navigate(['admin/mealtype']);
+          this.router.navigate(['admin/product/mealtype']);
         },
           (error: any) => {
             this.toastr.error(error.error.message);
@@ -65,7 +65,7 @@ export class MealTypeCuComponent implements OnInit {
       else if (this.actiontype == 'Edit') {
         this.producitemservice.patchmealtype(this.mealTypeForm.value).subscribe((response: any) => {
           this.toastr.success('Meal TypeItem Updated Successfully');
-          this.router.navigate(['admin/mealtype']);
+          this.router.navigate(['admin/product/mealtype']);
         },
           (error: any) => {
             this.toastr.error(error.error.message);

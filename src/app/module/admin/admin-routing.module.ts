@@ -3,10 +3,9 @@ import { RouterModule, Routes } from '@angular/router';
 
 
 const routes: Routes = [
-  {
-    path: '',
-    loadChildren: () => import('./products/product.module').then(m => m.ProductModule)
-  }
+  {path: 'product',loadChildren: () => import('./products/product.module').then(m => m.ProductModule)},
+  { path: 'table', loadChildren: () => import('./table-management/tablemanagement.module').then(m => m.TableManagementModule) }
+
 
 
 ];

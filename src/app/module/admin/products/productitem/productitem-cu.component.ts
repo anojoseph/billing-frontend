@@ -56,7 +56,7 @@ export class ProductItemCuComponent implements OnInit {
       if (this.actiontype == 'Add') {
         this.producitemservice.postproducitem(this.producItemForm.value).subscribe((response: any) => {
           this.toastr.success('Product Item Added Successfully');
-          this.router.navigate(['admin/productitem']);
+          this.router.navigate(['admin/product/productitem']);
         },
           (error: any) => {
             this.toastr.error(error.error.message);
@@ -65,7 +65,7 @@ export class ProductItemCuComponent implements OnInit {
       else if (this.actiontype == 'Edit') {
         this.producitemservice.patchproductitem(this.producItemForm.value).subscribe((response: any) => {
           this.toastr.success('Product Item Updated Successfully');
-          this.router.navigate(['admin/productitem']);
+          this.router.navigate(['admin/product/productitem']);
         },
           (error: any) => {
             this.toastr.error(error.error.message);
