@@ -33,7 +33,6 @@ export class LoginComponent implements OnInit {
 
     this.http.post<any>('/api/auth/login/', loginData).subscribe({
       next: (response) => {
-        console.log(response.access_token);
         const accessToken = response.access_token;
         const refreshToken = response.refresh_token;
         const userType = response.user_type;

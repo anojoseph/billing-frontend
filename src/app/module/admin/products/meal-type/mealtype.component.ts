@@ -1,28 +1,28 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ProductItemService } from './productitem.service';
+import { MealtypeService } from './mealtype.service';
 import { ToastrService } from 'ngx-toastr';
 import { DataTableComponent } from 'src/app/shared/datatable/data-table.component';
 
 @Component({
-  selector: 'app-productitem',
+  selector: 'app-mealtype',
   template: `
     <app-data-table
       #dataTable
-      [url]="'ProductItem'"
+      [url]="'MealType'"
       [fields]="fields"
-      [name]='name'
+      [name]="name"
       (delete)="onDelete($event)"
       [actions]="{ add: true, edit: true, delete: true }">
     </app-data-table>
   `
 })
-export class ProductItemComponent implements OnInit {
+export class MealTypeComponent implements OnInit {
   fields: string[] = ['Name', 'Status'];
   @ViewChild('dataTable') dataTable!: DataTableComponent;
-  name = 'Product Item'
+  name='Meal Type'
 
-  constructor(private productitemsrvice: ProductItemService,
-    private toastr:ToastrService
+  constructor(private mealtypeservice: MealtypeService,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() { }
@@ -33,13 +33,12 @@ export class ProductItemComponent implements OnInit {
       return;
     }
 
-    this.productitemsrvice.delete(id).subscribe(
+    this.mealtypeservice.delete(id).subscribe(
       (response: any) => {
         this.toastr.success('Product item deleted successfully!', 'Success');
         this.dataTable.loadData();  // Refresh the data table
       },
       (error: any) => {
-        console.error('Error deleting product item:', error);
         this.toastr.error('Failed to delete the product item. Please try again.', 'Error');
       }
     );

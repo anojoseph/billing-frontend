@@ -27,7 +27,9 @@ button.mat-raised-button {
 .filters {
   display: flex;
   justify-content: flex-end;
+  margin-bottom: 10px;
   margin-top: -21px;
+  // margin-bottom: -5px;
 }
 
 .search-input {
@@ -91,4 +93,72 @@ mat-checkbox {
   background-color: #f2f2f2;
   color: #777;
   font-weight: bold;
+}
+
+/* From Uiverse.io by joe-watson-sbf */
+.search {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.search__input {
+  font-family: inherit;
+  font-size: inherit;
+  background-color: #f4f2f2;
+  border: none;
+  color: #646464;
+  padding: 0.7rem 1rem;
+  border-radius: 30px;
+  width: 20em;
+  transition: all ease-in-out .5s;
+  margin-right: -2rem;
+}
+
+.search__input:hover,
+.search__input:focus {
+  box-shadow: 0 0 1em #00000013;
+}
+
+.search__input:focus {
+  outline: none;
+  background-color: #f0eeee;
+}
+
+.search__input::-webkit-input-placeholder {
+  font-weight: 100;
+  color: #ccc;
+}
+
+.search__input:focus+.search__button {
+  background-color: #f0eeee;
+}
+
+.search__button {
+  border: none;
+  background-color: #f4f2f2;
+  margin-top: .1em;
+}
+
+.search__button:hover {
+  cursor: pointer;
+}
+
+.search__icon {
+  height: 1.3em;
+  width: 1.3em;
+  fill: #b4b4b4;
+}
+.example-container {
+  height: 350px;
+  overflow: auto;
+}
+
+.mat-row .mat-cell {
+  height: 20px;
+  padding: 5px;
+}
+.mat-mdc-card-content:last-child {
+  padding-bottom: 0px;
 }

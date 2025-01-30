@@ -15,6 +15,7 @@ export class DataTableComponent implements OnInit {
   @Output() edit = new EventEmitter<any>();
   @Output() delete = new EventEmitter<any>();
   @Input() fields: string[] = [];
+  @Input() name: string = '';
 
   columns: string[] = [];
   dataSource: any[] = [];
@@ -37,7 +38,7 @@ export class DataTableComponent implements OnInit {
 
   loadData(): void {
     if (!this.url) return;
-
+    this.selectedRow = null
     this.dataService
       .getItems(
         this.url,
@@ -46,7 +47,6 @@ export class DataTableComponent implements OnInit {
         this.pageSize
       )
       .subscribe((response) => {
-        console.log(response);
         this.dataSource = response.items.map((item: any, index: number) => ({
           ...item,
           index: this.currentPage > 1 ? (this.currentPage - 1) * this.pageSize + index + 1 : index + 1,
@@ -56,7 +56,6 @@ export class DataTableComponent implements OnInit {
         if (this.dataSource.length > 0) {
           this.columns = Object.keys(this.dataSource[0]).filter((column) => column !== 'id' && column !== 'index');
         }
-        console.log(this.dataSource.length)
       },
         (error) => {
           console.error(error);
@@ -95,9 +94,7 @@ export class DataTableComponent implements OnInit {
 
   // Method to delete the selected row
   onDeleteSelected(): void {
-    console.log("it is working")
     if (this.selectedRow && this.selectedRow.id) {
-      console.log("second if is working")
       this.delete.emit(this.selectedRow.id); // Emit the selected row's id
     } else {
       console.error('No row selected for deletion.');

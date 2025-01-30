@@ -8,11 +8,15 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
+import { MealTypeCuComponent } from './meal-type/mealtype-cu.component';
+import { MealTypeComponent } from './meal-type/mealtype.component';
 
 @NgModule({
   declarations: [
     ProductItemComponent,
-    ProductItemCuComponent
+    ProductItemCuComponent,
+    MealTypeCuComponent,
+    MealTypeComponent
   ],
   imports: [
     CommonModule,

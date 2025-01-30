@@ -22,6 +22,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatIconModule,
     RouterModule,
     MatCheckboxModule,
-    RouterModule
+    RouterModule,
+    MatExpansionModule
 
   ],
   exports: [
