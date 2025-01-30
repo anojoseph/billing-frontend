@@ -23,7 +23,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatExpansionModule } from '@angular/material/expansion';
-
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 @NgModule({
   declarations: [
     DataTableComponent,
@@ -53,7 +53,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
     RouterModule,
     MatCheckboxModule,
     RouterModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatProgressSpinnerModule
 
   ],
   exports: [

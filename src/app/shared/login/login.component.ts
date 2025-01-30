@@ -12,6 +12,7 @@ import { HttpClient } from '@angular/common/http';
 export class LoginComponent implements OnInit {
   error: string | null = null;
   loginForm: FormGroup;
+  loading = false;
 
   constructor(
     private fb: FormBuilder,
@@ -30,7 +31,7 @@ export class LoginComponent implements OnInit {
 
   onSubmit(): void {
     const loginData = { email: this.loginForm.value.email, password: this.loginForm.value.password };
-
+    this.loading = true;
     this.http.post<any>('/api/auth/login/', loginData).subscribe({
       next: (response) => {
         const accessToken = response.access_token;
@@ -40,8 +41,10 @@ export class LoginComponent implements OnInit {
         this.authService.login(accessToken, refreshToken, userType, userDetails);
         const returnUrl = '';
         this.router.navigate([returnUrl]);
+        this.loading = false;
       },
       error: (err) => {
+        this.loading = false;
         this.error = 'Invalid username or password';
       },
     });

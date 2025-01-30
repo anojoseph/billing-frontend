@@ -16,15 +16,14 @@ export class DataTableComponent implements OnInit {
   @Output() delete = new EventEmitter<any>();
   @Input() fields: string[] = [];
   @Input() name: string = '';
-
   columns: string[] = [];
   dataSource: any[] = [];
   pagination: any = {};
   currentPage: number = 1;
   pageSize: number = 10;
-
   searchValue: string = '';
-  selectedRow: any = null; // Store the selected row
+  selectedRow: any = null;
+  loading: boolean = false;
 
   constructor(private dataService: DataService,
     private router: Router,
@@ -38,6 +37,7 @@ export class DataTableComponent implements OnInit {
 
   loadData(): void {
     if (!this.url) return;
+    this.loading = true;
     this.selectedRow = null
     this.dataService
       .getItems(
@@ -56,9 +56,11 @@ export class DataTableComponent implements OnInit {
         if (this.dataSource.length > 0) {
           this.columns = Object.keys(this.dataSource[0]).filter((column) => column !== 'id' && column !== 'index');
         }
+        this.loading = false;
       },
         (error) => {
           console.error(error);
+          this.loading = false;
         });
   }
 
