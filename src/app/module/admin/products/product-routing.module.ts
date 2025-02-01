@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ProductItemComponent } from './productitem/productitem.component';
-import { ProductItemCuComponent } from './productitem/productitem-cu.component';
+import { ProductItemComponent } from './foodtype/productitem.component';
+import { ProductItemCuComponent } from './foodtype/productitem-cu.component';
 import { MealTypeComponent } from './meal-type/mealtype.component';
 import { MealTypeCuComponent } from './meal-type/mealtype-cu.component';
 

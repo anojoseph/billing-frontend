@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataTableComponent } from 'src/app/shared/datatable/data-table.component';
-import { ProductItemService } from '../../products/productitem/productitem.service';
+import { ProductItemService } from '../../products/foodtype/productitem.service';
 import { ToastrService } from 'ngx-toastr';
 import { TableService } from './table.service';
 
@@ -19,33 +19,33 @@ import { TableService } from './table.service';
 })
 
 export class TableComponent implements OnInit {
- fields: string[] = ['Table No:','Name', 'Status', "Qr code"];
-   @ViewChild('dataTable') dataTable!: DataTableComponent;
-   name = 'Tables'
+  fields: string[] = ['Table No:', 'Name', 'Status', "Qr code"];
+  @ViewChild('dataTable') dataTable!: DataTableComponent;
+  name = 'Tables'
 
 
-   constructor(private tablservice: TableService,
-     private toastr:ToastrService
-   ) { }
+  constructor(private tablservice: TableService,
+    private toastr: ToastrService
+  ) { }
 
-   ngOnInit() { }
+  ngOnInit() { }
 
-   onDelete(id: number): void {
-     const confirmation = confirm('Are you sure you want to delete table?');
-     if (!confirmation) {
-       return;
-     }
+  onDelete(id: number): void {
+    const confirmation = confirm('Are you sure you want to delete table?');
+    if (!confirmation) {
+      return;
+    }
 
-     this.tablservice.delete(id).subscribe(
-       (response: any) => {
-         this.toastr.success('Deleted successfully!', 'Success');
-         this.dataTable.loadData();  // Refresh the data table
-       },
-       (error: any) => {
-         console.error('Error deleting table:', error);
-         this.toastr.error('Failed to delete. Please try again.', 'Error');
-       }
-     );
-   }
+    this.tablservice.delete(id).subscribe(
+      (response: any) => {
+        this.toastr.success('Deleted successfully!', 'Success');
+        this.dataTable.loadData();  // Refresh the data table
+      },
+      (error: any) => {
+        console.error('Error deleting table:', error);
+        this.toastr.error('Failed to delete. Please try again.', 'Error');
+      }
+    );
+  }
 
- }
+}

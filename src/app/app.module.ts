@@ -46,10 +46,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     HttpClientModule,
     MatSelectModule,
     MatIconModule,
-    ToastrModule.forRoot({ // Configure Toastr globally
-      timeOut: 3000, // Default timeout in ms
-      positionClass: 'toast-top-right', // Position of the toast
-      preventDuplicates: true, // Prevent duplicate toasts
+    ToastrModule.forRoot({
+      timeOut: 3000,
+      positionClass: 'toast-bottom-right',
+      preventDuplicates: true,
     }),
     MatToolbarModule,
     MatSidenavModule,

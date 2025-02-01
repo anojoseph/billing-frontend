@@ -13,10 +13,6 @@
   z-index: 1000;
 }
 
-/* .menu-button {
-  display: none;
-} */
-
 .desktop-nav {
   display: flex;
   gap: 10px;
@@ -51,17 +47,6 @@ mat-sidenav .active-menu:active {
   color: rgb(0,0,0) !important;
 }
 
-/* .mat-list-item.active-menu {
-  background-color: #212e79 !important;
-  color: white !important;
-}
-
-.desktop-nav .mat-button.active-menu {
-  background-color: #212e79 !important;
-  color: white !important;
-  font-weight: bold;
-} */
-
 .mdc-list {
   padding: 0;
 }
@@ -91,4 +76,16 @@ mat-icon {
   font-size: 16px;
   margin-right: 8px;
   padding:5px;
+}
+
+.icon{
+  margin-top: 14px;
+}
+
+.toggle-btn{
+  margin-left: -20px !important;
+}
+
+.menu-list{
+  padding: 10px;
 }

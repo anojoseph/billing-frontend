@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { ProductItemService } from '../../products/productitem/productitem.service';
+import { ProductItemService } from '../../products/foodtype/productitem.service';
 import { TableService } from './table.service';
 
 @Component({
@@ -43,8 +43,8 @@ export class TableCuComponent implements OnInit {
             id: response.id,
             name: response.name,
             status: response.status,
-            no:response.no,
-            qr_status:response.qr_status
+            no: response.no,
+            qr_status: response.qr_status
           });
         });
       }

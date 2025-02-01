@@ -19,7 +19,7 @@ import { DataTableComponent } from 'src/app/shared/datatable/data-table.componen
 export class ProductItemComponent implements OnInit {
   fields: string[] = ['Name', 'Status'];
   @ViewChild('dataTable') dataTable!: DataTableComponent;
-  name = 'Product Item'
+  name = 'Food Type'
 
   constructor(private productitemsrvice: ProductItemService,
     private toastr:ToastrService

@@ -9,7 +9,7 @@
       <div class="col-md-3">
         <mat-form-field appearance="outline" style="width: 100%;margin-top: 20px;">
           <mat-label>Name</mat-label>
-          <input matInput formControlName="name" placeholder="Input the name">
+          <input matInput formControlName="name" placeholder="Input the name" autofocus>
           <mat-error *ngIf="f['name'].hasError('required')">Name is required</mat-error>
         </mat-form-field>
       </div>

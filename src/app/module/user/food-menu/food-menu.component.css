@@ -444,3 +444,8 @@
   background-color: #f44336;
   color: #ffffff;
 }
+
+.search-chip input::placeholder {
+  color: #999 !important;
+  opacity: 1 !important;
+}
