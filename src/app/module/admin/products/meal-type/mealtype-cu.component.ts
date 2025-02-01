@@ -37,7 +37,7 @@ export class MealTypeCuComponent implements OnInit {
         this.actiontype = 'Edit';
         this.producitemservice.getmealtypebyid(editid).subscribe((response: any) => {
           this.mealTypeForm.patchValue({
-            id: response.id,
+            id: response._id,
             name: response.name,
             status: response.status,
           });

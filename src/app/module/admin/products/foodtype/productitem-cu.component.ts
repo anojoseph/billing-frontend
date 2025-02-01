@@ -37,7 +37,7 @@ export class ProductItemCuComponent implements OnInit {
         this.actiontype = 'Edit';
         this.producitemservice.getproductbyid(productId).subscribe((response: any) => {
           this.producItemForm.patchValue({
-            id: response.id,
+            id: response._id,
             name: response.name,
             status: response.status,
           });

@@ -1,0 +1,101 @@
+<div class="data-card">
+  <h5 class="data-head">{{actionType}} Meal type</h5>
+</div>
+
+<div class="data-card">
+
+  <form [formGroup]="productForm">
+    <div class="row" style="margin: 10px;">
+
+      <div class="col-md-3">
+        <mat-form-field appearance="outline" style="width: 100%;margin-top: 20px;">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name" placeholder="Input the name" autofocus required>
+          <mat-error *ngIf="f['name'].hasError('required')">Name is required</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-3">
+        <mat-form-field appearance="outline" style="width: 100%;margin-top: 20px;">
+          <mat-label>Price</mat-label>
+          <input matInput formControlName="price" type="number" placeholder="Input the price" required>
+          <mat-error *ngIf="f['price'].hasError('required')">Price is required</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-3">
+        <mat-form-field appearance="outline" style="width: 100%;margin-top: 20px;">
+          <mat-label>Incrediants</mat-label>
+          <input matInput formControlName="ingredients" placeholder="Input the Incrediants">
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-3">
+        <mat-form-field appearance="outline" style="width: 100%;margin-top: 20px;">
+          <mat-label>Food Type</mat-label>
+          <mat-select formControlName="type" placeholder="Select food type" required>
+            <mat-option *ngFor="let item of foodtypes" [value]="item._id">{{item?.name}}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="f['type'].hasError('required')">Food type is required</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-3">
+        <mat-form-field appearance="outline" style="width: 100%;margin-top: 20px;">
+          <mat-label>Meal Type</mat-label>
+          <mat-select formControlName="mealType" placeholder="Select meal type" required>
+            <mat-option *ngFor="let item of mealtypes" [value]="item._id">{{item?.name}}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="f['mealType'].hasError('required')">Meal type is required</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-3">
+        <mat-form-field appearance="outline" style="width: 100%;margin-top: 20px;">
+          <mat-label>Qunatity</mat-label>
+          <input matInput formControlName="qty" type="number" placeholder="Input the qunatity">
+        </mat-form-field>
+      </div>
+
+        <div class="col-md-3">
+          <mat-form-field appearance="outline" style="width: 100%;margin-top: 20px;">
+            <mat-label>Selection default qty</mat-label>
+            <input matInput formControlName="selectedQty" type="number" placeholder="Input the selection default qty">
+          </mat-form-field>
+        </div>
+
+      <div class="col-md-3">
+        <mat-form-field appearance="outline" style="width: 100%;margin-top: 20px;">
+          <mat-label>Status</mat-label>
+          <mat-select formControlName="status" placeholder="Select status" required>
+            <mat-option [value]="true">Active</mat-option>
+            <mat-option [value]="false">In Active</mat-option>
+          </mat-select>
+          <mat-error *ngIf="f['name'].hasError('required')">Name is required</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-3">
+        <div appearance="outline" style="width: 100%;margin-top: 20px;">
+          <mat-label>Image</mat-label>
+          <input type="file" (change)="onImageChange($event)" accept="image/*">
+        </div>
+        <!-- Display Image Preview -->
+        <div *ngIf="imagePreview" style="margin-top: 10px;">
+          <img [src]="imagePreview" alt="Image Preview" style="width: 100%; max-height: 150px; object-fit: cover;">
+        </div>
+      </div>
+
+    </div>
+    <hr>
+
+    <div class="row" style="padding: 10px;">
+      <div class="pull-right">
+        <button class="btn btn-danger btn-sm" type="button" routerLink="/admin/product/product/"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{'Back'}}</button>
+        <button class="btn btn-primary btn-sm" type="reset"><i class="fa fa-times" aria-hidden="true"></i> Clear</button>
+        <button class="btn btn-success btn-sm" type="submit" (click)="submit()"><i class="fa fa-check" aria-hidden="true"></i> {{formAction}}</button>
+      </div>
+    </div>
+
+  </form>
+</div>

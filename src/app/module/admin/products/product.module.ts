@@ -10,13 +10,17 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MealTypeCuComponent } from './meal-type/mealtype-cu.component';
 import { MealTypeComponent } from './meal-type/mealtype.component';
+import { ProductComponent } from './product/product.component';
+import { ProductCuComponent } from './product/product-cu.component';
 
 @NgModule({
   declarations: [
     ProductItemComponent,
     ProductItemCuComponent,
     MealTypeCuComponent,
-    MealTypeComponent
+    MealTypeComponent,
+    ProductComponent,
+    ProductCuComponent
   ],
   imports: [
     CommonModule,

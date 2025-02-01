@@ -4,9 +4,15 @@ import { ProductItemComponent } from './foodtype/productitem.component';
 import { ProductItemCuComponent } from './foodtype/productitem-cu.component';
 import { MealTypeComponent } from './meal-type/mealtype.component';
 import { MealTypeCuComponent } from './meal-type/mealtype-cu.component';
+import { ProductComponent } from './product/product.component';
+import { ProductCuComponent } from './product/product-cu.component';
 
 
 const routes: Routes = [
+  { path: 'product', component: ProductComponent },
+  { path: 'product/add', component: ProductCuComponent },
+  { path: 'product/edit/:id', component: ProductCuComponent },
+
   { path: 'productitem', component: ProductItemComponent },
   { path: 'productitem/add', component: ProductItemCuComponent },
   { path: 'productitem/edit/:id', component: ProductItemCuComponent },

@@ -40,7 +40,7 @@ export class TableCuComponent implements OnInit {
         this.actiontype = 'Edit';
         this.tableservice.gettablebyid(productId).subscribe((response: any) => {
           this.tableForm.patchValue({
-            id: response.id,
+            id: response._id,
             name: response.name,
             status: response.status,
             no: response.no,

@@ -47,6 +47,7 @@ export class DataTableComponent implements OnInit {
         this.pageSize
       )
       .subscribe((response) => {
+        console.log(response)
         this.dataSource = response.items.map((item: any, index: number) => ({
           ...item,
           index: this.currentPage > 1 ? (this.currentPage - 1) * this.pageSize + index + 1 : index + 1,
@@ -54,7 +55,7 @@ export class DataTableComponent implements OnInit {
         this.pagination = response.pagination;
 
         if (this.dataSource.length > 0) {
-          this.columns = Object.keys(this.dataSource[0]).filter((column) => column !== 'id' && column !== 'index');
+          this.columns = Object.keys(this.dataSource[0]).filter((column) => column !== '_id' && column !== 'index');
         }
         this.loading = false;
       },
@@ -89,15 +90,16 @@ export class DataTableComponent implements OnInit {
 
   onEditSelected(): void {
     if (this.selectedRow) {
+      console.log(this.selectedRow)
       const currentUrl = this.router.url;
-      this.router.navigate([`/${currentUrl}/edit`, this.selectedRow.id]);
+      this.router.navigate([`/${currentUrl}/edit`, this.selectedRow._id]);
     }
   }
 
   // Method to delete the selected row
   onDeleteSelected(): void {
-    if (this.selectedRow && this.selectedRow.id) {
-      this.delete.emit(this.selectedRow.id); // Emit the selected row's id
+    if (this.selectedRow && this.selectedRow._id) {
+      this.delete.emit(this.selectedRow._id); // Emit the selected row's id
     } else {
       console.error('No row selected for deletion.');
     }
