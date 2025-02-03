@@ -1,54 +1,67 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { Observable, switchMap, tap } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  private accessTokenKey = 'accessTokenKey';
+  private refreshTokenKey = 'refreshTokenKey';
+  private userTypeKey = 'userTypeKey';
+  private userDetailsKey = 'userDetailsKey';
 
-  constructor(
-    private router:Router
-  ) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
-  // Login and store the tokens and user details
   login(accessToken: string, refreshToken: string, userType: string, userDetails: any): void {
-    localStorage.setItem('accessTokenKey', accessToken);
-    localStorage.setItem('refreshTokenKey', refreshToken);
-    localStorage.setItem('userTypeKey', userType);
-    localStorage.setItem('userDetailsKey', JSON.stringify(userDetails)); // Store user details as a string
+    localStorage.setItem(this.accessTokenKey, accessToken);
+    localStorage.setItem(this.refreshTokenKey, refreshToken);
+    localStorage.setItem(this.userTypeKey, userType);
+    localStorage.setItem(this.userDetailsKey, JSON.stringify(userDetails));
   }
 
-  // Get access token
   getAccessToken(): string | null {
-    return localStorage.getItem('accessTokenKey');
+    return localStorage.getItem(this.accessTokenKey);
   }
 
-  // Get refresh token
   getRefreshToken(): string | null {
-    return localStorage.getItem('refreshTokenKey');
+    return localStorage.getItem(this.refreshTokenKey);
   }
 
-  // Get user type
-  getUserType(): string | null {
-    return localStorage.getItem('userTypeKey');
+  refreshToken(): Observable<string> {
+    return this.http.post<{ access_token: string }>(`${environment.baseUrl}/api/auth/refresh-token`, {
+      refresh_token: this.getRefreshToken(),
+    }).pipe(
+      tap(response => {
+        localStorage.setItem(this.accessTokenKey, response.access_token);
+      }),
+      // Extract only the access token to return as Observable<string>
+      switchMap(response => {
+        return new Observable<string>(observer => {
+          observer.next(response.access_token);
+          observer.complete();
+        });
+      })
+    );
   }
 
-  // Get user details
-  getUserDetails(): any | null {
-    const userDetails = localStorage.getItem('userDetailsKey');
-    return userDetails ? JSON.parse(userDetails) : null; // Parse back the user details
-  }
 
   isAuthenticated(): boolean {
-    const token = this.getAccessToken();
-    return !!token;
+    return !!this.getAccessToken();
   }
 
   logout(): void {
-    localStorage.removeItem('accessTokenKey');
-    localStorage.removeItem('refreshTokenKey');
-    localStorage.removeItem('userTypeKey');
-    localStorage.removeItem('userDetailsKey');
-    this.router.navigate(['/login'])
+    localStorage.removeItem(this.accessTokenKey);
+    localStorage.removeItem(this.refreshTokenKey);
+    localStorage.removeItem(this.userTypeKey);
+    localStorage.removeItem(this.userDetailsKey);
+    this.router.navigate(['/login']);
   }
+
+  getUserType(): string | null {
+    return localStorage.getItem(this.userTypeKey);
+  }
+
 }
