@@ -4,15 +4,15 @@ import { MatCardModule } from '@angular/material/card';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { UserRoutingModule } from './user.routing.module';
 import { FoodMenuComponent } from './food-menu/food-menu.component';
-import { OrderSummaryComponent } from './order-summary/order-summary.component';
+import { CartComponent } from './cart/cart.component';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 
 
 @NgModule({
-  declarations:[
+  declarations: [
     FoodMenuComponent,
-    OrderSummaryComponent
+    CartComponent
   ],
   imports: [
     CommonModule,

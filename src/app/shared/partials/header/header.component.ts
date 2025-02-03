@@ -1,7 +1,9 @@
 import { Component} from '@angular/core';
 import { Router } from '@angular/router';
-import { CartService } from 'src/app/module/user/cart.service';
 import { AuthService } from '../../auth/auth.service';
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { selectCartCount } from 'src/app/module/user/cart/cart.selectors';
 
 @Component({
   selector: 'app-header',
@@ -10,18 +12,20 @@ import { AuthService } from '../../auth/auth.service';
 })
 export class HeaderComponent {
 
-  constructor(private cartService: CartService,
+  cartCount$: Observable<number> ;
+
+  constructor(
     private router: Router,
     public authService: AuthService,
-  ) { }
-  cart$ = this.cartService.cart$;
+    private store: Store
+  ) {
+    this.cartCount$ = this.store.select(selectCartCount);
+   }
+  //cart$ = this.cartService.cart$;
+
   onCloseSidenav() {
   }
 
-  getCartItemCount(): number {
-    const cartItems = this.cart$();
-    return cartItems.reduce((total, item) => total + item.selectedQty, 0);
-  }
 
   viewProfile() {
     console.log("Navigating to Profile");

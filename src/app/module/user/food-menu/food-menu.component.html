@@ -6,7 +6,7 @@
     <mat-chip-grid #reactiveChipGrid>
       <span class="search-chip">
         <mat-icon matChipAvatar class="search-icon">search</mat-icon>
-        <input [(ngModel)]="searchQuery" [matChipInputFor]="reactiveChipGrid" autofocus
+        <input [formControl]="searchControl" [matChipInputFor]="reactiveChipGrid" autofocus
           placeholder="Search Food Type" />
       </span>
     </mat-chip-grid>
@@ -16,9 +16,9 @@
     <div class="chip-group" [ngClass]="(isMobile && !filterchip) ? 'hide-chip-filter' : 'show-chip-filter'">
       <mat-chip-listbox>
         <span style="margin-top: 10px;">Food Type:</span>
-        <mat-chip-option *ngFor="let type of foodTypes" (click)="selectFoodType(type)"
+        <mat-chip-option *ngFor="let type of foodTypes" (click)="selectFoodType(type?._id)"
           [highlighted]="selectedType === type">
-          {{ type }}
+          {{ type?.name }}
         </mat-chip-option>
       </mat-chip-listbox>
     </div>
@@ -26,44 +26,35 @@
     <div class="chip-group" [ngClass]="(isMobile && !filterchip) ? 'hide-chip-filter' : 'show-chip-filter'">
       <mat-chip-listbox>
         <span style="margin-top: 10px;">Meal Type:</span>
-        <mat-chip-option *ngFor="let meal of mealTypes" (click)="selectMealType(meal)"
+        <mat-chip-option *ngFor="let meal of mealTypes" (click)="selectMealType(meal?._id)"
           [highlighted]="selectedMealType === meal">
-          {{ meal }}
+          {{ meal?.name }}
         </mat-chip-option>
       </mat-chip-listbox>
     </div>
   </div>
 
-  <div *ngIf="filteredFoods.length === 0">
+  <div *ngIf="foods.length === 0">
     <div class="nodata">No items found matching your search criteria. <mat-icon> insert_emoticon_sad</mat-icon></div>
   </div>
 
   <div class="food-menu">
 
-    <mat-card *ngFor="let food of filteredFoods; trackBy: trackByFoodId" class="food-card">
-      <img mat-card-image [src]="food.image" [alt]="food.name" class="food-image" />
+    <mat-card *ngFor="let food of foods" class="food-card">
+      <img mat-card-image [src]="food.image || '../../../../assets/images/biriyani.webp' " [alt]="food.name" class="food-image" />
       <mat-card-title>{{ food.name }}</mat-card-title>
       <mat-card-content>
         <p><strong>Price:</strong> {{ food.price | currency: 'INR' }}</p>
-        <p><strong>Available Qty: <span style="color: red;"> {{ cartService.availableQty$()[food.id] || 0
-              }}</span></strong></p>
+        <p *ngIf="food?.qty"><strong>Available Qty: <span style="color: red;"> {{food?.qty}} </span></strong></p>
       </mat-card-content>
 
       <div class="button-conf">
         <div class="quantity-selector">
-          <button color="primary" (click)="decreaseQuantity(food)"
-            [disabled]="cartService.availableQty$()[food.id] <= 0">
-            -
-          </button>
+          <button color="primary" (click)="decreaseQuantity(food)">-</button>
           <span class="qty">{{ food.selectedQty || 0 }}</span>
-          <button color="primary" (click)="increaseQuantity(food)"
-            [disabled]="cartService.availableQty$()[food.id] <= 0">
-            +
-          </button>
+          <button color="primary" (click)="increaseQuantity(food)">+</button>
         </div>
-
-        <button class="btn-success cart-btn btn btn-sm" (click)="addToCart(food)"
-          [disabled]="cartService.availableQty$()[food.id] <= 0">
+        <button class="btn-success cart-btn btn btn-sm" (click)="onAddToCart(food)" >
           Add <i class="fa fa-shopping-cart" aria-hidden="true"></i>
         </button>
       </div>

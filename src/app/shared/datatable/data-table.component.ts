@@ -47,7 +47,6 @@ export class DataTableComponent implements OnInit {
         this.pageSize
       )
       .subscribe((response) => {
-        console.log(response)
         this.dataSource = response.items.map((item: any, index: number) => ({
           ...item,
           index: this.currentPage > 1 ? (this.currentPage - 1) * this.pageSize + index + 1 : index + 1,
@@ -90,7 +89,6 @@ export class DataTableComponent implements OnInit {
 
   onEditSelected(): void {
     if (this.selectedRow) {
-      console.log(this.selectedRow)
       const currentUrl = this.router.url;
       this.router.navigate([`/${currentUrl}/edit`, this.selectedRow._id]);
     }

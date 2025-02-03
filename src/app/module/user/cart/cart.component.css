@@ -189,11 +189,12 @@
   }
 
   .quantity-control {
-    margin-top: 20px;
+    margin-top: 44px;
     align-items: center;
     display: flex;
-    position: absolute;
-    right: -44px;
+    justify-content: right;
+    position: relative;
+    left: 80px;
   }
 
   .quantity-btn {

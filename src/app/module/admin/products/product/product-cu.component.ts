@@ -53,7 +53,6 @@ export class ProductCuComponent implements OnInit {
         this.actionType = 'Edit';
         this.productService.getproductbyid(editId).subscribe(
           (response: any) => {
-            console.log(response)
             this.productForm.patchValue({
               id: response._id,
               name: response.name,
@@ -81,7 +80,6 @@ export class ProductCuComponent implements OnInit {
     this.productService.getfoodtype().subscribe(
       (resp: any) => {
         this.foodtypes = resp;
-        console.log(resp);
       },
       error => this.toastr.error(error.message || 'Error fetching food types')
     );
@@ -129,7 +127,6 @@ export class ProductCuComponent implements OnInit {
       return;
     }
 
-    console.log(this.productForm.value)
     const formData = new FormData();
     Object.keys(this.productForm.value).forEach(key => {
       const value = this.productForm.value[key];

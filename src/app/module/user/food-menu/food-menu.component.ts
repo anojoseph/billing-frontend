@@ -1,7 +1,12 @@
-import { Component, effect, inject, Injector, Input, OnChanges, OnInit, runInInjectionContext } from '@angular/core'; // Import Injector
-import { CartService } from '../cart.service';
+import { Component, OnChanges, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { FoodMenuService } from './foodmenu.service';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { FormControl } from '@angular/forms';
+import { CartItem } from '../cart/cart.model';
+import { Store } from '@ngrx/store';
+import { addToCart } from '../cart/cart.actions';
 
 @Component({
   selector: 'app-food-menu',
@@ -13,120 +18,144 @@ export class FoodMenuComponent implements OnInit, OnChanges {
   selectedType = '';
   selectedMealType = '';
   searchQuery = '';
-  injector = inject(Injector);
-  availableQty: Record<number, number> = {};
-  @Input() orderQuantity: any;
-  maxQuantity: number = 10;
-  allowAddQty: any
   isMobile: boolean = false;
   filterchip: boolean = false;
+  availbleqtystatus: boolean = false;
+  mealTypes: any;
+  foodTypes: any;
+  searchControl = new FormControl('');
+
+
   constructor(
-    public cartService: CartService,
     private toastr: ToastrService,
-    private snackBar: MatSnackBar) { }
+    private snackBar: MatSnackBar,
+    private foodmenuservice: FoodMenuService,
+    private store: Store) { }
 
   ngOnChanges() {
-    if (this.orderQuantity < this.maxQuantity) {
-      this.allowAddQty = true;
-    } else {
-      this.allowAddQty = false;
-    }
   }
 
   ngOnInit(): void {
     this.fetchMenuItems();
-
-    runInInjectionContext(this.injector, () => {
-      effect(() => {
-        this.availableQty = this.cartService.availableQty$();
-      });
-    });
-
     this.checkDeviceWidth();
     window.addEventListener('resize', this.checkDeviceWidth.bind(this));
+    this.fetchmealtype();
+    this.fetchfoodtype();
+
+    this.searchControl.valueChanges
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged()
+      )
+      .subscribe(() => {
+        this.fetchMenuItems();
+      });
+
   }
 
   fetchMenuItems(): void {
-    this.cartService.getMenuItems().subscribe((data: any[]) => {
-      this.foods = data;
-    });
+    const filters: any = { status: true };
+
+    if (this.searchControl.value) {
+      filters.search = this.searchControl.value.trim();
+    }
+    if (this.selectedMealType) {
+      filters.mealType = this.selectedMealType;
+    }
+    if (this.selectedType) {
+      filters.productItem = this.selectedType;
+    }
+
+    this.foodmenuservice.getfoodmenu(filters).subscribe(
+      (response: any) => {
+        if (response.data.length === 0) {
+          this.foods = [];
+          this.toastr.info("No matching products found");
+        } else {
+          this.foods = response.data;
+        }
+      },
+      (error) => {
+        this.toastr.error(error.message || "Error fetching food menu");
+      }
+    );
   }
 
-  addToCart(food: any) {
-    const availableQty = this.availableQty[food.id] || 0;
-    if (food.selectedQty > availableQty) {
-      if(this.isMobile){
-        this.showError(`Not enough stock available. Only ${availableQty} left.`)
-      }
-      else{
-        this.toastr.error(`Not enough stock available. Only ${availableQty} left.`);
-      }
-      food.selectedQty = availableQty;
-      return;
-    }
-    this.cartService.addToCart({ ...food, selectedQty: food.selectedQty });
-    if(this.isMobile){
-      this.showSuccess(`${food.selectedQty} ${food.name} is added to Cart`)
-    }
-    else{
-      this.toastr.success(`${food.selectedQty} ${food.name} is added to Cart`)
-    }
-    food.selectedQty = 1;
+
+
+  fetchmealtype() {
+    this.foodmenuservice.getmealtype().subscribe((data: any) => {
+      this.mealTypes = data;
+    },
+      (error) => {
+        this.toastr.error(error.message || 'Error fetching meal type')
+      })
   }
 
-  trackByFoodId(index: number, food: any): number {
-    return food.id;
+  fetchfoodtype() {
+    this.foodmenuservice.getfoodtype().subscribe((data: any) => {
+      this.foodTypes = data;
+    },
+      (error) => {
+        this.toastr.error(error.message || 'Error fetching food type')
+      })
   }
+
+  selectFoodType(type: string) {
+    this.selectedType = this.selectedType === type ? '' : type;
+    this.fetchMenuItems();
+  }
+
+  selectMealType(meal: string) {
+    this.selectedMealType = this.selectedMealType === meal ? '' : meal;
+    this.fetchMenuItems();
+  }
+
+
+  availableqtycheck() {
+    this.availbleqtystatus;
+  }
+
 
   increaseQuantity(food: any): void {
-    if (food.selectedQty < food.qty) {
-      food.selectedQty++;
-    } else {
-      alert('No more stock available!');
-      return;
-    }
+    food.selectedQty++;
   }
 
-  decreaseQuantity(food: any) {
+  decreaseQuantity(food: any): void {
     if (food.selectedQty > 1) {
       food.selectedQty--;
     }
   }
 
-
-  get filteredFoods() {
-    return this.foods.filter((food) => {
-      const matchesType = this.selectedType ? food.type === this.selectedType : true;
-      const matchesMealType = this.selectedMealType ? food.mealType === this.selectedMealType : true;
-      const matchesSearch = this.searchQuery
-        ? food.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-        : true;
-      return matchesType && matchesMealType && matchesSearch;
-    });
-  }
-
-  foodTypes = ['Veg', 'Non-Veg'];
-  mealTypes = ['Lunch', 'Dinner', 'Snack', 'Cool Drink'];
-
-  selectFoodType(type: string) {
-    if (type === 'All') {
-      this.selectedType = ''; // Reset to show all food items
-    } else {
-      this.selectedType = this.selectedType === type ? '' : type; // Toggle selected type
+  onAddToCart(item: any) {
+    if (!item.selectedQty || item.selectedQty <= 0) {
+      this.toastr.error('Please select a quantity before adding to cart');
+      return;
     }
+
+    if (!item._id) {
+      this.toastr.error('Error: Item ID is missing.');
+      return;
+    }
+
+    const cartItem: CartItem = {
+      id: item._id, // Ensure ID is properly assigned
+      name: item.name,
+      price: item.price,
+      quantity: item.selectedQty,
+      image: item.image || '',
+      selectedQty: item.selectedQty,
+    };
+    this.store.dispatch(addToCart({ item: cartItem }));
+    this.toastr.success(`${item.name} added to cart`);
   }
 
-  selectMealType(meal: string) {
-    if (meal === 'All') {
-      this.selectedMealType = '';
-    } else {
-      this.selectedMealType = this.selectedMealType === meal ? '' : meal;
-    }
-  }
+
+
+
 
   checkDeviceWidth(): void {
     this.isMobile = window.innerWidth <= 768;
-
     if (!this.isMobile) {
       this.filterchip = false;
     }

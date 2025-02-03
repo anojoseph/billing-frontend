@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { FoodMenuComponent } from './user/food-menu/food-menu.component';
-import { OrderSummaryComponent } from './user/order-summary/order-summary.component';
 import { LayoutComponent } from './layout.component';
 
 
