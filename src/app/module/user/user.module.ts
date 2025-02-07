@@ -7,12 +7,13 @@ import { FoodMenuComponent } from './food-menu/food-menu.component';
 import { CartComponent } from './cart/cart.component';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
+import { MatRadioModule } from '@angular/material/radio';
 
 
 @NgModule({
   declarations: [
     FoodMenuComponent,
-    CartComponent
+    CartComponent,
   ],
   imports: [
     CommonModule,
@@ -20,7 +21,8 @@ import { MatIconModule } from '@angular/material/icon';
     MatCardModule,
     SharedModule,
     MatChipsModule,
-    MatIconModule
+    MatIconModule,
+    MatRadioModule
   ],
 })
 export class UserModule { }

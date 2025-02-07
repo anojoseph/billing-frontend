@@ -1,0 +1,31 @@
+.table-status-container {
+  margin: 20px;
+  padding: 20px;
+}
+
+.tables {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.table-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.occupied {
+  background-color: #ffebee;
+}
+
+.free {
+  background-color: #e8f5e9;
+}
+
+.main{
+  margin: 20px;
+  max-height: 88%;
+  overflow-y: auto;
+}
+
+

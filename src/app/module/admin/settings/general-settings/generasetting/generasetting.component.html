@@ -1,0 +1,52 @@
+<mat-card class="settings-card">
+  <mat-card-title class="card-title">General Settings</mat-card-title>
+  <mat-card-content>
+    <form [formGroup]="settingsForm" (ngSubmit)="saveSettings()">
+
+      <div class="logo-container">
+        <img *ngIf="logoUrl" [src]="logoUrl" alt="Store Logo" class="store-logo" />
+
+        <button *ngIf="logoUrl" mat-button color="primary" class="change-image-btn" (click)="removeImage()">
+          Change Image
+        </button>
+      </div>
+
+      <div class="file-upload" *ngIf="!logoUrl">
+        <label for="logoUpload" class="upload-label">Upload Logo</label>
+        <input id="logoUpload" type="file" (change)="onFileChange($event)" />
+      </div>
+
+      <hr />
+
+      <div class="form-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Store Name</mat-label>
+          <input matInput type="text" formControlName="storeName" />
+        </mat-form-field>
+
+        <!-- Status -->
+        <mat-form-field appearance="outline">
+          <mat-label>Status</mat-label>
+          <mat-select formControlName="status">
+            <mat-option [value]="true">Active</mat-option>
+            <mat-option [value]="false">Inactive</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Stock Update -->
+        <mat-slide-toggle formControlName="stockUpdate">Stock Update Needed</mat-slide-toggle>
+      </div>
+
+      <hr />
+
+      <!-- Submit Button with Loader -->
+      <div class="button-container">
+        <button mat-raised-button color="primary" type="submit" [disabled]="settingsForm.invalid || isLoading">
+          <mat-spinner *ngIf="isLoading" diameter="20"></mat-spinner>
+          <span *ngIf="!isLoading">Save Settings</span>
+        </button>
+      </div>
+
+    </form>
+  </mat-card-content>
+</mat-card>

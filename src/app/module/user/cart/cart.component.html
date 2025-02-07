@@ -1,69 +1,8 @@
-<!-- <div class="main-container" *ngIf="cart$().length >= 1">
-
-  <div class="order-summary">
-    <h2 class="section-title">Order Summary</h2>
-
-    <div *ngIf="cart$().length > 0; else noOrders" class="summary-list">
-      <div *ngFor="let order of cart$()" class="order-item">
-
-        <img class="img" src="https://www.foodiesfeed.com/wp-content/uploads/2023/06/burger-with-melted-cheese.jpg"
-          alt="order.name">
-
-        <div class="order-details">
-          <div class="order-name">{{ order.name }}</div>
-          <div class="order-price">x{{ order.selectedQty }} - ₹{{ (order.price * order.selectedQty).toFixed(2) }}</div>
-        </div>
-
-        <div class="quantity-control">
-          <button class="btn-primary btn btn-sm" (click)="updateQuantity(order, -1)">-</button>
-          <span class="quantity">{{ order.selectedQty }}</span>
-          <button class="btn-primary btn btn-sm" (click)="updateQuantity(order, 1)">+</button>
-          <button class="remove-btn" (click)="removeFromCart(order)"> <i class="fa fa-trash"
-              aria-hidden="true"></i></button>
-        </div>
-
-
-      </div>
-    </div>
-
-    <ng-template #noOrders>
-
-    </ng-template>
-  </div>
-
-  <div class="checkout">
-
-    <div class="chip-group">
-      <mat-chip-listbox>
-        <span style="margin-top: 10px;">Select Table:</span>
-        <mat-chip-option *ngFor="let type of table" [selected]="tableNumber === type.id" (click)="selecttable(type.id)">
-          {{ type?.name }}
-        </mat-chip-option>
-      </mat-chip-listbox>
-    </div>
-
-    <div class="summary-footer">
-      <p class="total-price">Total: ₹{{ calculateTotal() }}</p>
-      <button class="btn btn-success btn-sm" [disabled]="!tableNumber || cart$().length === 0"><i class="fa fa-check" aria-hidden="true"></i> Checkout</button>
-    </div>
-  </div>
-</div>
-
-
-<div *ngIf="cart$().length < 1" class="no-data">
-  <div class="no-orders-message">
-    <img src="./assets/images/emptycart.png" alt="" height="150px" width="150px">
-    <p>
-      No items in the cart.</p>
-  </div>
-</div> -->
-<!-- Main Container -->
 <div class="main-container" *ngIf="cart$ | async as cart">
   <div class="order-summary" *ngIf="cart && cart.length >= 1;">
     <h2 class="section-title">Order Summary</h2>
 
     <div class="summary-list">
-      <!-- Cart Items -->
       <div *ngFor="let order of cart" class="order-item">
         <img class="img" src="{{ order?.image || '../../../../../../assets/images/biriyani.webp' }}" alt="order.name">
         <div class="order-details">
@@ -88,7 +27,16 @@
   <!-- No Orders Message -->
 
   <div class="checkout"  *ngIf="cart && cart.length >= 1;">
-    <div class="chip-group">
+
+    <div class="order-type">
+      <mat-radio-group [(ngModel)]="orderType">
+        <mat-radio-button value="Bill">Bill</mat-radio-button>
+        <mat-radio-button value="Dine-in">Dine-in</mat-radio-button>
+        <mat-radio-button value="Takeaway">Takeaway</mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+    <div class="chip-group" *ngIf="orderType == 'Dine-in' ">
       <mat-chip-listbox>
         <span style="margin-top: 10px;">Select Table:</span>
         <mat-chip-option *ngFor="let type of table" [selected]="tableNumber === type._id" (click)="selecttable(type)">
@@ -99,8 +47,8 @@
 
     <div class="summary-footer">
       <p class="total-price">Total: ₹{{ (cartTotalPrice$ | async)?.toFixed(2) }}</p>
-      <button class="btn btn-success btn-sm" [disabled]="checkoutDisabled()">
-        <i class="fa fa-check" aria-hidden="true"></i> Checkout
+      <button class="btn btn-success btn-sm" [disabled]="checkoutDisabled()" (click)="submitOrder()">
+        <i class="fa fa-check" aria-hidden="true" ></i> Checkout
       </button>
     </div>
   </div>
@@ -113,3 +61,6 @@
     <p>No items in the cart.</p>
   </div>
 </div>
+
+
+

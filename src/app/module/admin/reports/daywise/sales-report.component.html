@@ -1,0 +1,61 @@
+<mat-card class="data-table-card" style="margin: 10px;max-height: 88%;overflow-y: auto;">
+  <div class="container">
+    <h2>Sales Report</h2>
+    <form [formGroup]="filterForm" (ngSubmit)="generateReport()">
+      <div class="row">
+        <div class="col-md-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Start Date</mat-label>
+            <input matInput [matDatepicker]="startPicker" formControlName="startDate" />
+            <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+            <mat-datepicker #startPicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="col-md-3">
+          <mat-form-field appearance="outline">
+            <mat-label>End Date</mat-label>
+            <input matInput [matDatepicker]="endPicker" formControlName="endDate" />
+            <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+            <mat-datepicker #endPicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="col-md-1" style="margin-top: 10px;">
+          <button mat-raised-button style="width: 100%;" [disabled]="loading" color="primary" type="submit">
+            <span *ngIf="!loading">Generate</span>
+            <span *ngIf="loading" style="text-align: center;">
+              <mat-spinner diameter="20px" color="primary"></mat-spinner>
+            </span>
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <div *ngIf="showtable">
+      <hr>
+
+      <table class="table table-bordered table-stripped">
+        <thead class="sticky-header">
+          <tr>
+            <th>#</th>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of billdata; let i=index">
+            <td>{{i+1}}</td>
+            <td>{{item.createdAt | date}}</td>
+            <td>{{item?.totalAmount | currency:'INR'}}</td>
+            <td>{{item?.type}}</td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align: center;font-weight: 600;">Total</td>
+            <td style="font-weight: 600;" colspan="2">{{total?.totalAmount | currency:'INR'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</mat-card>
+

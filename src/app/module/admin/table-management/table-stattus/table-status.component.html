@@ -1,0 +1,25 @@
+<mat-card class="main">
+  <div class="table-status-container">
+    <h2>Table Status</h2>
+    <div class="tables">
+      <mat-card *ngFor="let table of tables"
+        [ngClass]="{'occupied': table.status === 'occupied', 'free': table.status === 'free'}" class="table-card">
+        <mat-card-header>
+          <mat-card-title>{{ table.tableName || table?.tableNumber }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p *ngIf="table.status === 'occupied'">Current Bill: {{ table.currentBill | currency:'INR' }}</p>
+        </mat-card-content>
+        <mat-card-actions *ngIf="table.status === 'occupied'">
+          <button mat-raised-button color="primary" style="width: 100%;" (click)="markAsCompleted(table.orderIds)"
+            [disabled]="loading">
+            <span *ngIf="loading"><mat-progress-spinner diameter="20" mode="indeterminate" color="primary">
+              </mat-progress-spinner>
+            </span>
+            <span *ngIf="!loading">Mark as Completed <i class="fa fa-check" aria-hidden="true"></i></span>
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+</mat-card>

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { first, Observable, of } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { selectCartCount, selectCartItems, selectCartTotal, selectCartTotalPrice } from './cart.selectors';
-import { removeFromCart, updateCartItem } from './cart.actions';
+import { clearCart, removeFromCart, updateCartItem } from './cart.actions';
 import { CartItem } from './cart.model';
 import { cartService } from './cart.service'
 
@@ -20,6 +20,7 @@ export class CartComponent implements OnInit {
   tableNumber: any;
   table: any;
   cartCount$: Observable<number>;
+  orderType: string = 'Bill';
 
   constructor(
     private store: Store,
@@ -63,8 +64,56 @@ export class CartComponent implements OnInit {
 
 
   checkoutDisabled(): boolean {
-    return !(this.tableNumber && this.cartCount$);
+    if (this.orderType === 'Dine-in') {
+      return !(this.tableNumber && this.cartCount$);
+    }
+    return !(this.cartCount$);
   }
 
-}
+  // submitOrder() {
+  //   this.cart$.pipe(first()).subscribe(cartItems => {
+  //     const orderData = {
+  //       tableId: this.tableNumber,
+  //       orderType: this.orderType,
+  //       items: cartItems
+  //     };
 
+  //     this.cartService.createOrder(orderData).subscribe(
+  //       (response) => {
+  //         this.toastr.success(response.message);
+  //         this.store.dispatch(clearCart());
+  //       },
+  //       (error) => {
+  //         this.toastr.error(error.error.message);
+  //       }
+  //     );
+  //   });
+  // }
+
+  submitOrder() {
+    this.cart$.pipe(first()).subscribe(cartItems => {
+      if (!cartItems.length) {
+        this.toastr.warning('Cart is empty!');
+        return;
+      }
+
+      const orderData = {
+        tableId: this.orderType === 'Dine-in' ? this.tableNumber : null, // Table required only for Dine-in
+        orderType: this.orderType,
+        items: cartItems
+      };
+
+      this.cartService.createOrder(orderData).subscribe(
+        (response) => {
+          this.toastr.success(response.message);
+          this.store.dispatch(clearCart()); // ✅ Clears the cart state
+        },
+        (error) => {
+          this.toastr.error(error.error.message || 'Failed to create order');
+        }
+      );
+    });
+  }
+
+
+}
