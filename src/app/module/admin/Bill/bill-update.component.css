@@ -1,0 +1,91 @@
+/* Main Card */
+.bill-card {
+  margin: 20px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Title */
+.title {
+  text-align: center;
+  font-size: 22px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Search Section */
+.search-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+/* Search Button */
+.search-btn {
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* Bill Information */
+.bill-info {
+  font-size: 18px;
+  font-weight: 500;
+  color: #555;
+  margin-bottom: 15px;
+}
+
+/* Table Styling */
+.bill-table {
+  width: 100%;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.bill-table th {
+  background-color: #343a40;
+  color: #fff;
+  text-align: center;
+  padding: 10px;
+}
+
+.bill-table td {
+  text-align: center;
+  vertical-align: middle;
+  padding: 8px;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.add-btn {
+  background-color: #007bff;
+  border: none;
+}
+
+.add-btn:hover {
+  background-color: #0056b3;
+}
+
+/* Total Amount */
+.total-amount {
+  font-size: 20px;
+  font-weight: bold;
+  color: #007bff;
+  text-align: right;
+  margin-top: 15px;
+}
+
+/* Update Button */
+.update-btn {
+  display: block;
+  width: 100%;
+  font-size: 18px;
+  margin-top: 10px;
+}

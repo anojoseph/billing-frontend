@@ -70,26 +70,6 @@ export class CartComponent implements OnInit {
     return !(this.cartCount$);
   }
 
-  // submitOrder() {
-  //   this.cart$.pipe(first()).subscribe(cartItems => {
-  //     const orderData = {
-  //       tableId: this.tableNumber,
-  //       orderType: this.orderType,
-  //       items: cartItems
-  //     };
-
-  //     this.cartService.createOrder(orderData).subscribe(
-  //       (response) => {
-  //         this.toastr.success(response.message);
-  //         this.store.dispatch(clearCart());
-  //       },
-  //       (error) => {
-  //         this.toastr.error(error.error.message);
-  //       }
-  //     );
-  //   });
-  // }
-
   submitOrder() {
     this.cart$.pipe(first()).subscribe(cartItems => {
       if (!cartItems.length) {

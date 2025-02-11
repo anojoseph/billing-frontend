@@ -1,0 +1,76 @@
+<mat-card class="bill-card">
+  <div class="bill-container">
+    <h2 class="title">Update Bill</h2>
+
+    <form [formGroup]="billForm" class="search-section">
+      <div class="row align-items-end" style="width: 100%;">
+        <div class="col-md-4">
+          <label class="form-label">Bill Number</label>
+          <input class="form-control" formControlName="billNumber" placeholder="Search by Bill No" />
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-primary search-btn" type="button" (click)="fetchBill()">
+            <i class="fa fa-search"></i> Search
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <div *ngIf="isLoading" class="loading-spinner" style="text-align: center;">
+      <mat-spinner diameter="10"></mat-spinner>
+    </div>
+
+    <div *ngIf="bill">
+      <p class="bill-info"><strong>Bill Number:</strong> {{ bill.billNumber }}</p>
+
+      <form [formGroup]="billForm">
+        <div formArrayName="items" class="table-responsive">
+          <table class="table bill-table table-bordered">
+            <thead>
+              <tr>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total Price</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of items.controls; let i=index" [formGroupName]="i">
+                <td>
+                  <select class="form-control" formControlName="productId" (change)="updateProductName(i)">
+                    <option value="">Select Product</option>
+                    <option *ngFor="let product of products" [value]="product._id">
+                      {{ product.name }}
+                    </option>
+                  </select>
+                </td>
+                <td><input class="form-control" type="number" formControlName="quantity" (input)="updateTotal()" /></td>
+                <td><input class="form-control" type="number" readonly formControlName="price" /></td>
+                <td><input class="form-control" formControlName="totalPrice" readonly /></td>
+                <td>
+                  <div class="action-buttons">
+                    <button class="btn btn-danger btn-sm" type="button" *ngIf="items.length > 1"
+                      (click)="removeItem(i)">
+                      <i class="fa fa-trash"></i>
+                    </button>
+                    <button class="btn btn-primary btn-sm add-btn" (click)="addItem()" *ngIf="i === items.length - 1">
+                      <i class="fa fa-plus"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </form>
+
+      <p class="total-amount"><strong>Total Amount: ₹{{ totalAmount }}</strong></p>
+      <div class="pull-right">
+        <button class="btn btn-success btn-sm" [disabled]="billForm.invalid" (click)="updateBill()"><i class="fa fa-check" aria-hidden="true"></i> Update
+          Bill</button>
+        <button class="btn btn-sm btn-danger" (click)="deletebill()"><i class="fa fa-trash" aria-hidden="true"></i> Delete</button>
+      </div>
+    </div>
+  </div>
+</mat-card>

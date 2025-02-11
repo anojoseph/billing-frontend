@@ -46,6 +46,15 @@
               (click)="drawer.toggle()">Table</a>
           </mat-nav-list>
         </mat-expansion-panel>
+
+          <mat-expansion-panel>
+            <mat-expansion-panel-header routerLinkActive="active-menu">
+              <i class="fa fa-sticky-note icon" aria-hidden="true"></i> <span class="menu-list">Bill</span>
+            </mat-expansion-panel-header>
+            <mat-nav-list>
+              <a mat-list-item routerLink="/admin/bill/bill-edit" routerLinkActive="active-menu" (click)="drawer.toggle()">Edit Bill</a>
+            </mat-nav-list>
+          </mat-expansion-panel>
       </mat-accordion>
     </mat-nav-list>
   </mat-sidenav>

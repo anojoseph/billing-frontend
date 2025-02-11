@@ -6,12 +6,8 @@ const routes: Routes = [
   { path: 'product', loadChildren: () => import('./products/product.module').then(m => m.ProductModule) },
   { path: 'table', loadChildren: () => import('./table-management/tablemanagement.module').then(m => m.TableManagementModule) },
   { path: 'settings', loadChildren: () => import('./settings/setting.module').then(m => m.SettingsModule) },
-  { path: 'reports', loadChildren: () => import('./reports/tablemanagement.module').then(m => m.reportModule) }
-
-
-
-
-
+  { path: 'reports', loadChildren: () => import('./reports/tablemanagement.module').then(m => m.reportModule) },
+  { path: 'bill', loadChildren: () => import('./Bill/bill.module').then(m => m.BillModule) }
 ];
 
 @NgModule({

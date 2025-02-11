@@ -33,29 +33,35 @@
     <div *ngIf="showtable">
       <hr>
 
-      <table class="table table-bordered table-stripped">
+      <table class="table table-bordered table-striped">
         <thead class="sticky-header">
           <tr>
-            <th>#</th>
-            <th>Date</th>
-            <th>Amount</th>
+            <th style="text-align: center;">#</th>
+            <th style="text-align: center;">Bill No</th>
+            <th style="text-align: center;">Date</th>
+            <th style="text-align: center;">Amount</th>
             <th>Type</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody *ngIf="billdata.length > 0">
           <tr *ngFor="let item of billdata; let i=index">
-            <td>{{i+1}}</td>
-            <td>{{item.createdAt | date}}</td>
-            <td>{{item?.totalAmount | currency:'INR'}}</td>
+            <td style="text-align: center;">{{i+1}}</td>
+            <td style="text-align: center;">{{item?.billNumber}}</td>
+            <td style="text-align: center;">{{item.createdAt | date}}</td>
+            <td style="text-align: center;">{{item?.totalAmount | currency:'INR'}}</td>
             <td>{{item?.type}}</td>
           </tr>
           <tr>
-            <td colspan="2" style="text-align: center;font-weight: 600;">Total</td>
+            <td colspan="3" style="text-align: center;font-weight: 600;">Total</td>
             <td style="font-weight: 600;" colspan="2">{{total?.totalAmount | currency:'INR'}}</td>
+          </tr>
+        </tbody>
+        <tbody *ngIf="billdata.length < 1">
+          <tr>
+            <td colspan="5" style="text-align: center;color: red;">No data found</td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
 </mat-card>
-
