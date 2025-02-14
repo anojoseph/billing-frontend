@@ -1,0 +1,69 @@
+<div class="data-card">
+  <h5 class="data-head">{{ actiontype }} Table</h5>
+</div>
+
+<div class="data-card">
+  <form [formGroup]="kitchenForm">
+    <div class="row" style="margin: 10px;">
+      <div class="col-md-3">
+        <mat-form-field appearance="outline" style="width: 100%; margin-top: 20px;">
+          <mat-label>Kitchen Name</mat-label>
+          <input matInput formControlName="name" placeholder="Input the kitchen name">
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-3">
+        <mat-form-field appearance="outline" style="width: 100%; margin-top: 20px;">
+          <mat-label>Status</mat-label>
+          <mat-select formControlName="status" required>
+            <mat-option [value]="true">Active</mat-option>
+            <mat-option [value]="false">Inactive</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Product Selection with Search -->
+      <div class="col-md-6">
+        <mat-form-field appearance="outline" style="width: 100%; margin-top: 20px;">
+          <mat-label>Search and Select Product</mat-label>
+          <input type="text" matInput formControlName="searchControl" [matAutocomplete]="auto">
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="addProduct($event.option.value)">
+            <mat-option *ngFor="let product of filteredProducts" [value]="product">
+              {{ product.name }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+
+      <!-- Selected Products Display -->
+      <div class="col-md-6" style="margin-top: 20px;">
+        <mat-label>Selected Products</mat-label>
+        <mat-chip-listbox>
+          <mat-chip *ngFor="let product of selectedProducts" (removed)="removeProduct(product)">
+            {{ product.name }}
+            <mat-icon matChipRemove>cancel</mat-icon>
+          </mat-chip>
+        </mat-chip-listbox>
+      </div>
+    </div>
+
+    <hr>
+    <div class="row" style="padding: 10px;">
+      <div class="pull-right">
+        <button class="btn btn-danger btn-sm" type="button" routerLink="/admin/kitchen/kitchen/">
+          <i class="fa fa-arrow-left" aria-hidden="true"></i> Back
+        </button>
+        <button class="btn btn-primary btn-sm" type="reset">
+          <i class="fa fa-times" aria-hidden="true"></i> Clear
+        </button>
+        <button class="btn btn-success btn-sm" type="submit" (click)="submit()" [disabled]="loading">
+          <span style="display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+            <i *ngIf="!loading" class="fa fa-check" aria-hidden="true"></i>
+            <mat-progress-spinner *ngIf="loading" diameter="20" mode="indeterminate"></mat-progress-spinner>
+            {{ loading ? 'Processing...' : formaction }}
+          </span>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

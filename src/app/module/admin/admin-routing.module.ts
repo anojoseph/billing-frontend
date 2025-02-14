@@ -7,7 +7,9 @@ const routes: Routes = [
   { path: 'table', loadChildren: () => import('./table-management/tablemanagement.module').then(m => m.TableManagementModule) },
   { path: 'settings', loadChildren: () => import('./settings/setting.module').then(m => m.SettingsModule) },
   { path: 'reports', loadChildren: () => import('./reports/tablemanagement.module').then(m => m.reportModule) },
-  { path: 'bill', loadChildren: () => import('./Bill/bill.module').then(m => m.BillModule) }
+  { path: 'bill', loadChildren: () => import('./Bill/bill.module').then(m => m.BillModule) },
+  { path: 'kitchen', loadChildren: () => import('./kitchen/kitchen.module').then(m => m.KitchenModule) }
+
 ];
 
 @NgModule({
