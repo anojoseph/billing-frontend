@@ -13,7 +13,7 @@
 
       <div class="file-upload" *ngIf="!logoUrl">
         <label for="logoUpload" class="upload-label">Upload Logo</label>
-        <input id="logoUpload" type="file" (change)="onFileChange($event)" />
+        <input id="logoUpload" type="file" (change)="onFileChange($event)"  accept=".png, .jpg, .jpeg" />
       </div>
 
       <hr />
@@ -32,6 +32,18 @@
             <mat-option [value]="false">Inactive</mat-option>
           </mat-select>
         </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Printer Port</mat-label>
+          <mat-select formControlName="printerPort">
+            <mat-option *ngFor="let port of availablePorts" [value]="port.path">
+              {{ port.path }} — {{ port.friendlyName }}
+            </mat-option>
+
+            <mat-option [disabled]="true" *ngIf="availablePorts.length < 1">NO Printer connected </mat-option>
+          </mat-select>
+        </mat-form-field>
+
 
         <!-- Stock Update -->
         <mat-slide-toggle formControlName="stockUpdate">Stock Update Needed</mat-slide-toggle>

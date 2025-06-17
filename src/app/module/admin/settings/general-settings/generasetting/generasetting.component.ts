@@ -12,6 +12,7 @@ export class GenerasettingComponent implements OnInit {
   selectedFile: any;
   logoUrl: string | null = null;
   isLoading = false; // Loader flag
+  availablePorts: any[] = [];
 
   constructor(private fb: FormBuilder, private settingsService: SettingsService) { }
 
@@ -21,9 +22,11 @@ export class GenerasettingComponent implements OnInit {
       logo: [null],
       status: [true],
       stockUpdate: [false],
+      printerPort: [''] 
     });
 
     this.loadSettings();
+    this.getserialport();
   }
 
   loadSettings() {
@@ -34,6 +37,7 @@ export class GenerasettingComponent implements OnInit {
             storeName: data.storeName || '',
             status: data.status ?? true,
             stockUpdate: data.stockUpdate ?? false,
+            printerPort: data.printerPort ?? '' 
           });
 
           this.logoUrl = data.logo ? data.logo : null;
@@ -74,6 +78,7 @@ export class GenerasettingComponent implements OnInit {
       formData.append('storeName', this.settingsForm.get('storeName')?.value);
       formData.append('status', this.settingsForm.get('status')?.value);
       formData.append('stockUpdate', this.settingsForm.get('stockUpdate')?.value);
+      formData.append('printerPort', this.settingsForm.get('printerPort')?.value);
 
       if (this.selectedFile) {
         formData.append('logo', this.selectedFile);
@@ -85,5 +90,13 @@ export class GenerasettingComponent implements OnInit {
         this.loadSettings();
       });
     }
+  }
+
+  getserialport() {
+    this.settingsService.getport().subscribe((ports: any) => {
+      this.availablePorts = ports;
+    }, (error) => {
+      console.error(error);
+    });
   }
 }

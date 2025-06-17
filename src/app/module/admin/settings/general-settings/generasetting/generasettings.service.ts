@@ -17,4 +17,8 @@ export class SettingsService {
   updateSettings(settings: any): Observable<any> {
     return this.http.patch('/settings/general-settings', settings);
   }
+
+  getport(){
+    return this.http.get('/ports/serialports')
+  }
 }
