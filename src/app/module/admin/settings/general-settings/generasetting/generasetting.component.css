@@ -81,3 +81,14 @@ mat-spinner {
   display: inline-block;
   vertical-align: middle;
 }
+.bluetooth-printer-section {
+  margin-top: 16px;
+}
+
+.printer-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  font-weight: 500;
+}

@@ -6,6 +6,7 @@ import { selectCartCount, selectCartItems, selectCartTotal, selectCartTotalPrice
 import { clearCart, removeFromCart, updateCartItem } from './cart.actions';
 import { CartItem } from './cart.model';
 import { cartService } from './cart.service'
+import { BluetoothPrinterService } from '../../printer/bluetooth-printer.service';
 
 @Component({
   selector: 'app-cart',
@@ -25,7 +26,8 @@ export class CartComponent implements OnInit {
   constructor(
     private store: Store,
     private toastr: ToastrService,
-    private cartService: cartService
+    private cartService: cartService,
+    private btPrinter: BluetoothPrinterService
   ) {
     this.cartCount$ = this.store.select(selectCartCount);
   }
@@ -85,8 +87,30 @@ export class CartComponent implements OnInit {
 
       this.cartService.createOrder(orderData).subscribe(
         (response) => {
+          console.log(response.printContent)
           this.toastr.success(response.message);
           this.store.dispatch(clearCart()); // ✅ Clears the cart state
+          console.log(response.order)
+
+
+          this.cartService.printOrder(response.order._id).subscribe((printResponse) => {
+            console.log('Print response!', printResponse);
+
+            if (printResponse.printContent) {
+              this.toastr.success('Printed successfully.');
+              console.log('Print content!', printResponse.printContent);
+
+              //this.btPrinter.print(printResponse.printContent);
+            } else {
+              this.toastr.error('Print failed.');
+            }
+          },
+            (error) => {
+              console.error('Print failed!', error);
+              this.toastr.error(error.error?.message);
+            });
+
+
         },
         (error) => {
           this.toastr.error(error.error.message || 'Failed to create order');
@@ -94,6 +118,5 @@ export class CartComponent implements OnInit {
       );
     });
   }
-
 
 }

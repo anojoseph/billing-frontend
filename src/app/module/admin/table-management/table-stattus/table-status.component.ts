@@ -31,7 +31,8 @@ export class TableStatusComponent implements OnInit {
   markAsCompleted(orderId: any) {
     this.loading = true;
     this.tablestatusservice.completeOrder(orderId[0]).subscribe(
-      () => {
+      (data) => {
+        console.log(data)
         this.toastr.success('Order marked as completed');
         this.getTableStatus(); // Refresh the table status
         this.loading = false;;

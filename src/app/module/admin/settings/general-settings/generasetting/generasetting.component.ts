@@ -22,7 +22,7 @@ export class GenerasettingComponent implements OnInit {
       logo: [null],
       status: [true],
       stockUpdate: [false],
-      printerPort: [''] 
+      printerPort: ['']
     });
 
     this.loadSettings();
@@ -37,7 +37,7 @@ export class GenerasettingComponent implements OnInit {
             storeName: data.storeName || '',
             status: data.status ?? true,
             stockUpdate: data.stockUpdate ?? false,
-            printerPort: data.printerPort ?? '' 
+            printerPort: data.printerPort ?? ''
           });
 
           this.logoUrl = data.logo ? data.logo : null;
