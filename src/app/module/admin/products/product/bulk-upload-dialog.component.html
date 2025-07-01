@@ -1,0 +1,19 @@
+<h3 mat-dialog-title>Bulk Upload Products</h3>
+<mat-dialog-content>
+    <div>
+        <input type="file" (change)="onExcelFileChange($event)" accept=".xlsx, .xls" />
+        <button class="btn btn-success btn-sm" (click)="uploadExcel()" [disabled]="!excelFile || isUploading">
+            <i class="fa fa-spinner fa-spin" *ngIf="isUploading"></i>
+            <i class="fa fa-upload" *ngIf="!isUploading"></i>
+            {{ isUploading ? 'Uploading...' : 'Upload Excel' }}
+        </button>
+
+        <a href="assets/Product_Upload_Template.xlsx" download class="btn btn-outline-primary btn-sm"
+            style="margin-left: 10px;">
+            <i class="fa fa-download"></i> Download Template
+        </a>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

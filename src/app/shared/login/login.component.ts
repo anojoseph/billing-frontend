@@ -38,7 +38,8 @@ export class LoginComponent implements OnInit {
         const refreshToken = response.refresh_token;
         const userType = response.user_type;
         const userDetails = response.user_details;
-        this.authService.login(accessToken, refreshToken, userType, userDetails);
+        const user_id = response.user_id;
+        this.authService.login(accessToken, refreshToken, userType, userDetails, user_id);
         const returnUrl = '';
         this.router.navigate([returnUrl]);
         this.loading = false;

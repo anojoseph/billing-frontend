@@ -24,6 +24,7 @@ export class FoodMenuComponent implements OnInit, OnChanges {
   mealTypes: any;
   foodTypes: any;
   searchControl = new FormControl('');
+  showqty: boolean = false;
 
 
   constructor(
@@ -38,6 +39,7 @@ export class FoodMenuComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.fetchMenuItems();
     this.checkDeviceWidth();
+    this.getgeneralsetting();
     window.addEventListener('resize', this.checkDeviceWidth.bind(this));
     this.fetchmealtype();
     this.fetchfoodtype();
@@ -51,6 +53,12 @@ export class FoodMenuComponent implements OnInit, OnChanges {
         this.fetchMenuItems();
       });
 
+  }
+
+  getgeneralsetting() {
+    this.foodmenuservice.getSettings().subscribe((resp: any) => {
+      this.showqty = resp?.show_available_qty
+    })
   }
 
   fetchMenuItems(): void {

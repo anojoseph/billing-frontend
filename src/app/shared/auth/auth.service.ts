@@ -12,14 +12,16 @@ export class AuthService {
   private refreshTokenKey = 'refreshTokenKey';
   private userTypeKey = 'userTypeKey';
   private userDetailsKey = 'userDetailsKey';
+  private user_id = 'user_id';
 
   constructor(private http: HttpClient, private router: Router) { }
 
-  login(accessToken: string, refreshToken: string, userType: string, userDetails: any): void {
+  login(accessToken: string, refreshToken: string, userType: string, userDetails: any, user_id: any): void {
     localStorage.setItem(this.accessTokenKey, accessToken);
     localStorage.setItem(this.refreshTokenKey, refreshToken);
     localStorage.setItem(this.userTypeKey, userType);
     localStorage.setItem(this.userDetailsKey, JSON.stringify(userDetails));
+    localStorage.setItem(this.user_id, user_id);
   }
 
   getAccessToken(): string | null {
@@ -57,6 +59,7 @@ export class AuthService {
     localStorage.removeItem(this.refreshTokenKey);
     localStorage.removeItem(this.userTypeKey);
     localStorage.removeItem(this.userDetailsKey);
+    localStorage.removeItem(this.user_id);
     this.router.navigate(['/login']);
   }
 

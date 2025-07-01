@@ -24,4 +24,8 @@ export class FoodMenuService {
     return this.httpClient.get(`/product/search-product?query=${query}`);
   }
 
+    getSettings() {
+    return this.httpClient.get('/settings/general-settings');
+  }
+
 }

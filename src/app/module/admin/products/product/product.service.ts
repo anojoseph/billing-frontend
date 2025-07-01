@@ -19,7 +19,7 @@ export class ProductService {
     return this.httpClient.patch(`/product/product/${data.id}`, data)
   }
 
-  delete(data:any){
+  delete(data: any) {
     return this.httpClient.delete(`/product/product/${data}`)
   }
 
@@ -30,6 +30,11 @@ export class ProductService {
   getfoodtype() {
     return this.httpClient.get(`/product/product-items/`)
   }
+
+  uploadBulkExcel(formData: FormData) {
+    return this.httpClient.post('/product/bulk-upload', formData); // Adjust API URL if needed
+  }
+
 
 
 }

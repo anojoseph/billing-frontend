@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { ProductService } from './product.service';
+import { BulkUploadDialogComponent } from './bulk-upload-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-product',
@@ -15,13 +17,15 @@ export class ProductCuComponent implements OnInit {
   imagePreview: string | ArrayBuffer | null = null;
   formAction: string = 'Save';
   actionType: string = 'Add';
+  excelFile: File | null = null;
 
   constructor(
     private fb: FormBuilder,
     private toastr: ToastrService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private productService: ProductService
+    private productService: ProductService,
+    private dialog: MatDialog,
   ) {
     this.productForm = this.fb.group({
       id: [''],
@@ -159,5 +163,18 @@ export class ProductCuComponent implements OnInit {
         error => this.toastr.error(error.error.message)
       );
     }
+  }
+
+  openBulkUploadDialog() {
+    const dialogRef = this.dialog.open(BulkUploadDialogComponent, {
+      width: '500px',
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        // Optionally reload product list or give feedback
+      }
+    });
   }
 }

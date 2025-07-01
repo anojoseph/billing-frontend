@@ -41,11 +41,13 @@
   <div class="food-menu">
 
     <mat-card *ngFor="let food of foods" class="food-card">
-      <img mat-card-image [src]="food.image || '../../../../assets/images/biriyani.webp' " [alt]="food.name" class="food-image" />
+      <img mat-card-image [src]="food.image || '../../../../assets/images/biriyani.webp' " [alt]="food.name"
+        class="food-image" />
       <mat-card-title>{{ food.name }}</mat-card-title>
       <mat-card-content>
         <p><strong>Price:</strong> {{ food.price | currency: 'INR' }}</p>
-        <p *ngIf="food?.qty"><strong>Available Qty: <span style="color: red;"> {{food?.qty}} </span></strong></p>
+        <p *ngIf="food?.qty && showqty == true"><strong>Available Qty: <span style="color: red;"> {{food?.qty}}
+            </span></strong></p>
       </mat-card-content>
 
       <div class="button-conf">
@@ -54,7 +56,7 @@
           <span class="qty">{{ food.selectedQty || 0 }}</span>
           <button color="primary" (click)="increaseQuantity(food)">+</button>
         </div>
-        <button class="btn-success cart-btn btn btn-sm" (click)="onAddToCart(food)" >
+        <button class="btn-success cart-btn btn btn-sm" (click)="onAddToCart(food)">
           Add <i class="fa fa-shopping-cart" aria-hidden="true"></i>
         </button>
       </div>

@@ -48,7 +48,7 @@ export class HeaderComponent implements OnInit {
 
 
   viewProfile() {
-    console.log("Navigating to Profile");
+    this.router.navigate(['profile']);
   }
 
   logout() {

@@ -14,10 +14,13 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
+import { ProfileComponent } from '../shared/partials/profile/profile.component';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
-    LayoutComponent
+    LayoutComponent,
+    ProfileComponent
   ],
   imports: [
     CommonModule,
@@ -33,7 +36,8 @@ import { MatIconModule } from '@angular/material/icon';
     MatMenuModule,
     MatBadgeModule,
     MatIconModule,
-    SharedModule
+    SharedModule,
+    MatSelectModule
   ],
 })
 export class LayoutModule { }

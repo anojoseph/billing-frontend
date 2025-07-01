@@ -12,6 +12,8 @@ import { MealTypeCuComponent } from './meal-type/mealtype-cu.component';
 import { MealTypeComponent } from './meal-type/mealtype.component';
 import { ProductComponent } from './product/product.component';
 import { ProductCuComponent } from './product/product-cu.component';
+import { BulkUploadDialogComponent } from './product/bulk-upload-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,8 @@ import { ProductCuComponent } from './product/product-cu.component';
     MealTypeCuComponent,
     MealTypeComponent,
     ProductComponent,
-    ProductCuComponent
+    ProductCuComponent,
+    BulkUploadDialogComponent
   ],
   imports: [
     CommonModule,
@@ -30,7 +33,8 @@ import { ProductCuComponent } from './product/product-cu.component';
     MatInputModule,
     FormsModule,
     ReactiveFormsModule,
-    MatSelectModule
+    MatSelectModule,
+    MatDialogModule
   ]
 })
 export class ProductModule { }
