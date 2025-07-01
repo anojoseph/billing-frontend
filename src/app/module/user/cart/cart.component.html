@@ -26,7 +26,7 @@
 
   <!-- No Orders Message -->
 
-  <div class="checkout"  *ngIf="cart && cart.length >= 1;">
+  <div class="checkout" *ngIf="cart && cart.length >= 1;">
 
     <div class="order-type">
       <mat-radio-group [(ngModel)]="orderType">
@@ -47,8 +47,10 @@
 
     <div class="summary-footer">
       <p class="total-price">Total: ₹{{ (cartTotalPrice$ | async)?.toFixed(2) }}</p>
-      <button class="btn btn-success btn-sm" [disabled]="checkoutDisabled()" (click)="submitOrder()">
-        <i class="fa fa-check" aria-hidden="true" ></i> Checkout
+      <button class="btn btn-success btn-sm" [disabled]="checkoutDisabled() || isLoading" (click)="submitOrder()"
+        style="min-width: 150px;text-align: center;display: flex;justify-content: center;">
+        <span *ngIf="!isLoading"> <i class="fa fa-check" aria-hidden="true"></i> Checkout </span>
+        <span *ngIf="isLoading"> <mat-spinner color="warn" diameter="20"></mat-spinner> </span>
       </button>
     </div>
 
@@ -62,6 +64,3 @@
     <p>No items in the cart.</p>
   </div>
 </div>
-
-
-

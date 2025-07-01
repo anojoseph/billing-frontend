@@ -12,10 +12,12 @@ import { SalesReportComponent } from './daywise/sales-report.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule, NativeDateModule } from '@angular/material/core';
+import { ItemWiseSalesReportComponent } from './itemwise/sales-report.component';
 
 @NgModule({
   declarations: [
-    SalesReportComponent
+    SalesReportComponent,
+    ItemWiseSalesReportComponent
   ],
   imports: [
     CommonModule,

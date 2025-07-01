@@ -8,6 +8,7 @@ import { CartComponent } from './cart/cart.component';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { MatRadioModule } from '@angular/material/radio';
     SharedModule,
     MatChipsModule,
     MatIconModule,
-    MatRadioModule
+    MatRadioModule,
+    MatProgressSpinnerModule
   ],
 })
 export class UserModule { }

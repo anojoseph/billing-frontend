@@ -3,71 +3,17 @@
   <mat-sidenav #drawer class="sidenav" mode="over" [opened]="false" (closedStart)="onCloseSidenav()">
     <mat-nav-list>
       <mat-accordion [multi]="false">
-        <mat-expansion-panel>
-          <mat-expansion-panel-header routerLinkActive="active-menu">
-            <i class="fa-solid fa-list icon"></i> <span class="menu-list">Menu</span>
+        <mat-expansion-panel *ngFor="let menu of menuItems">
+          <mat-expansion-panel-header>
+            <i class="{{ menu.icon }} icon"></i> <span class="menu-list">{{ menu.label }}</span>
           </mat-expansion-panel-header>
           <mat-nav-list>
-            <a mat-list-item routerLink="" routerLinkActive="active-menu" (click)="drawer.toggle()">Menu List</a>
+            <a mat-list-item *ngFor="let child of menu.children" [routerLink]="child.route"
+              routerLinkActive="active-menu" (click)="drawer.toggle()">
+              {{ child.label }}
+            </a>
           </mat-nav-list>
         </mat-expansion-panel>
-
-        <mat-expansion-panel>
-          <mat-expansion-panel-header routerLinkActive="active-menu">
-            <i class="fa-solid fa-store icon"></i> <span class="menu-list">Product</span>
-          </mat-expansion-panel-header>
-          <mat-nav-list>
-            <a mat-list-item routerLink="/admin/product/product" routerLinkActive="active-menu"
-              (click)="drawer.toggle()">Product</a>
-            <a mat-list-item routerLink="/admin/product/productitem" routerLinkActive="active-menu"
-              (click)="drawer.toggle()">Product Items</a>
-            <a mat-list-item routerLink="/admin/product/mealtype" routerLinkActive="active-menu"
-              (click)="drawer.toggle()">Meal
-              Type</a>
-          </mat-nav-list>
-        </mat-expansion-panel>
-
-        <mat-expansion-panel>
-          <mat-expansion-panel-header routerLinkActive="active-menu">
-            <i class="fa-solid fa-book icon"></i> <span class="menu-list"> Reports</span>
-          </mat-expansion-panel-header>
-          <mat-nav-list>
-            <a mat-list-item routerLink="/admin/reports/sales-reprt" routerLinkActive="active-menu"
-              (click)="drawer.toggle()">Sales Report</a>
-          </mat-nav-list>
-        </mat-expansion-panel>
-
-        <mat-expansion-panel>
-          <mat-expansion-panel-header routerLinkActive="active-menu">
-            <i class="fa-solid fa-chair icon"></i> <span class="menu-list">Table</span>
-          </mat-expansion-panel-header>
-          <mat-nav-list>
-            <a mat-list-item routerLink="/admin/table/table" routerLinkActive="active-menu"
-              (click)="drawer.toggle()">Table</a>
-          </mat-nav-list>
-        </mat-expansion-panel>
-
-        <mat-expansion-panel>
-          <mat-expansion-panel-header routerLinkActive="active-menu">
-            <i class="fa fa-sticky-note icon" aria-hidden="true"></i> <span class="menu-list">Bill</span>
-          </mat-expansion-panel-header>
-          <mat-nav-list>
-            <a mat-list-item routerLink="/admin/bill/bill-edit" routerLinkActive="active-menu"
-              (click)="drawer.toggle()">Edit Bill</a>
-          </mat-nav-list>
-        </mat-expansion-panel>
-
-        <mat-expansion-panel>
-          <mat-expansion-panel-header routerLinkActive="active-menu">
-            <i class="fa fa-cutlery icon" aria-hidden="true"></i> <span class="menu-list">Kitchen</span>
-          </mat-expansion-panel-header>
-          <mat-nav-list>
-            <a mat-list-item routerLink="/admin/kitchen/kitchen" routerLinkActive="active-menu"
-              (click)="drawer.toggle()">Kitchen</a>
-          </mat-nav-list>
-        </mat-expansion-panel>
-
-
       </mat-accordion>
     </mat-nav-list>
   </mat-sidenav>

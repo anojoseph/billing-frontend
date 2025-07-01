@@ -1,0 +1,111 @@
+<div class="container">
+    <div class="data-card">
+        <div *ngIf="isLoading" class="loading-spinner">Loading menus...</div>
+
+        <mat-accordion *ngIf="!isLoading" class="menu-accordion">
+            <mat-expansion-panel *ngFor="let menu of menus" class="menu-panel">
+                <mat-expansion-panel-header class="panel-header">
+                    <div class="menu-header">
+                        <i class="{{ menu.icon }} icon"></i>
+                        <span class="menu-label">{{ menu.label }}</span>
+                        <small class="menu-roles" style="margin-right: 10px;">roles: {{ menu.roles.join(', ')
+                            }}</small>
+                    </div>
+                </mat-expansion-panel-header>
+
+                <mat-nav-list class="child-list">
+                    <mat-list-item *ngFor="let child of menu.children" class="child-item">
+                        <div class="child-content">
+                             <button mat-icon-button [routerLink]="['/admin/menu/edit', menu._id]"
+                                matTooltip="Edit Menu">
+                                <mat-icon style="font-size: medium;">edit</mat-icon>
+                            </button>
+                            <span class="child-label">{{ child.label }}</span>
+                            <span class="child-route">{{ child.route }}</span>
+                            <span class="child-roles">Roles: {{ child.roles.join(', ') }}</span>
+                            <span class="spacer"></span>
+                        </div>
+                    </mat-list-item>
+                </mat-nav-list>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+
+    <div class="data-card form-card">
+        <h2 class="form-title">{{ menuId ? 'Edit Menu' : 'Create New Menu' }}</h2>
+
+        <form [formGroup]="form" (ngSubmit)="submit()" class="menu-form">
+            <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Menu Label</mat-label>
+                <input matInput placeholder="Menu Label" formControlName="label" required>
+                <mat-error *ngIf="form.get('label')?.invalid">Label is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Icon Class</mat-label>
+                <input matInput placeholder="e.g. fa-solid fa-list" formControlName="icon">
+                <mat-hint>Use Font Awesome or Material Icons class names</mat-hint>
+            </mat-form-field>
+
+            <div class="roles-section">
+                <h4 class="section-title">Roles</h4>
+                <div class="roles-container">
+                    <mat-checkbox *ngFor="let role of allRoles" [checked]="isRoleChecked(roles, role)"
+                        (change)="onRoleChange($event, roles)" [value]="role" class="role-checkbox">
+                        {{ role | titlecase }}
+                    </mat-checkbox>
+                </div>
+            </div>
+
+            <div formArrayName="children" class="children-section menu-form">
+                <div *ngFor="let childCtrl of children.controls; let i = index" [formGroupName]="i"
+                    class="child-form-item">
+                    <div class="child-header">
+                        <h4 class="child-title">Child Item {{ i + 1 }}</h4>
+                        <button mat-icon-button color="warn" type="button" (click)="removeChild(i)"
+                            matTooltip="Remove Child">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+
+                    <div class="child-fields">
+                        <mat-form-field appearance="outline" class="form-field">
+                            <mat-label>Label</mat-label>
+                            <input matInput placeholder="Child Label" formControlName="label" required>
+                            <mat-error *ngIf="childCtrl.get('label')?.invalid">Label is required</mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="form-field">
+                            <mat-label>Route</mat-label>
+                            <input matInput placeholder="e.g. /admin/users" formControlName="route" required>
+                            <mat-error *ngIf="childCtrl.get('route')?.invalid">Route is required</mat-error>
+                        </mat-form-field>
+
+                        <div class="roles-section child-roles">
+                            <h5 class="section-title">Child Roles</h5>
+                            <div class="roles-container">
+                                <mat-checkbox *ngFor="let role of allRoles"
+                                    [checked]="isRoleChecked(getRolesArray(childCtrl), role)"
+                                    (change)="onRoleChange($event, getRolesArray(childCtrl))" [value]="role"
+                                    class="role-checkbox">
+                                    {{ role | titlecase }}
+                                </mat-checkbox>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button mat-stroked-button color="primary" type="button" (click)="addChild()" class="action-button">
+                    <mat-icon>add</mat-icon> Add Child
+                </button>
+                <button mat-raised-button color="accent" type="submit" [disabled]="isLoading || form.invalid"
+                    class="submit-button">
+                    <span *ngIf="isLoading" class="spinner"></span>
+                    {{ menuId ? 'Update Menu' : 'Create Menu' }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

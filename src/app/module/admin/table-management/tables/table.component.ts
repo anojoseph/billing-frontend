@@ -19,7 +19,7 @@ import { TableService } from './table.service';
 })
 
 export class TableComponent implements OnInit {
-  fields: string[] = ['Table No:', 'Name', 'Status', "Qr code"];
+  fields: string[] = ['Table No:', 'Name', 'Status'];
   @ViewChild('dataTable') dataTable!: DataTableComponent;
   name = 'Tables'
 

@@ -44,7 +44,8 @@ export class TableCuComponent implements OnInit {
             name: response.name,
             status: response.status,
             no: response.no,
-            qr_status: response.qr_status
+            qr_status: response.qr_status,
+            qr_code: response.qr_code
           });
         });
       }

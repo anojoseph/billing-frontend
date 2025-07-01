@@ -10,4 +10,13 @@ export class ReportService {
   getreport(startDate: string, endDate: string) {
     return this.httpClient.get(`/reports/daily-report?startDate=${startDate}&endDate=${endDate}`);
   }
+
+  
+  geitemwisetreport(startDate: string, endDate: string) {
+    return this.httpClient.get(`/reports/item-report?startDate=${startDate}&endDate=${endDate}`);
+  }
+
+  getDaywisetreport(startDate: string, endDate: string) {
+    return this.httpClient.get(`/reports/day-report?startDate=${startDate}&endDate=${endDate}`);
+  }
 }

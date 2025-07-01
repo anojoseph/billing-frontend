@@ -22,7 +22,8 @@ export class GenerasettingComponent implements OnInit {
       logo: [null],
       status: [true],
       stockUpdate: [false],
-      printerPort: ['']
+      printerPort: [''],
+      accept_qr_booking:['']
     });
 
     this.loadSettings();
@@ -37,7 +38,8 @@ export class GenerasettingComponent implements OnInit {
             storeName: data.storeName || '',
             status: data.status ?? true,
             stockUpdate: data.stockUpdate ?? false,
-            printerPort: data.printerPort ?? ''
+            printerPort: data.printerPort ?? '',
+            accept_qr_booking:data?.accept_qr_booking
           });
 
           this.logoUrl = data.logo ? data.logo : null;
@@ -79,6 +81,8 @@ export class GenerasettingComponent implements OnInit {
       formData.append('status', this.settingsForm.get('status')?.value);
       formData.append('stockUpdate', this.settingsForm.get('stockUpdate')?.value);
       formData.append('printerPort', this.settingsForm.get('printerPort')?.value);
+      formData.append('accept_qr_booking', this.settingsForm.get('accept_qr_booking')?.value);
+
 
       if (this.selectedFile) {
         formData.append('logo', this.selectedFile);

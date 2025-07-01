@@ -22,6 +22,7 @@ export class CartComponent implements OnInit {
   table: any;
   cartCount$: Observable<number>;
   orderType: string = 'Bill';
+  isLoading:boolean = false;
 
   constructor(
     private store: Store,
@@ -85,6 +86,7 @@ export class CartComponent implements OnInit {
         items: cartItems
       };
 
+      this.isLoading = true;
       this.cartService.createOrder(orderData).subscribe(
         (response) => {
           console.log(response.printContent)
@@ -104,16 +106,19 @@ export class CartComponent implements OnInit {
             } else {
               this.toastr.error('Print failed.');
             }
+            this.isLoading =false;
           },
             (error) => {
               console.error('Print failed!', error);
               this.toastr.error(error.error?.message);
+              this.isLoading =false;
             });
 
 
         },
         (error) => {
           this.toastr.error(error.error.message || 'Failed to create order');
+          this.isLoading = false;
         }
       );
     });

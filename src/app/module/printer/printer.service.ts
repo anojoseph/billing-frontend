@@ -26,8 +26,6 @@ export class PrinterService {
 
       this.service = await this.server.getPrimaryService(this.serviceUUID);
       this.characteristic = await this.service.getCharacteristic(this.characteristicUUID);
-
-      console.log('✅ Printer connected');
     } catch (error) {
       console.error('❌ Failed to connect to printer', error);
     }

@@ -63,7 +63,6 @@ export class BillUpdateComponent implements OnInit {
         this.isLoading = false;
       },
       (error) => {
-        console.error('Error fetching bill:', error);
         this.snackBar.open('Bill not found.', 'Close', { duration: 3000 });
         this.isLoading = false;
       }
