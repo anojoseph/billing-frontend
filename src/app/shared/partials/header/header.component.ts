@@ -6,6 +6,7 @@ import { Store } from '@ngrx/store';
 import { selectCartCount } from 'src/app/module/user/cart/cart.selectors';
 import { MenuItem, MENU_ITEMS } from '../menu/menu.config';
 import { MenuService } from '../menu/menu.service';
+import { SettingsService } from 'src/app/module/admin/settings/general-settings/generasetting/generasettings.service';
 
 @Component({
   selector: 'app-header',
@@ -18,24 +19,29 @@ export class HeaderComponent implements OnInit {
   userType: string | null = null;
   menuItems: MenuItem[] = [];
   userRole: string | null = null;
+  storename: any;
 
   ngOnInit(): void {
     this.userRole = this.authService.getUserType();
-    this.getmenu()
+    this.getmenu();
+    this.settings.getSettings().subscribe((resp: any) => {
+      this.storename = resp?.storeName || 'Billing.Com'
+    })
   }
 
   constructor(
     private router: Router,
     public authService: AuthService,
     private store: Store,
-    private menuservice:MenuService
+    private menuservice: MenuService,
+    private settings: SettingsService
   ) {
     this.cartCount$ = this.store.select(selectCartCount);
   }
   //cart$ = this.cartService.cart$;
 
-  getmenu(){
-    this.menuservice.getallmenu().subscribe((resp:any)=>{
+  getmenu() {
+    this.menuservice.getallmenu().subscribe((resp: any) => {
       this.menuItems = resp
     })
   }
