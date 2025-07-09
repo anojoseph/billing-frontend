@@ -32,13 +32,15 @@ import { cartReducer } from './module/user/cart/cart.reducer';
 import { PaymentTypeDialogComponent } from './module/user/payment-dialog/payment-type-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatRadioModule } from '@angular/material/radio';
+import { PrinterConfigComponent } from './shared/printer-config/printer-config.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     LogoutComponent,
-    PaymentTypeDialogComponent
+    PaymentTypeDialogComponent,
+    PrinterConfigComponent
 
   ],
   imports: [

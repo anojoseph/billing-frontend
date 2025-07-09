@@ -27,6 +27,7 @@
       <a class="title" routerLink="" style="text-decoration: none;color: white;">Billing.Com</a>
       <span class="spacer"></span>
 
+      <mat-icon routerLink="/admin/printer-config">printer</mat-icon>
       <mat-icon routerLink="/admin/table/table-status">table_restaurant</mat-icon>
       <mat-icon (click)="opencart()" *ngIf="(cartCount$ | async)?.toString() === '0'">shopping_cart</mat-icon>
       <mat-icon (click)="opencart()" matBadgeSize="small" matBadge="{{ cartCount$ | async }}" matBadgeColor="accent"

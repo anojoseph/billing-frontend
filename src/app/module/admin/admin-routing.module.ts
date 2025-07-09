@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MenuFormComponent } from 'src/app/shared/partials/menu/menu-form.component';
+import { PrinterConfigComponent } from 'src/app/shared/printer-config/printer-config.component';
 
 
 const routes: Routes = [
@@ -12,6 +13,7 @@ const routes: Routes = [
   { path: 'kitchen', loadChildren: () => import('./kitchen/kitchen.module').then(m => m.KitchenModule) },
   { path: 'menu', component: MenuFormComponent },
   { path: 'menu/edit/:id', component: MenuFormComponent },
+  { path: 'printer-config', component: PrinterConfigComponent },
 
 
 ];

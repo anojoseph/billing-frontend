@@ -27,4 +27,7 @@ export class KitchenService {
     return this.httpClient.get('/product/product/')
   }
 
+  getallkitchen() {
+    return this.httpClient.get(`/kitchens/kitchen`)
+  }
 }
