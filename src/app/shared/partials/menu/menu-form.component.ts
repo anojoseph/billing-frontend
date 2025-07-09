@@ -34,7 +34,7 @@ export class MenuFormComponent implements OnInit {
         private fb: FormBuilder,
         private menuService: MenuService,
         private route: ActivatedRoute,
-        private router:Router
+        private router: Router
     ) {
         this.form = this.fb.group({
             label: ['', Validators.required],
@@ -171,8 +171,8 @@ export class MenuFormComponent implements OnInit {
                 }
                 this.isLoading = false;
                 this.router.navigate(['/admin/menu/']);
-               
-                
+
+
             },
             error: () => {
                 this.isLoading = false;
@@ -180,4 +180,23 @@ export class MenuFormComponent implements OnInit {
             }
         });
     }
+
+deleteMenu(menuId: string): void {
+  if (!confirm('Are you sure you want to delete this menu?')) return;
+
+  this.isLoading = true;
+  this.menuService.deleteMenu(menuId).subscribe({
+    next: () => {
+      this.loadAllMenus(); // Refresh the menu list after deletion
+      this.isLoading = false;
+      alert("Menu deleted");
+    },
+    error: (error) => {
+      this.isLoading = false;
+      console.error('Failed to delete menu:', error);
+    }
+  });
+}
+
+
 }

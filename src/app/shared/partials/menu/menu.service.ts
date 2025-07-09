@@ -26,10 +26,13 @@ export class MenuService {
         return this.http.get(`/menu/menu/${id}`);
     }
 
-    getallmenu(){
+    getallmenu() {
         return this.http.get('/menu/menu/all')
     }
 
-    
+    deleteMenu(menuId: string) {
+        return this.http.delete(`/menu/menu/${menuId}`);
+    }
+
 
 }

@@ -5,10 +5,17 @@
         <mat-accordion *ngIf="!isLoading" class="menu-accordion">
             <mat-expansion-panel *ngFor="let menu of menus" class="menu-panel">
                 <mat-expansion-panel-header class="panel-header">
+
                     <div class="menu-header">
+
+                        <mat-icon style="font-size: medium;color: green;" [routerLink]="['/admin/menu/edit', menu._id]"
+                            matTooltip="Edit Menu">edit</mat-icon>
+                        <mat-icon style="font-size: medium;margin-top: 6px;color: red;" (click)="deleteMenu(menu._id)"
+                            matTooltip="Delete Menu">delete</mat-icon>
                         <i class="{{ menu.icon }} icon"></i>
                         <span class="menu-label">{{ menu.label }}</span>
-                        <small class="menu-roles" style="margin-right: 10px;">roles: {{ menu.roles.join(', ')
+                        <small class="menu-roles" style="margin-right: 10px;margin-top: 6px;">roles: {{
+                            menu.roles.join(', ')
                             }}</small>
                     </div>
                 </mat-expansion-panel-header>
@@ -16,10 +23,6 @@
                 <mat-nav-list class="child-list">
                     <mat-list-item *ngFor="let child of menu.children" class="child-item">
                         <div class="child-content">
-                             <button mat-icon-button [routerLink]="['/admin/menu/edit', menu._id]"
-                                matTooltip="Edit Menu">
-                                <mat-icon style="font-size: medium;">edit</mat-icon>
-                            </button>
                             <span class="child-label">{{ child.label }}</span>
                             <span class="child-route">{{ child.route }}</span>
                             <span class="child-roles">Roles: {{ child.roles.join(', ') }}</span>
@@ -100,6 +103,7 @@
                 <button mat-stroked-button color="primary" type="button" (click)="addChild()" class="action-button">
                     <mat-icon>add</mat-icon> Add Child
                 </button>
+
                 <button mat-raised-button color="accent" type="submit" [disabled]="isLoading || form.invalid"
                     class="submit-button">
                     <span *ngIf="isLoading" class="spinner"></span>

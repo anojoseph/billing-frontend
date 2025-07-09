@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { TableStatusService } from './tablestatus.service';
+import { PaymentTypeDialogComponent } from 'src/app/module/user/payment-dialog/payment-type-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-table-status',
@@ -11,7 +13,7 @@ export class TableStatusComponent implements OnInit {
   tables: any[] = [];
   loading: boolean = false;
 
-  constructor(private tablestatusservice: TableStatusService, private toastr: ToastrService) { }
+  constructor(private tablestatusservice: TableStatusService, private toastr: ToastrService, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.getTableStatus();
@@ -28,18 +30,28 @@ export class TableStatusComponent implements OnInit {
     );
   }
 
-  markAsCompleted(orderId: any) {
+markAsCompleted(orderIds: any[]) {
+  const dialogRef = this.dialog.open(PaymentTypeDialogComponent, {
+    width: '300px',
+    disableClose: true
+  });
+
+  dialogRef.afterClosed().subscribe(paymentType => {
+    if (!paymentType) return;
+
     this.loading = true;
-    this.tablestatusservice.completeOrder(orderId[0]).subscribe(
+    this.tablestatusservice.completeOrder(orderIds[0], paymentType).subscribe(
       (data) => {
         this.toastr.success('Order marked as completed');
-        this.getTableStatus(); // Refresh the table status
-        this.loading = false;;
+        this.getTableStatus();
+        this.loading = false;
       },
       (error) => {
         this.toastr.error(error.message || 'Error completing order');
         this.loading = false;
       }
     );
-  }
+  });
+}
+
 }

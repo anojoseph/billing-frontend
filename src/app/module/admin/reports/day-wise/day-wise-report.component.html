@@ -1,6 +1,7 @@
-<mat-card class="data-table-card" style="margin: 10px;max-height: 88%;overflow-y: auto;">
+<mat-card class="data-table-card" style="margin: 10px; max-height: 88%; overflow-y: auto;">
   <div class="container">
-    <h2>Sales Report</h2>
+    <h2>Day-wise Sales Report</h2>
+
     <form [formGroup]="filterForm" (ngSubmit)="generateReport()">
       <div class="row">
         <div class="col-md-3">
@@ -11,6 +12,7 @@
             <mat-datepicker #startPicker></mat-datepicker>
           </mat-form-field>
         </div>
+
         <div class="col-md-3">
           <mat-form-field appearance="outline">
             <mat-label>End Date</mat-label>
@@ -19,10 +21,11 @@
             <mat-datepicker #endPicker></mat-datepicker>
           </mat-form-field>
         </div>
+
         <div class="col-md-1" style="margin-top: 10px;">
-          <button mat-raised-button style="width: 100%;" [disabled]="loading" color="primary" type="submit">
+          <button mat-raised-button color="primary" type="submit" [disabled]="loading">
             <span *ngIf="!loading">Generate</span>
-            <span *ngIf="loading" style="text-align: center;">
+            <span *ngIf="loading">
               <mat-spinner diameter="20px" color="primary"></mat-spinner>
             </span>
           </button>
@@ -30,38 +33,30 @@
       </div>
     </form>
 
-    <div *ngIf="showtable">
-      <hr>
-
+    <div *ngIf="showTable && reportData.length > 0">
+      <hr />
       <table class="table table-bordered table-striped">
         <thead class="sticky-header">
           <tr>
             <th style="text-align: center;">#</th>
-            <th style="text-align: center;">Bill No</th>
             <th style="text-align: center;">Date</th>
-            <th style="text-align: center;">Amount</th>
-            <th>Type</th>
+            <th style="text-align: center;">Total Sales</th>
+            <th style="text-align: center;">Bill Count</th>
           </tr>
         </thead>
-        <tbody *ngIf="billdata.length > 0">
-          <tr *ngFor="let item of billdata; let i=index">
-            <td style="text-align: center;">{{i+1}}</td>
-            <td style="text-align: center;">{{item?.billNumber}}</td>
-            <td style="text-align: center;">{{item.createdAt | date}}</td>
-            <td style="text-align: center;">{{item?.totalAmount | currency:'INR'}}</td>
-            <td>{{item?.type}}</td>
-          </tr>
-          <tr>
-            <td colspan="3" style="text-align: center;font-weight: 600;">Total</td>
-            <td style="font-weight: 600;" colspan="2">{{total?.totalAmount | currency:'INR'}}</td>
-          </tr>
-        </tbody>
-        <tbody *ngIf="billdata.length < 1">
-          <tr>
-            <td colspan="5" style="text-align: center;color: red;">No data found</td>
+        <tbody>
+          <tr *ngFor="let day of reportData; let i = index">
+            <td style="text-align: center;">{{ i + 1 }}</td>
+            <td style="text-align: center;">{{ day?.date | date }}</td>
+            <td style="text-align: center;">₹{{ day?.totalSales | number: '1.2-2' }}</td>
+            <td style="text-align: center;">{{ day?.billCount }}</td>
           </tr>
         </tbody>
       </table>
+    </div>
+
+    <div *ngIf="showTable && reportData.length === 0" style="color: red; text-align: center;">
+      No data found.
     </div>
   </div>
 </mat-card>

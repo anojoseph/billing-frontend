@@ -35,6 +35,10 @@ export class ProductService {
     return this.httpClient.post('/product/bulk-upload', formData); // Adjust API URL if needed
   }
 
+  getallkitchen() {
+    return this.httpClient.get(`/kitchens/kitchen`)
+  }
+
 
 
 }

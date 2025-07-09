@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 
 export class TableStatusService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getTableStatus(){
+  getTableStatus() {
     return this.httpClient.get('/table/table-status')
   }
 
-  completeOrder(orderId: string){
-    return this.httpClient.put(`/order/${orderId}/complete`, {});
+  completeOrder(orderId: string, paymentType: string) {
+    return this.httpClient.put(`/order/${orderId}/complete`, { paymentType });
   }
 
 }

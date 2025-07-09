@@ -1,6 +1,6 @@
 <div class="data-card">
   <div style="display: flex;justify-content: space-between;">
-    <h5 class="data-head">{{actionType}} Meal type</h5>
+    <h5 class="data-head">{{actionType}} Product</h5>
 
     <button mat-stroked-button color="accent" (click)="openBulkUploadDialog()" style="margin: 13px;">
       <i class="fa fa-upload"></i> Bulk Upload Products
@@ -78,6 +78,15 @@
             <mat-option [value]="false">In Active</mat-option>
           </mat-select>
           <mat-error *ngIf="f['name'].hasError('required')">Name is required</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-3">
+        <mat-form-field appearance="outline" style="width: 100%;margin-top: 20px;">
+          <mat-label>Kitchen</mat-label>
+          <mat-select formControlName="kitchen" placeholder="Select status">
+            <mat-option *ngFor="let item of kitchens" [value]="item._id">{{item?.name}}</mat-option>
+          </mat-select>
         </mat-form-field>
       </div>
 

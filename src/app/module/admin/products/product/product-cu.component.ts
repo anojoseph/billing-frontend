@@ -18,6 +18,7 @@ export class ProductCuComponent implements OnInit {
   formAction: string = 'Save';
   actionType: string = 'Add';
   excelFile: File | null = null;
+  kitchens: any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -36,8 +37,9 @@ export class ProductCuComponent implements OnInit {
       type: ['', Validators.required],
       mealType: ['', Validators.required],
       qty: [''],
-      selectedQty: [''],
-      image: ['']
+      selectedQty: [1],
+      image: [''],
+      kitchen: ['']
     });
   }
 
@@ -45,8 +47,18 @@ export class ProductCuComponent implements OnInit {
     this.loadFoodTypes();
     this.loadMealTypes();
     this.checkEditMode();
+    this.getallkitchen();
   }
 
+  getallkitchen() {
+    this.productService.getallkitchen().subscribe((resp: any) => {
+      console.log(resp);
+      this.kitchens = resp;
+    },
+      (error) => {
+        console.error("Error in loading kitchen")
+      })
+  }
   private initForm() { }
 
   private checkEditMode() {
@@ -58,15 +70,16 @@ export class ProductCuComponent implements OnInit {
         this.productService.getproductbyid(editId).subscribe(
           (response: any) => {
             this.productForm.patchValue({
-              id: response._id,
-              name: response.name,
-              status: response.status,
-              price: response.price,
-              ingredients: response.ingredients || [],
-              type: response.type,
-              mealType: response.mealType,
-              qty: response.qty,
-              selectedQty: response.selectedQty
+              id: response?._id,
+              name: response?.name,
+              status: response?.status,
+              price: response?.price,
+              ingredients: response?.ingredients || [],
+              type: response?.type,
+              mealType: response?.mealType,
+              qty: response?.qty,
+              selectedQty: response?.selectedQty,
+              kitchen: response?.kitchen
             });
             this.imagePreview = response.image;
           },
@@ -141,9 +154,14 @@ export class ProductCuComponent implements OnInit {
       } else if (key === 'mealType' && value) {
         const selectedMealType = this.mealtypes.find(mt => mt._id === value);
         formData.append(key, selectedMealType ? selectedMealType._id : '');
-      } else if (value !== null && value !== undefined) {
+      } else if (key === 'kitchen' && value) {
+        const kitchen = this.kitchens.find(kt => kt._id === value);
+        formData.append(key, kitchen ? kitchen._id : '');
+      }
+      else if (value !== null && value !== undefined) {
         formData.append(key, value);
       }
+
     });
 
     if (this.actionType === 'Add') {

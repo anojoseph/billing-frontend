@@ -25,6 +25,7 @@ export class BillUpdateComponent implements OnInit {
   ) {
     this.billForm = this.fb.group({
       billNumber: ['', Validators.required],
+      paymentType: ['', Validators.required], // ✅ Add this line
       items: this.fb.array([])
     });
   }
@@ -90,6 +91,9 @@ export class BillUpdateComponent implements OnInit {
       this.addItem();
     }
     this.updateTotal();
+    this.billForm.patchValue({
+      paymentType: bill.orderId.paymentType || ''
+    });
   }
 
   createItemFormGroup(item: any = {}): FormGroup {
@@ -157,6 +161,7 @@ export class BillUpdateComponent implements OnInit {
 
     const updatedBill = {
       billNumber: this.billForm.get('billNumber')?.value,
+      paymentType: this.billForm.get('paymentType')?.value,
       items: items
     };
 
@@ -203,7 +208,7 @@ export class BillUpdateComponent implements OnInit {
         (response: any) => {
           this.snackBar.open('Bill deleted successfully!', 'Close', { duration: 3000 });
           this.billForm.reset();
-          this.bill=null;
+          this.bill = null;
         },
         (error) => {
           console.error('Error deleting bill:', error);

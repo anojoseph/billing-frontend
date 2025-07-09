@@ -29,12 +29,16 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { cartReducer } from './module/user/cart/cart.reducer';
+import { PaymentTypeDialogComponent } from './module/user/payment-dialog/payment-type-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     LogoutComponent,
+    PaymentTypeDialogComponent
 
   ],
   imports: [
@@ -67,7 +71,9 @@ import { cartReducer } from './module/user/cart/cart.reducer';
     MatProgressSpinnerModule,
     StoreModule.forRoot({ cart: cartReducer }),
     EffectsModule.forRoot([]),
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() })
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
+    MatDialogModule,
+    MatRadioModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

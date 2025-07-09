@@ -63,13 +63,32 @@
             </tbody>
           </table>
         </div>
+        <div class="pull-left" style="width: max-content;">
+          <div class="form-group">
+            <label for="paymentType">Payment Type</label>
+            <select class="form-control" formControlName="paymentType">
+              <option value="">Select Payment Type</option>
+              <option value="Cash">Cash</option>
+              <option value="Card">Card</option>
+              <option value="UPI">UPI</option>
+              <option value="Zomato">Zomato</option>
+              <option value="Swiggy">Swiggy</option>
+            </select>
+          </div>
+        </div>
+
       </form>
 
+
       <p class="total-amount"><strong>Total Amount: ₹{{ totalAmount }}</strong></p>
+
       <div class="pull-right">
-        <button class="btn btn-success btn-sm" [disabled]="billForm.invalid" (click)="updateBill()"><i class="fa fa-check" aria-hidden="true"></i> Update
+
+        <button class="btn btn-success btn-sm" [disabled]="billForm.invalid" (click)="updateBill()"><i
+            class="fa fa-check" aria-hidden="true"></i> Update
           Bill</button>
-        <button class="btn btn-sm btn-danger" (click)="deletebill()"><i class="fa fa-trash" aria-hidden="true"></i> Delete</button>
+        <button class="btn btn-sm btn-danger" (click)="deletebill()"><i class="fa fa-trash" aria-hidden="true"></i>
+          Delete</button>
       </div>
     </div>
   </div>

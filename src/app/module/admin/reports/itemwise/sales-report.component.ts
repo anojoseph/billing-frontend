@@ -42,7 +42,7 @@ export class ItemWiseSalesReportComponent implements OnInit {
 
     this.loading=true;
     this.reportService.geitemwisetreport(startDate, endDate).subscribe((response: any) => {
-
+      console.log(response)
       this.billdata = response.items;
       this.total = response.summary;
       this.loading = false;

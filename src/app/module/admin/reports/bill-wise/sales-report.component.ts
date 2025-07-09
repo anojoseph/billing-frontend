@@ -15,7 +15,7 @@ export class SalesReportComponent implements OnInit {
   billdata: any;
   showtable: boolean = false;
   today = new Date();
-  loading:boolean = false;
+  loading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -40,10 +40,10 @@ export class SalesReportComponent implements OnInit {
       return;
     }
 
-    this.loading=true;
+    this.loading = true;
     this.reportService.getreport(startDate, endDate).subscribe((response: any) => {
 
-
+      console.log(response)
       this.billdata = response.bills;
       this.total = response.summary;
       this.loading = false;

@@ -24,7 +24,9 @@ export class GenerasettingComponent implements OnInit {
       stockUpdate: [false],
       printerPort: [''],
       accept_qr_booking: [''],
-      show_available_qty: [false]
+      show_available_qty: [false],
+      auto_print_bill: [false],
+      auto_print_kot: [false]
     });
 
     this.loadSettings();
@@ -41,7 +43,9 @@ export class GenerasettingComponent implements OnInit {
             stockUpdate: data.stockUpdate ?? false,
             printerPort: data.printerPort ?? '',
             accept_qr_booking: data?.accept_qr_booking,
-            show_available_qty: data?.show_available_qty
+            show_available_qty: data?.show_available_qty,
+            auto_print_bill: data?.auto_print_bill,
+            auto_print_kot: data?.auto_print_kot
           });
 
           this.logoUrl = data.logo ? data.logo : null;
@@ -85,6 +89,9 @@ export class GenerasettingComponent implements OnInit {
       formData.append('printerPort', this.settingsForm.get('printerPort')?.value);
       formData.append('accept_qr_booking', this.settingsForm.get('accept_qr_booking')?.value);
       formData.append('show_available_qty', this.settingsForm.get('show_available_qty')?.value);
+      formData.append('auto_print_bill', this.settingsForm.get('auto_print_bill')?.value);
+      formData.append('auto_print_kot', this.settingsForm.get('auto_print_kot')?.value);
+
 
 
 

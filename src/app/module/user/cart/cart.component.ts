@@ -7,6 +7,8 @@ import { clearCart, removeFromCart, updateCartItem } from './cart.actions';
 import { CartItem } from './cart.model';
 import { cartService } from './cart.service'
 import { BluetoothPrinterService } from '../../printer/bluetooth-printer.service';
+import { PaymentTypeDialogComponent } from '../payment-dialog/payment-type-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-cart',
@@ -22,13 +24,14 @@ export class CartComponent implements OnInit {
   table: any;
   cartCount$: Observable<number>;
   orderType: string = 'Bill';
-  isLoading:boolean = false;
+  isLoading: boolean = false;
 
   constructor(
     private store: Store,
     private toastr: ToastrService,
     private cartService: cartService,
-    private btPrinter: BluetoothPrinterService
+    private btPrinter: BluetoothPrinterService,
+    private dialog: MatDialog
   ) {
     this.cartCount$ = this.store.select(selectCartCount);
   }
@@ -73,6 +76,57 @@ export class CartComponent implements OnInit {
     return !(this.cartCount$);
   }
 
+  // submitOrder() {
+  //   this.cart$.pipe(first()).subscribe(cartItems => {
+  //     if (!cartItems.length) {
+  //       this.toastr.warning('Cart is empty!');
+  //       return;
+  //     }
+
+  //     const orderData = {
+  //       tableId: this.orderType === 'Dine-in' ? this.tableNumber : null, // Table required only for Dine-in
+  //       orderType: this.orderType,
+  //       items: cartItems
+  //     };
+
+  //     this.isLoading = true;
+  //     this.cartService.createOrder(orderData).subscribe(
+  //       (response) => {
+  //         console.log(response.printContent)
+  //         this.toastr.success(response.message);
+  //         this.store.dispatch(clearCart()); // ✅ Clears the cart state
+  //         console.log(response.order)
+
+
+  //         this.cartService.printOrder(response.order._id).subscribe((printResponse) => {
+  //           console.log('Print response!', printResponse);
+
+  //           if (printResponse.printContent) {
+  //             this.toastr.success('Printed successfully.');
+  //             console.log('Print content!', printResponse.printContent);
+
+  //             //this.btPrinter.print(printResponse.printContent);
+  //           } else {
+  //             this.toastr.error('Print failed.');
+  //           }
+  //           this.isLoading =false;
+  //         },
+  //           (error) => {
+  //             console.error('Print failed!', error);
+  //             this.toastr.error(error.error?.message);
+  //             this.isLoading =false;
+  //           });
+
+
+  //       },
+  //       (error) => {
+  //         this.toastr.error(error.error.message || 'Failed to create order');
+  //         this.isLoading = false;
+  //       }
+  //     );
+  //   });
+  // }
+
   submitOrder() {
     this.cart$.pipe(first()).subscribe(cartItems => {
       if (!cartItems.length) {
@@ -80,48 +134,57 @@ export class CartComponent implements OnInit {
         return;
       }
 
-      const orderData = {
-        tableId: this.orderType === 'Dine-in' ? this.tableNumber : null, // Table required only for Dine-in
-        orderType: this.orderType,
-        items: cartItems
+      const proceedWithOrder = (paymentType?: string) => {
+        const orderData: any = {
+          tableId: this.orderType === 'Dine-in' ? this.tableNumber : null,
+          orderType: this.orderType,
+          items: cartItems,
+          ...(paymentType && { paymentType }) // only include if exists
+        };
+
+        this.isLoading = true;
+        this.cartService.createOrder(orderData).subscribe(
+          (response) => {
+            this.toastr.success(response.message);
+            this.store.dispatch(clearCart());
+
+            this.cartService.printOrder(response.order._id).subscribe(
+              (printResponse) => {
+                if (printResponse.printContent) {
+                  this.toastr.success('Printed successfully.');
+                }
+                this.isLoading = false;
+              },
+              (error) => {
+                this.toastr.error(error.error?.message);
+                this.isLoading = false;
+              }
+            );
+          },
+          (error) => {
+            this.toastr.error(error.error.message || 'Failed to create order');
+            this.isLoading = false;
+          }
+        );
       };
 
-      this.isLoading = true;
-      this.cartService.createOrder(orderData).subscribe(
-        (response) => {
-          console.log(response.printContent)
-          this.toastr.success(response.message);
-          this.store.dispatch(clearCart()); // ✅ Clears the cart state
-          console.log(response.order)
+      // 🟨 For Dine-in: Skip asking for payment type
+      if (this.orderType === 'Dine-in') {
+        proceedWithOrder(); // no paymentType
+      } else {
+        // 🟩 For Takeaway and Bill: Ask for payment type
+        const dialogRef = this.dialog.open(PaymentTypeDialogComponent, {
+          width: '300px',
+          disableClose: true
+        });
 
-
-          this.cartService.printOrder(response.order._id).subscribe((printResponse) => {
-            console.log('Print response!', printResponse);
-
-            if (printResponse.printContent) {
-              this.toastr.success('Printed successfully.');
-              console.log('Print content!', printResponse.printContent);
-
-              //this.btPrinter.print(printResponse.printContent);
-            } else {
-              this.toastr.error('Print failed.');
-            }
-            this.isLoading =false;
-          },
-            (error) => {
-              console.error('Print failed!', error);
-              this.toastr.error(error.error?.message);
-              this.isLoading =false;
-            });
-
-
-        },
-        (error) => {
-          this.toastr.error(error.error.message || 'Failed to create order');
-          this.isLoading = false;
-        }
-      );
+        dialogRef.afterClosed().subscribe(paymentType => {
+          if (!paymentType) return;
+          proceedWithOrder(paymentType);
+        });
+      }
     });
   }
+
 
 }
