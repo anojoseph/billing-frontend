@@ -101,6 +101,33 @@
         </div>
       </div>
 
+      <div formArrayName="addons">
+        <div *ngFor="let addon of addonsFormArray.controls; let i = index" [formGroupName]="i" class="row">
+          <div class="col-md-3">
+            <mat-form-field appearance="outline" style="width: 100%;">
+              <mat-label>Addon Name</mat-label>
+              <input matInput formControlName="name">
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <mat-form-field appearance="outline" style="width: 100%;">
+              <mat-label>Addon Price</mat-label>
+              <input matInput formControlName="price" type="number">
+            </mat-form-field>
+          </div>
+          <div class="col-md-2" style="margin-top: 10px;">
+            <button mat-icon-button color="warn" (click)="removeAddon(i)">
+              <i class="fa fa-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 10px;">
+        <button class="btn btn-outline-primary btn-sm" type="button" (click)="addAddon()">+ Addon</button>
+      </div>
+
+
     </div>
     <hr>
 

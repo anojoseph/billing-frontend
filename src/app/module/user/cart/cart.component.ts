@@ -9,6 +9,8 @@ import { cartService } from './cart.service'
 import { BluetoothPrinterService } from '../../printer/bluetooth-printer.service';
 import { PaymentTypeDialogComponent } from '../payment-dialog/payment-type-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { AddonDialogComponent } from '../food-menu/addon-dialog.component';
+import { FoodMenuService } from '../food-menu/foodmenu.service';
 
 @Component({
   selector: 'app-cart',
@@ -31,7 +33,8 @@ export class CartComponent implements OnInit {
     private toastr: ToastrService,
     private cartService: cartService,
     private btPrinter: BluetoothPrinterService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private foodmenuservice: FoodMenuService
   ) {
     this.cartCount$ = this.store.select(selectCartCount);
   }
@@ -75,57 +78,6 @@ export class CartComponent implements OnInit {
     }
     return !(this.cartCount$);
   }
-
-  // submitOrder() {
-  //   this.cart$.pipe(first()).subscribe(cartItems => {
-  //     if (!cartItems.length) {
-  //       this.toastr.warning('Cart is empty!');
-  //       return;
-  //     }
-
-  //     const orderData = {
-  //       tableId: this.orderType === 'Dine-in' ? this.tableNumber : null, // Table required only for Dine-in
-  //       orderType: this.orderType,
-  //       items: cartItems
-  //     };
-
-  //     this.isLoading = true;
-  //     this.cartService.createOrder(orderData).subscribe(
-  //       (response) => {
-  //         console.log(response.printContent)
-  //         this.toastr.success(response.message);
-  //         this.store.dispatch(clearCart()); // ✅ Clears the cart state
-  //         console.log(response.order)
-
-
-  //         this.cartService.printOrder(response.order._id).subscribe((printResponse) => {
-  //           console.log('Print response!', printResponse);
-
-  //           if (printResponse.printContent) {
-  //             this.toastr.success('Printed successfully.');
-  //             console.log('Print content!', printResponse.printContent);
-
-  //             //this.btPrinter.print(printResponse.printContent);
-  //           } else {
-  //             this.toastr.error('Print failed.');
-  //           }
-  //           this.isLoading =false;
-  //         },
-  //           (error) => {
-  //             console.error('Print failed!', error);
-  //             this.toastr.error(error.error?.message);
-  //             this.isLoading =false;
-  //           });
-
-
-  //       },
-  //       (error) => {
-  //         this.toastr.error(error.error.message || 'Failed to create order');
-  //         this.isLoading = false;
-  //       }
-  //     );
-  //   });
-  // }
 
   submitOrder() {
     this.cart$.pipe(first()).subscribe(cartItems => {
@@ -185,6 +137,48 @@ export class CartComponent implements OnInit {
       }
     });
   }
+
+  getAddonTotal(order: CartItem): number {
+    return order.addons?.reduce(
+      (sum, addon) => sum + (addon.price * (addon.qty || 1)),
+      0
+    ) || 0;
+  }
+  editAddons(order: CartItem) {
+    this.foodmenuservice.getfoodbyid(order.id).subscribe((food: any) => {
+      const baseAddons = food?.addons || [];
+
+      // Merge with existing cart addons
+      const enrichedAddons = baseAddons.map((addon: any) => {
+        const existing = order.addons?.find((a: any) => a.name === addon.name);
+        return {
+          ...addon,
+          qty: existing?.qty ?? 1
+        };
+      });
+
+      const dialogRef = this.dialog.open(AddonDialogComponent, {
+        width: '400px',
+        data: {
+          addons: enrichedAddons
+        }
+      });
+
+      dialogRef.afterClosed().subscribe((selectedAddons) => {
+        if (!selectedAddons) return;
+
+        this.store.dispatch(updateCartItem({
+          productId: order.id,
+          quantity: order.selectedQty,
+          addons: selectedAddons
+        }));
+      });
+
+    }, error => {
+      this.toastr.error('Failed to fetch addon info');
+    });
+  }
+
 
 
 }

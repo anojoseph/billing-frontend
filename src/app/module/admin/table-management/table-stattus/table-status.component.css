@@ -15,17 +15,16 @@
 }
 
 .occupied {
-  background-color: #ffebee;
+  background-color: #f32a48;
+  color: white;
 }
 
 .free {
-  background-color: #e8f5e9;
+  background-color: #eaeaea;
 }
 
-.main{
+.main {
   margin: 20px;
   max-height: 88%;
   overflow-y: auto;
 }
-
-

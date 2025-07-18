@@ -1,21 +1,27 @@
-<div class="container p-4" style="height: 90%;overflow-y: auto;">
-    <h2>Printer Configuration</h2>
+<div class="data-card">
+    <h5 class="data-head">Printer Configuration</h5>
+</div>
 
-    <div class="card my-3 p-3">
-        <h3>Billing Printer</h3>
-        <mat-form-field class="w-100">
-            <mat-label>Local Printer Name (USB)</mat-label>
-            <input matInput [(ngModel)]="printerAssignments.billing" placeholder="e.g. HP-USB-Bill-Printer" />
-        </mat-form-field>
+<div class="data-card">
+    <div class=" p-4">
+        <div class="card my-3 p-3">
+            <h3>Billing Printer</h3>
+            <mat-form-field class="w-100">
+                <mat-label>Local Printer Name (USB)</mat-label>
+                <input matInput [(ngModel)]="printerAssignments.billing" placeholder="e.g. HP-USB-Bill-Printer" />
+            </mat-form-field>
+        </div>
+
+        <div *ngFor="let kitchen of kitchens" class="card my-3 p-3">
+            <h3>{{ kitchen.name }}</h3>
+            <mat-form-field class="w-100">
+                <mat-label>Printer IP Address</mat-label>
+                <input matInput [(ngModel)]="printerAssignments.kitchens[kitchen._id]"
+                    placeholder="e.g. 192.168.1.10" />
+            </mat-form-field>
+        </div>
+
+        <button style="float: right;" mat-raised-button color="primary" (click)="saveAssignments()">Save
+            Configuration</button>
     </div>
-
-    <div *ngFor="let kitchen of kitchens" class="card my-3 p-3">
-        <h3>{{ kitchen.name }}</h3>
-        <mat-form-field class="w-100">
-            <mat-label>Printer IP Address</mat-label>
-            <input matInput [(ngModel)]="printerAssignments.kitchens[kitchen._id]" placeholder="e.g. 192.168.1.10" />
-        </mat-form-field>
-    </div>
-
-    <button style="float: right;" mat-raised-button color="primary" (click)="saveAssignments()">Save Configuration</button>
 </div>

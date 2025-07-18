@@ -20,6 +20,7 @@ export class HeaderComponent implements OnInit {
   menuItems: MenuItem[] = [];
   userRole: string | null = null;
   storename: any;
+  currentTime: string = '';
 
   ngOnInit(): void {
     this.userRole = this.authService.getUserType();
@@ -27,6 +28,18 @@ export class HeaderComponent implements OnInit {
     this.settings.getSettings().subscribe((resp: any) => {
       this.storename = resp?.storeName || 'Billing.Com'
     })
+    this.updateTime();
+    setInterval(() => this.updateTime(), 1000);
+  }
+  
+  updateTime() {
+    const now = new Date();
+    this.currentTime = now.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true,
+    });
   }
 
   constructor(

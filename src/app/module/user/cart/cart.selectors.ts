@@ -1,4 +1,4 @@
-import { createSelector, createFeatureSelector } from '@ngrx/store';
+import { createSelector, createFeatureSelector, createAction, props } from '@ngrx/store';
 import { CartState } from './cart.reducer';
 import { CartItem } from './cart.model';
 
@@ -24,10 +24,22 @@ export const selectCartCount = createSelector(
   (state) => state.items.length
 );
 
-
-// Select Cart Total Price (total price for all items in the cart)
 export const selectCartTotalPrice = createSelector(
-  selectCartState,
-  (state) =>
-    state.items.reduce((total, item) => total + item.selectedQty * item.price, 0) // Use selectedQty for price calculation
+  selectCartItems,
+  (items: CartItem[]) =>
+    items.reduce((total, item) => {
+      const addonsTotal = item.addons?.reduce(
+        (sum, addon) => sum + (addon.price * (addon.qty || 1)),
+        0
+      ) || 0;
+
+      const itemTotal = item.price * (item.selectedQty || 1);
+
+      return total + itemTotal + addonsTotal;
+    }, 0)
 );
+
+
+
+
+

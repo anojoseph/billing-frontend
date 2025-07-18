@@ -24,8 +24,13 @@ export class FoodMenuService {
     return this.httpClient.get(`/product/search-product?query=${query}`);
   }
 
-    getSettings() {
+  getSettings() {
     return this.httpClient.get('/settings/general-settings');
   }
+
+  getfoodbyid(id: string) {
+    return this.httpClient.get<any>(`/product/product/${id}`);
+  }
+
 
 }

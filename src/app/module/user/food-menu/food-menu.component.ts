@@ -7,6 +7,9 @@ import { FormControl } from '@angular/forms';
 import { CartItem } from '../cart/cart.model';
 import { Store } from '@ngrx/store';
 import { addToCart } from '../cart/cart.actions';
+import { MatDialog } from '@angular/material/dialog';
+import { AddonDialogComponent } from './addon-dialog.component';
+import { selectCartItems } from '../cart/cart.selectors';
 
 @Component({
   selector: 'app-food-menu',
@@ -25,13 +28,20 @@ export class FoodMenuComponent implements OnInit, OnChanges {
   foodTypes: any;
   searchControl = new FormControl('');
   showqty: boolean = false;
+  cartItems$: CartItem[] = [];
+
 
 
   constructor(
     private toastr: ToastrService,
     private snackBar: MatSnackBar,
     private foodmenuservice: FoodMenuService,
-    private store: Store) { }
+    private store: Store,
+    private dialog: MatDialog,) {
+    this.store.select(selectCartItems).subscribe(items => {
+      this.cartItems$ = items;
+    });
+  }
 
   ngOnChanges() {
   }
@@ -135,29 +145,28 @@ export class FoodMenuComponent implements OnInit, OnChanges {
     }
   }
 
-  onAddToCart(item: any) {
+
+  onAddToCart(item: any, selectedAddons: any[] = []) {
     if (!item.selectedQty || item.selectedQty <= 0) {
       this.toastr.error('Please select a quantity before adding to cart');
       return;
     }
 
-    if (!item._id) {
-      this.toastr.error('Error: Item ID is missing.');
-      return;
-    }
-
     const cartItem: CartItem = {
-      id: item._id, // Ensure ID is properly assigned
+      id: item._id,
       name: item.name,
       price: item.price,
       quantity: item.selectedQty,
       image: item.image || '',
       selectedQty: item.selectedQty,
-    };
-    this.store.dispatch(addToCart({ item: cartItem }));
-    this.toastr.success(`${item.name} added to cart`);
-  }
+      addons: selectedAddons,  // ✅ pass selected addons
+      addonsAvailable: (item.addons && item.addons.length > 0) 
 
+    };
+
+    this.store.dispatch(addToCart({ item: cartItem }));
+    this.toastr.success(`${item.name} added to cart with addons`);
+  }
 
 
 
@@ -186,4 +195,31 @@ export class FoodMenuComponent implements OnInit, OnChanges {
       duration: 3000
     });
   }
+  openAddonDialog(food: any) {
+    // Try to find if item is already in cart
+    const existingCartItem = this.cartItems$.find(i => i.id === food._id);
+
+    // Merge base addons with qty from cart if exists
+    const enrichedAddons = (food.addons || []).map((addon: any) => {
+      const matched = existingCartItem?.addons?.find((a: any) => a.name === addon.name);
+      return {
+        ...addon,
+        qty: matched?.qty ?? 1  // use existing qty or default to 1
+      };
+    });
+
+    const dialogRef = this.dialog.open(AddonDialogComponent, {
+      width: '500px',
+      data: {
+        addons: enrichedAddons
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((selectedAddons: any[]) => {
+      if (selectedAddons && selectedAddons.length > 0) {
+        this.onAddToCart(food, selectedAddons);
+      }
+    });
+  }
+
 }

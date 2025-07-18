@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { ProductService } from './product.service';
@@ -39,7 +39,8 @@ export class ProductCuComponent implements OnInit {
       qty: [''],
       selectedQty: [1],
       image: [''],
-      kitchen: ['']
+      kitchen: [''],
+      addons: this.fb.array([])
     });
   }
 
@@ -52,7 +53,6 @@ export class ProductCuComponent implements OnInit {
 
   getallkitchen() {
     this.productService.getallkitchen().subscribe((resp: any) => {
-      console.log(resp);
       this.kitchens = resp;
     },
       (error) => {
@@ -82,6 +82,7 @@ export class ProductCuComponent implements OnInit {
               kitchen: response?.kitchen
             });
             this.imagePreview = response.image;
+            this.setAddons(response?.addons || []);
           },
           () => this.toastr.error('Error fetching product details')
         );
@@ -92,6 +93,38 @@ export class ProductCuComponent implements OnInit {
   get f() {
     return this.productForm.controls;
   }
+
+  get addonsFormArray(): FormArray {
+    return this.productForm.get('addons') as FormArray;
+  }
+
+  addAddon() {
+    this.addonsFormArray.push(
+      this.fb.group({
+        name: ['', Validators.required],
+        price: ['', [Validators.required, Validators.min(0)]]
+      })
+    );
+  }
+
+  removeAddon(index: number) {
+    this.addonsFormArray.removeAt(index);
+  }
+
+  setAddons(addons: any[]) {
+    const addonsFormArray = this.productForm.get('addons') as FormArray;
+    addonsFormArray.clear(); // Clear previous values if any
+
+    addons.forEach(addon => {
+      addonsFormArray.push(
+        this.fb.group({
+          name: [addon.name, Validators.required],
+          price: [addon.price, [Validators.required, Validators.min(0)]]
+        })
+      );
+    });
+  }
+
 
   private loadFoodTypes() {
     this.productService.getfoodtype().subscribe(
@@ -158,9 +191,16 @@ export class ProductCuComponent implements OnInit {
         const kitchen = this.kitchens.find(kt => kt._id === value);
         formData.append(key, kitchen ? kitchen._id : '');
       }
+      else if (key === 'addons') {
+        // Only send if addons are present
+        if (value && value.length > 0) {
+          formData.append('addons', JSON.stringify(value));
+        }
+      }
       else if (value !== null && value !== undefined) {
         formData.append(key, value);
       }
+
 
     });
 

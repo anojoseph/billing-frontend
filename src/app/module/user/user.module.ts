@@ -9,12 +9,16 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { AddonDialogComponent } from './food-menu/addon-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 
 @NgModule({
   declarations: [
     FoodMenuComponent,
     CartComponent,
+    AddonDialogComponent
   ],
   imports: [
     CommonModule,
@@ -24,7 +28,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatChipsModule,
     MatIconModule,
     MatRadioModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatDialogModule,
+    MatCheckboxModule
   ],
 })
 export class UserModule { }

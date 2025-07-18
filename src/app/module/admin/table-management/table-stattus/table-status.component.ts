@@ -12,6 +12,9 @@ import { MatDialog } from '@angular/material/dialog';
 export class TableStatusComponent implements OnInit {
   tables: any[] = [];
   loading: boolean = false;
+  tableLoading: { [key: string]: boolean } = {};
+
+  
 
   constructor(private tablestatusservice: TableStatusService, private toastr: ToastrService, private dialog: MatDialog) { }
 
@@ -30,28 +33,32 @@ export class TableStatusComponent implements OnInit {
     );
   }
 
-markAsCompleted(orderIds: any[]) {
+markAsCompleted(orderIds: any[], tableId: string) {
+  console.log(orderIds,tableId)
   const dialogRef = this.dialog.open(PaymentTypeDialogComponent, {
     width: '300px',
-    disableClose: true
+    disableClose: true,
   });
 
-  dialogRef.afterClosed().subscribe(paymentType => {
+  dialogRef.afterClosed().subscribe((paymentType) => {
     if (!paymentType) return;
 
-    this.loading = true;
+    this.tableLoading[tableId] = true;
+
     this.tablestatusservice.completeOrder(orderIds[0], paymentType).subscribe(
       (data) => {
         this.toastr.success('Order marked as completed');
         this.getTableStatus();
-        this.loading = false;
       },
       (error) => {
         this.toastr.error(error.message || 'Error completing order');
-        this.loading = false;
+      },
+      () => {
+        this.tableLoading[tableId] = false;
       }
     );
   });
 }
+
 
 }

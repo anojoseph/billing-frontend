@@ -254,3 +254,59 @@
     font-size: 14px; /* Smaller font size for the button */
   }
 }
+/* Add these styles to your existing CSS */
+
+.no-data {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+}
+
+.no-orders-message {
+  text-align: center;
+  font-size: 18px;
+  color: #777;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.no-orders-message img {
+  margin-bottom: 10px;
+}
+
+.no-orders-message p {
+  margin: 0;
+  font-size: 18px;
+  color: #777;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .no-data {
+    height: 50vh;
+  }
+  
+  .no-orders-message {
+    font-size: 16px;
+  }
+  
+  .no-orders-message img {
+    height: 120px;
+    width: 120px;
+  }
+}
+
+@media (max-width: 480px) {
+  .no-orders-message {
+    font-size: 14px;
+  }
+  
+  .no-orders-message img {
+    height: 100px;
+    width: 100px;
+  }
+}

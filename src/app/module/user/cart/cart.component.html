@@ -8,8 +8,33 @@
         <div class="order-details">
           <div class="order-name">{{ order.name }}</div>
           <div class="order-price" style="font-weight: 600;">
-            {{ order.price }} x {{ order.selectedQty }} - ₹{{ (order.price * order.selectedQty).toFixed(2) }}
+            <span *ngIf="order.addons?.length"> ₹{{ (order.price * order.selectedQty).toFixed(2) }} + ₹{{
+              getAddonTotal(order).toFixed(2) }} = ₹{{ (order.price * order.selectedQty +
+              getAddonTotal(order)).toFixed(2) }}</span>
+            <strong *ngIf="!order.addons?.length"> ₹{{order.price }} x {{order.selectedQty}} = ₹{{ (order.price *
+              order.selectedQty + getAddonTotal(order)).toFixed(2) }}</strong>
           </div>
+
+          <div class="order-addons" *ngIf="order?.addonsAvailable">
+            <div *ngIf="order.addons?.length; else noAddons">
+              <div *ngFor="let addon of order.addons" style="font-size: 13px; color: #555;">
+                • {{ addon.name }} ({{ addon.qty }} x ₹{{ addon.price }}) = ₹{{ addon.qty * addon.price }}
+              </div>
+              <button class="btn btn-sm btn-outline-danger" (click)="editAddons(order)">
+                <i class="fa fa-pencil"></i> Edit Addons
+              </button>
+            </div>
+
+            <ng-template #noAddons>
+              <button class="btn btn-sm btn-outline-primary" (click)="editAddons(order)">
+                <i class="fa fa-plus"></i> Addons
+              </button>
+            </ng-template>
+          </div>
+
+
+
+
         </div>
 
         <div class="quantity-control">
@@ -50,17 +75,17 @@
       <button class="btn btn-success btn-sm" [disabled]="checkoutDisabled() || isLoading" (click)="submitOrder()"
         style="min-width: 150px;text-align: center;display: flex;justify-content: center;">
         <span *ngIf="!isLoading"> <i class="fa fa-check" aria-hidden="true"></i> Checkout </span>
-        <span *ngIf="isLoading"> <mat-spinner color="warn" diameter="20"></mat-spinner> </span>
+        <span *ngIf="isLoading"> <mat-spinner diameter="20"></mat-spinner> </span>
       </button>
     </div>
 
   </div>
+  <div *ngIf="(cartCount$ | async)?.toString() === '0'" class="no-data">
+    <div class="no-orders-message">
+      <img src="./assets/images/emptycart.png" alt="" height="150px" width="150px">
+      <p>No items in the cart.</p>
+    </div>
+  </div>
 </div>
 
 <!-- Cart Empty Section -->
-<div *ngIf="(cartCount$ | async)?.toString() === '0'" class="no-data">
-  <div class="no-orders-message">
-    <img src="./assets/images/emptycart.png" alt="" height="150px" width="150px">
-    <p>No items in the cart.</p>
-  </div>
-</div>
