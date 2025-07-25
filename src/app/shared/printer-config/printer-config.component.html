@@ -6,22 +6,89 @@
     <div class=" p-4">
         <div class="card my-3 p-3">
             <h3>Billing Printer</h3>
-            <mat-form-field class="w-100">
-                <mat-label>Local Printer Name (USB)</mat-label>
-                <input matInput [(ngModel)]="printerAssignments.billing" placeholder="e.g. HP-USB-Bill-Printer" />
-            </mat-form-field>
+            <div class="printer-row">
+                <mat-form-field class="w-100">
+                    <mat-label>Local Printer Name (USB)</mat-label>
+                    <input matInput [(ngModel)]="printerAssignments.billing" placeholder="e.g. HP-USB-Bill-Printer" />
+                </mat-form-field>
+                <span class="status-dot" [ngClass]="{
+        'available': printerAssignments.billing && printerStatus[printerAssignments.billing],
+        'unavailable': printerAssignments.billing && printerStatus[printerAssignments.billing] === false
+      }">
+                </span>
+            </div>
         </div>
+
+
+        <div class="card my-3 p-3">
+            <h3>Token Printer</h3>
+            <div class="printer-row">
+                <mat-form-field class="w-100">
+                    <mat-label>Local Printer Name (USB)</mat-label>
+                    <input matInput [(ngModel)]="printerAssignments.token" placeholder="e.g. HP-USB-Bill-Printer" />
+                </mat-form-field>
+                <span class="status-dot" [ngClass]="{
+        'available': printerAssignments.token && printerStatus[printerAssignments.token],
+        'unavailable': printerAssignments.token && printerStatus[printerAssignments.token] === false
+      }">
+                </span>
+            </div>
+        </div>
+
 
         <div *ngFor="let kitchen of kitchens" class="card my-3 p-3">
             <h3>{{ kitchen.name }}</h3>
-            <mat-form-field class="w-100">
-                <mat-label>Printer IP Address</mat-label>
-                <input matInput [(ngModel)]="printerAssignments.kitchens[kitchen._id]"
-                    placeholder="e.g. 192.168.1.10" />
-            </mat-form-field>
+            <div class="printer-row">
+                <mat-form-field class="w-100">
+                    <mat-label>Printer IP Address</mat-label>
+                    <input matInput [(ngModel)]="printerAssignments.kitchens[kitchen._id]"
+                        placeholder="e.g. 192.168.1.10" />
+                </mat-form-field>
+                <span class="status-dot" [ngClass]="{
+        'available': printerAssignments.kitchens[kitchen._id] && printerStatus[printerAssignments.kitchens[kitchen._id]],
+        'unavailable': printerAssignments.kitchens[kitchen._id] && printerStatus[printerAssignments.kitchens[kitchen._id]] === false
+      }">
+                </span>
+            </div>
         </div>
 
-        <button style="float: right;" mat-raised-button color="primary" (click)="saveAssignments()">Save
-            Configuration</button>
+
+        <div style="display: flex;text-align: center;justify-content: center;">
+            <button mat-raised-button color="primary" (click)="saveAssignments()" style="width: 200px;"
+                [disabled]="loading">
+                <span *ngIf="!loading">Save Configuration</span>
+                <mat-spinner *ngIf="loading" diameter="20" strokeWidth="4"></mat-spinner>
+            </button>
+        </div>
+
     </div>
 </div>
+
+<style>
+    .status-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        margin-left: 8px;
+        display: inline-block;
+    }
+
+    .available {
+        background-color: #4caf50;
+        /* green */
+    }
+
+    .unavailable {
+        background-color: #f44336;
+        /* red */
+    }
+
+    .printer-row {
+        display: flex;
+        align-items: center;
+    }
+
+    .printer-row mat-form-field {
+        flex: 1;
+    }
+</style>
