@@ -11,8 +11,12 @@ export class TableStatusService {
     return this.httpClient.get('/table/table-status')
   }
 
-  completeOrder(orderId: string, paymentType: string) {
-    return this.httpClient.put(`/order/${orderId}/complete`, { paymentType });
+  completeOrder(orderId: string, payload: {
+    paymentType: string;
+    discountType?: 'percentage' | 'amount';
+    discountValue?: number;
+  }) {
+    return this.httpClient.put(`/order/${orderId}/complete`, payload);
   }
 
 }

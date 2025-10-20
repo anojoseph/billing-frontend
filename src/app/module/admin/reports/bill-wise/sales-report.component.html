@@ -40,23 +40,58 @@
             <th style="text-align: center;">Bill No</th>
             <th style="text-align: center;">Date</th>
             <th style="text-align: center;">Amount</th>
+            <th style="text-align: center;">Discount</th>
+            <th style="text-align: center;">Tax</th>
+            <th style="text-align: center;">Grand Total</th>
             <th>Type</th>
             <th style="text-align: center;">Payment Type</th>
           </tr>
         </thead>
+
         <tbody *ngIf="billdata.length > 0">
           <tr *ngFor="let item of billdata; let i=index">
             <td style="text-align: center;">{{i+1}}</td>
             <td style="text-align: center;">{{item?.billNumber}}</td>
-            <td style="text-align: center;">{{item.createdAt | date}}</td>
+            <td style="text-align: center;">{{item.createdAt | date:'dd/MM/yyyy'}}</td>
             <td style="text-align: center;">{{item?.totalAmount | currency:'INR'}}</td>
+
+            <!-- ✅ Discount -->
+            <td style="text-align: center;">
+              <ng-container *ngIf="item.discountAmount > 0">
+                <span *ngIf="item.discountType === 'percentage'">
+                  {{item.discountValue}}% (₹{{item.discountAmount}})
+                </span>
+                <span *ngIf="item.discountType === 'amount'">
+                  ₹{{item.discountAmount}}
+                </span>
+              </ng-container>
+              <ng-container *ngIf="!item.discountAmount || item.discountAmount === 0">-</ng-container>
+            </td>
+
+            <!-- ✅ Tax -->
+            <td style="text-align: center;">
+              <ng-container *ngIf="item.taxAmount">
+                ₹{{item.taxAmount | number:'1.2-2'}}
+              </ng-container>
+              <ng-container *ngIf="!item.taxAmount">-</ng-container>
+            </td>
+
+            <!-- ✅ Grand Total -->
+            <td style="text-align: center;">{{item?.grandTotal | currency:'INR'}}</td>
+
             <td>{{item?.type}}</td>
             <td style="text-align: center;">{{item?.paymentType || '-'}}</td>
           </tr>
+
           <tr>
-            <td colspan="4" style="text-align: center;font-weight: 600;">Total</td>
-            <td style="font-weight: 600;" colspan="2">{{total?.totalAmount | currency:'INR'}}</td>
+            <td colspan="3" style="text-align: center; font-weight: 600;">Total</td>
+            <td style="font-weight: 600;text-align: center;">{{total?.totalAmount | currency:'INR'}}</td>
+            <td style="font-weight: 600;text-align: center;">-{{total?.totalDiscount | currency:'INR'}}</td>
+            <td style="font-weight: 600;text-align: center;">{{total?.totalTax | currency:'INR'}}</td>
+            <td style="font-weight: 600;text-align: center;">{{total?.grandTotal | currency:'INR'}}</td>
+            <td colspan="2"></td>
           </tr>
+
         </tbody>
         <tbody *ngIf="billdata.length < 1">
           <tr>

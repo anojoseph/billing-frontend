@@ -310,3 +310,23 @@
     width: 100px;
   }
 }
+
+.g_total{
+  font-size: large;
+}
+
+.g_total_amount{
+  font-size:x-large;
+  font-weight: 600;
+  color:darkcyan ;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0; /* Removes extra space that might be left by the arrows */
+}
+
+/* For Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}

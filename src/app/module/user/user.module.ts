@@ -12,6 +12,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AddonDialogComponent } from './food-menu/addon-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatOptionModule } from "@angular/material/core";
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatRadioModule,
     MatProgressSpinnerModule,
     MatDialogModule,
-    MatCheckboxModule
-  ],
+    MatCheckboxModule,
+    MatOptionModule
+],
 })
 export class UserModule { }

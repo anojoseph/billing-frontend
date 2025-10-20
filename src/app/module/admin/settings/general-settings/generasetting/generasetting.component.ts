@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SettingsService } from './generasettings.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-generasetting',
@@ -14,7 +15,10 @@ export class GenerasettingComponent implements OnInit {
   isLoading = false; // Loader flag
   availablePorts: any[] = [];
 
-  constructor(private fb: FormBuilder, private settingsService: SettingsService) { }
+  constructor(
+    private fb: FormBuilder,
+    private settingsService: SettingsService,
+    private toastrservice: ToastrService) { }
 
   ngOnInit() {
     this.settingsForm = this.fb.group({
@@ -26,7 +30,19 @@ export class GenerasettingComponent implements OnInit {
       accept_qr_booking: [''],
       show_available_qty: [false],
       auto_print_bill: [false],
-      auto_print_kot: [false]
+      auto_print_kot: [false],
+      auto_print_token: [false],
+      tax_status: [false],
+      sgst: [''],
+      cgst: [''],
+      igst: [''],
+      storeAddress: [''],
+      storeContact: [''],
+      gstNumber: [''],
+      gst_available: [false],
+      fssai_available: [false],
+      fssai_number: [''],
+      whatsapp: ['']
     });
 
     this.loadSettings();
@@ -45,7 +61,19 @@ export class GenerasettingComponent implements OnInit {
             accept_qr_booking: data?.accept_qr_booking,
             show_available_qty: data?.show_available_qty,
             auto_print_bill: data?.auto_print_bill,
-            auto_print_kot: data?.auto_print_kot
+            auto_print_kot: data?.auto_print_kot,
+            auto_print_token: data?.auto_print_token,
+            tax_status: data?.tax_status,
+            sgst: data?.sgst,
+            cgst: data?.cgst,
+            igst: data?.igst,
+            storeAddress: data.storeAddress ?? '',
+            storeContact: data.storeContact ?? '',
+            gstNumber: data.gstNumber ?? '',
+            gst_available: data.gst_available ?? false,
+            fssai_available: data.fssai_available ?? false,
+            fssai_number: data.fssai_number ?? '',
+            whatsapp: data.whatsapp ?? ''
           });
 
           this.logoUrl = data.logo ? data.logo : null;
@@ -91,18 +119,27 @@ export class GenerasettingComponent implements OnInit {
       formData.append('show_available_qty', this.settingsForm.get('show_available_qty')?.value);
       formData.append('auto_print_bill', this.settingsForm.get('auto_print_bill')?.value);
       formData.append('auto_print_kot', this.settingsForm.get('auto_print_kot')?.value);
-
-
-
+      formData.append('auto_print_token', this.settingsForm.get('auto_print_token')?.value);
+      formData.append('tax_status', this.settingsForm.get('tax_status')?.value);
+      formData.append('cgst', this.settingsForm.get('cgst')?.value);
+      formData.append('sgst', this.settingsForm.get('sgst')?.value);
+      formData.append('igst', this.settingsForm.get('igst')?.value);
+      formData.append('storeAddress', this.settingsForm.get('storeAddress')?.value);
+      formData.append('storeContact', this.settingsForm.get('storeContact')?.value);
+      formData.append('gstNumber', this.settingsForm.get('gstNumber')?.value);
+      formData.append('gst_available', this.settingsForm.get('gst_available')?.value);
+      formData.append('fssai_available', this.settingsForm.get('fssai_available')?.value);
+      formData.append('fssai_number', this.settingsForm.get('fssai_number')?.value);
+      formData.append('whatsapp', this.settingsForm.get('whatsapp')?.value);
 
       if (this.selectedFile) {
         formData.append('logo', this.selectedFile);
       }
 
       this.settingsService.updateSettings(formData).subscribe(() => {
-        alert('Settings updated successfully!');
         this.isLoading = false; // Hide loader
         this.loadSettings();
+        this.toastrservice.success("Updated successfully...!")
       });
     }
   }

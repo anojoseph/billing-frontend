@@ -26,7 +26,6 @@
     "@ngrx/store": "^16.3.0",
     "@ngrx/store-devtools": "^16.3.0",
     "bootstrap": "^5.3.3",
-    "ng-thermal-print": "^1.0.3",
     "ngx-spinner": "^17.0.0",
     "ngx-toastr": "^19.0.0",
     "rxjs": "~7.8.0",

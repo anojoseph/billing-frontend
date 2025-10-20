@@ -11,6 +11,9 @@ import { TableComponent } from './tables/table.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TableStatusComponent } from './table-stattus/table-status.component';
 import { MatCardModule } from '@angular/material/card';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 @NgModule({
   declarations: [
@@ -28,7 +31,11 @@ import { MatCardModule } from '@angular/material/card';
     MatSelectModule,
     TableManagementRoutingModule,
     MatProgressSpinnerModule,
-    MatCardModule
+    MatCardModule,
+    MatSlideToggleModule,
+    MatButtonModule,
+    MatSlideToggleModule,
+    MatButtonToggleModule
   ]
 })
 export class TableManagementModule { }

@@ -1,95 +1,121 @@
-<mat-card class="bill-card">
+<mat-card class="bill-card p-4" style="max-height: 95%;">
   <div class="bill-container">
-    <h2 class="title">Update Bill</h2>
+    <h2 class="title mb-4">Update Bill</h2>
 
-    <form [formGroup]="billForm" class="search-section">
-      <div class="row align-items-end" style="width: 100%;">
-        <div class="col-md-4">
-          <label class="form-label">Bill Number</label>
-          <input class="form-control" formControlName="billNumber" placeholder="Search by Bill No" />
+    <form [formGroup]="billForm">
+      <!-- Bill Number Search -->
+      <div class="row align-items-end mb-3">
+        <div class="col-md-5">
+          <label class="form-label fw-bold">Bill Number</label>
+          <div class="input-group">
+            <input class="form-control" formControlName="billNumber" placeholder="Search by Bill No" />
+            <button class="btn btn-primary" type="button" (click)="fetchBill()">
+              <mat-icon>search</mat-icon>
+            </button>
+          </div>
         </div>
-        <div class="col-md-2">
-          <button class="btn btn-primary search-btn" type="button" (click)="fetchBill()">
-            <i class="fa fa-search"></i> Search
+      </div>
+
+      <div *ngIf="isLoading" class="text-center mb-3">
+        <mat-spinner diameter="35"></mat-spinner>
+      </div>
+
+      <!-- Bill Items Table -->
+      <div *ngIf="items.length > 0" class="table-responsive">
+        <table class="table table-bordered align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Product</th>
+              <th>Qty</th>
+              <th>Price</th>
+              <th>Total</th>
+              <th>Addons</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody formArrayName="items">
+            <tr *ngFor="let item of items.controls; let i=index" [formGroupName]="i">
+              <td>
+                <select class="form-select" formControlName="productId" (change)="updateProductName(i)">
+                  <option value="">-- Select --</option>
+                  <option *ngFor="let product of products" [value]="product._id">{{product.name}}</option>
+                </select>
+              </td>
+              <td><input type="number" class="form-control" formControlName="quantity" (input)="updateTotal()" /></td>
+              <td><input type="number" class="form-control" formControlName="price" (input)="updateTotal()" /></td>
+              <td><input class="form-control fw-bold" readonly formControlName="totalPrice" /></td>
+              <td>
+                <div formArrayName="addons">
+                  <div *ngFor="let addon of getAddons(i).controls; let j=index" [formGroupName]="j"
+                    class="d-flex mb-1 align-items-center gap-1">
+                    <input class="form-control" formControlName="name" placeholder="Addon Name" />
+                    <input type="number" class="form-control" style="width:70px" formControlName="qty"
+                      (input)="updateTotal()" />
+                    <input type="number" class="form-control" style="width:90px" formControlName="price"
+                      (input)="updateTotal()" />
+                    <button type="button" class="btn btn-danger btn-sm" (click)="removeAddon(i,j)">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+                  <button type="button" class="btn btn-outline-success btn-sm mt-1" (click)="addAddon(i)">
+                    <mat-icon>add</mat-icon> Add Addon
+                  </button>
+                </div>
+              </td>
+              <td class="text-center">
+                <button type="button" class="btn btn-outline-danger btn-sm" (click)="removeItem(i)">
+                  <mat-icon>delete_forever</mat-icon>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <button type="button" class="btn btn-success btn-sm" (click)="addItem()">
+          <i class="fa fa-plus"></i> Add Product
+        </button>
+
+        <!-- Discounts and Taxes -->
+        <div class="row g-3 mb-3">
+          <div class="col-md-3">
+            <label class="form-label fw-bold">Discount Type</label>
+            <select class="form-select" formControlName="discountType" (change)="updateTotal()">
+              <option value="amount">Amount</option>
+              <option value="percentage">%</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label fw-bold">Discount Value</label>
+            <input type="number" class="form-control" formControlName="discountValue" (input)="updateTotal()" />
+          </div>
+          <div class="col-md-2">
+            <label class="form-label fw-bold">CGST (%)</label>
+            <input type="number" class="form-control" formControlName="cgst" readonly />
+          </div>
+          <div class="col-md-2">
+            <label class="form-label fw-bold">SGST (%)</label>
+            <input type="number" class="form-control" formControlName="sgst" readonly />
+          </div>
+          <div class="col-md-2">
+            <label class="form-label fw-bold">IGST (%)</label>
+            <input type="number" class="form-control" formControlName="igst" readonly />
+          </div>
+        </div>
+
+        <!-- Totals -->
+        <div class="totals border p-3 rounded mb-3">
+          <p><b>Subtotal:</b> ₹{{ totalAmount | number:'1.2-2' }}</p>
+          <p><b>Discount:</b> ₹{{ discountAmount | number:'1.2-2' }}</p>
+          <p><b>Tax:</b> ₹{{ taxAmount | number:'1.2-2' }}</p>
+          <p class="grand-total"><b>Grand Total:</b> ₹{{ grandTotal | number:'1.2-2' }}</p>
+        </div>
+
+        <div class="d-flex justify-content-end">
+          <button class="btn btn-primary btn-sm" (click)="updateBill()">
+            <i class="fa fa-floppy-o"></i> Update Bill
           </button>
         </div>
       </div>
     </form>
-
-    <div *ngIf="isLoading" class="loading-spinner" style="text-align: center;">
-      <mat-spinner diameter="10"></mat-spinner>
-    </div>
-
-    <div *ngIf="bill">
-      <p class="bill-info"><strong>Bill Number:</strong> {{ bill.billNumber }}</p>
-
-      <form [formGroup]="billForm">
-        <div formArrayName="items" class="table-responsive">
-          <table class="table bill-table table-bordered">
-            <thead>
-              <tr>
-                <th>Product Name</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Total Price</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let item of items.controls; let i=index" [formGroupName]="i">
-                <td>
-                  <select class="form-control" formControlName="productId" (change)="updateProductName(i)">
-                    <option value="">Select Product</option>
-                    <option *ngFor="let product of products" [value]="product._id">
-                      {{ product.name }}
-                    </option>
-                  </select>
-                </td>
-                <td><input class="form-control" type="number" formControlName="quantity" (input)="updateTotal()" /></td>
-                <td><input class="form-control" type="number" readonly formControlName="price" /></td>
-                <td><input class="form-control" formControlName="totalPrice" readonly /></td>
-                <td>
-                  <div class="action-buttons">
-                    <button class="btn btn-danger btn-sm" type="button" *ngIf="items.length > 1"
-                      (click)="removeItem(i)">
-                      <i class="fa fa-trash"></i>
-                    </button>
-                    <button class="btn btn-primary btn-sm add-btn" (click)="addItem()" *ngIf="i === items.length - 1">
-                      <i class="fa fa-plus"></i>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="pull-left" style="width: max-content;">
-          <div class="form-group">
-            <label for="paymentType">Payment Type</label>
-            <select class="form-control" formControlName="paymentType">
-              <option value="">Select Payment Type</option>
-              <option value="Cash">Cash</option>
-              <option value="Card">Card</option>
-              <option value="UPI">UPI</option>
-              <option value="Zomato">Zomato</option>
-              <option value="Swiggy">Swiggy</option>
-            </select>
-          </div>
-        </div>
-
-      </form>
-
-
-      <p class="total-amount"><strong>Total Amount: ₹{{ totalAmount }}</strong></p>
-
-      <div class="pull-right">
-
-        <button class="btn btn-success btn-sm" [disabled]="billForm.invalid" (click)="updateBill()"><i
-            class="fa fa-check" aria-hidden="true"></i> Update
-          Bill</button>
-        <button class="btn btn-sm btn-danger" (click)="deletebill()"><i class="fa fa-trash" aria-hidden="true"></i>
-          Delete</button>
-      </div>
-    </div>
   </div>
 </mat-card>

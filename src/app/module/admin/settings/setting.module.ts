@@ -11,6 +11,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
+import {MatTabsModule} from '@angular/material/tabs';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,9 @@ import { MatIconModule } from '@angular/material/icon';
     MatCardModule,
     MatSlideToggleModule,
     MatProgressSpinnerModule,
-    MatIconModule
+    MatIconModule,
+    MatTabsModule,
+    MatDividerModule
   ]
 })
 export class SettingsModule { }

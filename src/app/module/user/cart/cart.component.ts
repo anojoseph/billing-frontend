@@ -11,6 +11,9 @@ import { PaymentTypeDialogComponent } from '../payment-dialog/payment-type-dialo
 import { MatDialog } from '@angular/material/dialog';
 import { AddonDialogComponent } from '../food-menu/addon-dialog.component';
 import { FoodMenuService } from '../food-menu/foodmenu.service';
+import { SettingsService } from '../../admin/settings/general-settings/generasetting/generasettings.service';
+
+
 
 @Component({
   selector: 'app-cart',
@@ -27,6 +30,18 @@ export class CartComponent implements OnInit {
   cartCount$: Observable<number>;
   orderType: string = 'Bill';
   isLoading: boolean = false;
+  discountType: 'percentage' | 'amount' = 'percentage';
+  discountValue: number = 0;
+  finalTotalPrice: number = 0;
+  taxAmount: number = 0;
+  sgst: number = 0;
+  cgst: number = 0;
+  grandTotal: number = 0;
+  finalTotal: number = 0;
+  roundOff: number = 0;
+  public Math = Math;
+  taxstatus: any;
+
 
   constructor(
     private store: Store,
@@ -34,14 +49,34 @@ export class CartComponent implements OnInit {
     private cartService: cartService,
     private btPrinter: BluetoothPrinterService,
     private dialog: MatDialog,
-    private foodmenuservice: FoodMenuService
+    private foodmenuservice: FoodMenuService,
+    private settingsService: SettingsService
   ) {
     this.cartCount$ = this.store.select(selectCartCount);
   }
 
   ngOnInit(): void {
     this.gettables();
+    this.loadTaxSettings();
   }
+
+  loadTaxSettings() {
+    this.settingsService.getSettings().subscribe(
+      (data: any) => {
+        this.taxstatus = data?.tax_status || false;
+        if (data && data?.tax_status) {
+          this.sgst = data.sgst ?? 0;
+          this.cgst = data.cgst ?? 0;
+          this.taxAmount = this.sgst + this.cgst;
+        }
+      },
+      (error) => {
+        this.toastr.error('Failed to load tax settings');
+        console.error('Settings error:', error);
+      }
+    );
+  }
+
 
   gettables() {
     this.cartService.gettables().subscribe(
@@ -91,14 +126,27 @@ export class CartComponent implements OnInit {
           tableId: this.orderType === 'Dine-in' ? this.tableNumber : null,
           orderType: this.orderType,
           items: cartItems,
-          ...(paymentType && { paymentType }) // only include if exists
+          ...(paymentType && { paymentType }), // only include if exists
+          ...(this.orderType !== 'Dine-in' && this.discountValue > 0 && {
+            discountType: this.discountType,
+            discountValue: this.discountValue
+          })
         };
+
 
         this.isLoading = true;
         this.cartService.createOrder(orderData).subscribe(
           (response) => {
             this.toastr.success(response.message);
             this.store.dispatch(clearCart());
+
+            const order = response.order;
+            this.taxAmount = order.taxAmount || 0;
+            this.sgst = order.sgst || 0;
+            this.cgst = order.cgst || 0;
+            this.grandTotal = order.grandTotal || 0;
+            this.finalTotal = Math.round(this.grandTotal);
+            this.roundOff = this.finalTotal - this.grandTotal;
 
             this.cartService.printOrder(response.order._id).subscribe(
               (printResponse) => {
@@ -127,7 +175,7 @@ export class CartComponent implements OnInit {
       } else {
         // 🟩 For Takeaway and Bill: Ask for payment type
         const dialogRef = this.dialog.open(PaymentTypeDialogComponent, {
-          width: '300px',
+          width: '500px',
           disableClose: true
         });
 
@@ -145,6 +193,7 @@ export class CartComponent implements OnInit {
       0
     ) || 0;
   }
+
   editAddons(order: CartItem) {
     this.foodmenuservice.getfoodbyid(order.id).subscribe((food: any) => {
       const baseAddons = food?.addons || [];
@@ -179,6 +228,49 @@ export class CartComponent implements OnInit {
       this.toastr.error('Failed to fetch addon info');
     });
   }
+
+  getDiscountedTotal(originalTotal: number): number {
+    if (this.discountType === 'percentage') {
+      const discountAmount = (this.discountValue / 100) * originalTotal;
+      return Math.max(originalTotal - discountAmount, 0); // prevent negative
+    } else {
+      return Math.max(originalTotal - this.discountValue, 0);
+    }
+  }
+
+  getEstimatedTaxBreakdown(total: number) {
+    // Step 1: Apply tax first
+    const sgstAmount = (this.sgst / 100) * total;
+    const cgstAmount = (this.cgst / 100) * total;
+    const taxAmount = sgstAmount + cgstAmount;
+
+    const taxedTotal = total + taxAmount;
+
+    // Step 2: Apply discount on taxed amount
+    let discountAmount = 0;
+    if (this.discountType === 'percentage') {
+      discountAmount = (this.discountValue / 100) * taxedTotal;
+    } else {
+      discountAmount = this.discountValue;
+    }
+
+    const grandTotal = Math.max(taxedTotal - discountAmount, 0);
+    const roundOff = Math.round(grandTotal) - grandTotal;
+    const finalTotal = Math.round(grandTotal);
+
+    return {
+      taxedTotal,
+      sgstAmount,
+      cgstAmount,
+      taxAmount,
+      discountAmount,
+      grandTotal,
+      roundOff,
+      finalTotal
+    };
+  }
+
+
 
 
 

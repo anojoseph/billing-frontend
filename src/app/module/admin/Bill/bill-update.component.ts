@@ -1,8 +1,8 @@
-// bill-update.component.ts
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { SettingsService } from '../settings/general-settings/generasetting/generasettings.service';
 
 @Component({
   selector: 'app-bill-update',
@@ -10,212 +10,278 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./bill-update.component.css']
 })
 export class BillUpdateComponent implements OnInit {
-  billForm: FormGroup;
+  billForm!: FormGroup;
   products: any[] = [];
-  bill: any = null;
-  displayedColumns = ['productName', 'quantity', 'price', 'totalPrice', 'actions'];
-  totalAmount: number = 0;
-  isLoading: boolean = false;
-  filteredProducts: any[][] = [];
+  totalAmount = 0;
+  discountAmount = 0;
+  taxAmount = 0;
+  grandTotal = 0;
+  isLoading = false;
+  sgst: any = 0;
+  cgst: any = 0;
+  igst: any = 0;
+  taxstatus: any;
+  fetchedCgst = 0;
+  fetchedSgst = 0;
+  fetchedIgst = 0;
+  fetchedSubtotal = 0;
+
 
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
-    private snackBar: MatSnackBar
-  ) {
-    this.billForm = this.fb.group({
-      billNumber: ['', Validators.required],
-      paymentType: ['', Validators.required], // ✅ Add this line
-      items: this.fb.array([])
-    });
+    private snackBar: MatSnackBar,
+    private settingsService: SettingsService
+  ) { }
+
+  ngOnInit(): void {
+    this.initializeForm();
+    this.loadProducts();
+    this.loadTaxSettings();
   }
 
-  ngOnInit() {
-    this.fetchProducts();
-    this.addItem();
+  loadTaxSettings() {
+    this.settingsService.getSettings().subscribe(
+      (data: any) => {
+        this.taxstatus = data?.tax_status || false;
+        if (data && data?.tax_status) {
+          this.sgst = data.sgst ?? 0;
+          this.cgst = data.cgst ?? 0;
+          this.igst = data.igst ?? 0;
+          this.taxAmount = this.sgst + this.cgst;
+        }
+      },
+      (error) => {
+        console.error('Settings error:', error);
+      }
+    );
+  }
+
+  initializeForm() {
+    this.billForm = this.fb.group({
+      billNumber: ['', Validators.required],
+      paymentType: ['', Validators.required],
+      discountType: ['amount'],
+      discountValue: [0],
+      cgst: [0],
+      sgst: [0],
+      igst: [0],
+      tax_status: [false],
+      items: this.fb.array([])
+    });
   }
 
   get items(): FormArray {
     return this.billForm.get('items') as FormArray;
   }
 
-  fetchProducts() {
-    this.http.get('/product/product').subscribe(
-      (response: any) => {
-        this.products = response;
+  createItemFormGroup(item: any = {}): FormGroup {
+    const group = this.fb.group({
+      id: [item.id || ''],
+      productId: [item.id || '', Validators.required],
+      productName: [{ value: item.productName || '', disabled: true }],
+      quantity: [item.quantity || 1, [Validators.required, Validators.min(1)]],
+      price: [item.price || 0, Validators.required],
+      totalPrice: [{ value: item.totalPrice || 0, disabled: true }],
+      addons: this.fb.array(
+        (item.addons || []).map((addon: any) =>
+          this.fb.group({
+            name: [addon.name],
+            qty: [addon.qty],
+            price: [addon.price],
+            total: [{ value: addon.qty * addon.price, disabled: true }]
+          })
+        )
+      )
+    });
 
-      },
-      (error) => console.error('Error fetching products:', error)
+    // Recalculate totals whenever quantity or price changes
+    group.get('quantity')?.valueChanges.subscribe(() => this.updateTotal());
+    group.get('price')?.valueChanges.subscribe(() => this.updateTotal());
+
+    // Recalculate totals whenever any addon changes
+    (group.get('addons') as FormArray).controls.forEach((addon) => {
+      addon.get('qty')?.valueChanges.subscribe(() => this.updateTotal());
+      addon.get('price')?.valueChanges.subscribe(() => this.updateTotal());
+    });
+
+    return group;
+  }
+
+  getAddons(i: number): FormArray {
+    return this.items.at(i).get('addons') as FormArray;
+  }
+
+  addAddon(i: number) {
+    this.getAddons(i).push(
+      this.fb.group({
+        name: [''],
+        qty: [1],
+        price: [0],
+        total: [{ value: 0, disabled: true }]
+      })
+    );
+    this.updateTotal();
+  }
+
+  removeAddon(i: number, j: number) {
+    this.getAddons(i).removeAt(j);
+    this.updateTotal();
+  }
+
+  addItem() {
+    this.items.push(this.createItemFormGroup());
+    this.updateTotal();
+  }
+
+  removeItem(i: number) {
+    this.items.removeAt(i);
+    this.updateTotal();
+  }
+
+  loadProducts() {
+    this.http.get('/product/product').subscribe(
+      (res: any) => (this.products = res),
+      (err) => console.error('Error fetching products', err)
     );
   }
 
   fetchBill() {
     const billNumber = this.billForm.get('billNumber')?.value;
     if (!billNumber) {
-      this.snackBar.open('Please enter a bill number.', 'Close', { duration: 3000 });
+      this.snackBar.open('Enter Bill Number', 'Close', { duration: 3000 });
       return;
     }
 
     this.isLoading = true;
     this.http.get(`/order/${billNumber}`).subscribe(
-      (response: any) => {
-        this.bill = response.bill;
-        this.populateBill(response.bill);
+      (res: any) => {
+        const bill = res.bill;
+        this.populateBill(bill);
         this.isLoading = false;
       },
-      (error) => {
-        this.snackBar.open('Bill not found.', 'Close', { duration: 3000 });
+      (err) => {
         this.isLoading = false;
+        this.snackBar.open('Bill not found', 'Close', { duration: 3000 });
       }
     );
   }
 
   populateBill(bill: any) {
-    while (this.items.length) {
-      this.items.removeAt(0);
-    }
+    while (this.items.length) this.items.removeAt(0);
+    bill.items.forEach((item: any) => this.items.push(this.createItemFormGroup(item)));
 
-    if (bill.items && Array.isArray(bill.items) && bill.items.length > 0) {
-      bill.items.forEach((item: any) => {
-        const formGroup = this.createItemFormGroup({
-          id: item.id,
-          productId: item.id,
-          quantity: item.quantity,
-          price: item.price,
-          totalPrice: item.totalPrice
-        });
-        this.items.push(formGroup);
-        this.updateProductName(this.items.length - 1);
-      });
-    } else {
-      this.addItem();
-    }
-    this.updateTotal();
     this.billForm.patchValue({
-      paymentType: bill.orderId.paymentType || ''
+      paymentType: bill.paymentType,
+      discountType: bill.discountType || 'amount',
+      discountValue: bill.discountValue || 0,
+      cgst: bill.cgst || 0,
+      sgst: bill.sgst || 0,
+      igst: bill.igst || 0,
+      tax_status: bill.tax_status || false
     });
+
+    // Save the fetched tax percentages
+    this.fetchedCgst = bill.cgst || 0;
+    this.fetchedSgst = bill.sgst || 0;
+    this.fetchedIgst = bill.igst || 0;
+
+    // Save backend totals
+    this.fetchedSubtotal = bill.totalAmount || 0;
+
+    this.totalAmount = bill.totalAmount || 0;
+    this.discountAmount = bill.discountAmount || 0;
+    this.taxAmount = bill.taxAmount || 0;
+    this.grandTotal = bill.grandTotal || 0;
   }
 
-  createItemFormGroup(item: any = {}): FormGroup {
-    return this.fb.group({
-      id: [item.id || ''],
-      productId: [item.productId || '', Validators.required],
-      productName: [{ value: item.productName || '', disabled: true }],
-      quantity: [item.quantity || 1, [Validators.required, Validators.min(1)]],
-      price: [item.price || 0, [Validators.required, Validators.min(0)]],
-      totalPrice: [{ value: item.totalPrice || 0, disabled: true }]
-    });
-  }
 
-  updateProductName(index: number) {
-    const productId = this.items.at(index).get('productId')?.value;
+
+  updateProductName(i: number) {
+    const productId = this.items.at(i).get('productId')?.value;
     const product = this.products.find(p => p._id === productId);
     if (product) {
-      this.items.at(index).patchValue({
-        id: product._id,
-        productName: product.name,
-        price: product.price || 0
-      });
-      this.updateTotal();
+      this.items.at(i).patchValue({ productName: product.name, price: product.price });
     }
-  }
-
-  addItem() {
-    this.items.push(this.createItemFormGroup());
-    this.updateTotal();
-    this.filteredProducts.push([...this.products]); // Initialize filtered list
-  }
-
-  removeItem(index: number) {
-    this.items.removeAt(index);
     this.updateTotal();
   }
 
-  filterProducts(index: number) {
-    const searchValue = this.items.at(index).get('productSearch')?.value.toLowerCase();
-    this.filteredProducts[index] = this.products.filter(product =>
-      product.name.toLowerCase().includes(searchValue)
-    );
-  }
+  updateTotal() {
+    let subtotal = 0;
 
-  selectProduct(product: any, index: number) {
-    this.items.at(index).patchValue({
-      productId: product._id,
-      productSearch: product.name,
-      price: product.price,
-      totalPrice: product.price
+    // Calculate subtotal including addons
+    this.items.controls.forEach((item, i) => {
+      const quantity = item.get('quantity')?.value || 0;
+      const price = item.get('price')?.value || 0;
+      const addons = this.getAddons(i).getRawValue();
+      const addonsTotal = addons.reduce((sum: number, a: any) => sum + a.qty * a.price, 0);
+
+      const itemTotal = quantity * price + addonsTotal;
+      item.patchValue({ totalPrice: itemTotal }, { emitEvent: false });
+
+      subtotal += itemTotal;
     });
+
+    this.totalAmount = subtotal;
+
+    // Calculate discount
+    const discountType = this.billForm.get('discountType')?.value;
+    const discountValue = this.billForm.get('discountValue')?.value || 0;
+    this.discountAmount = discountType === 'percentage' ? (subtotal * discountValue) / 100 : discountValue;
+
+    // Taxable amount
+    const taxable = subtotal;
+
+    // Calculate tax strictly using backend percentages
+    const cgstAmount = (taxable * this.cgst) / 100;
+    const sgstAmount = (taxable * this.sgst) / 100;
+    const igstAmount = (taxable * this.igst) / 100;
+
+    this.billForm.patchValue({ cgst: cgstAmount, sgst: sgstAmount, igst: igstAmount })
+
+    this.taxAmount = cgstAmount + sgstAmount + igstAmount;
+
+    // Grand total
+    this.grandTotal = taxable + this.taxAmount;
+
+    // Round values
+    this.totalAmount = Math.round(this.totalAmount * 100) / 100;
+    this.discountAmount = Math.round(this.discountAmount * 100) / 100;
+    this.taxAmount = Math.round(this.taxAmount * 100) / 100;
+    this.grandTotal = Math.round(this.grandTotal - this.discountAmount);
   }
 
   updateBill() {
     if (this.billForm.invalid) {
-      this.snackBar.open('Please correct the errors in the form.', 'Close', { duration: 3000 });
+      this.snackBar.open('Please correct form errors', 'Close', { duration: 3000 });
       return;
     }
 
-    const items = this.items.getRawValue().map(item => ({
-      id: item.productId,  // Use productId as the id
-      quantity: item.quantity,
-      price: item.price
-    }));
-
-    const updatedBill = {
-      billNumber: this.billForm.get('billNumber')?.value,
-      paymentType: this.billForm.get('paymentType')?.value,
-      items: items
+    const formValue = this.billForm.getRawValue();
+    const payload = {
+      billNumber: formValue.billNumber,
+      paymentType: formValue.paymentType,
+      discountType: formValue.discountType,
+      discountValue: formValue.discountValue,
+      cgst: formValue.cgst,
+      sgst: formValue.sgst,
+      igst: formValue.igst,
+      tax_status: formValue.tax_status,
+      items: formValue.items.map((item: any) => ({
+        id: item.productId,
+        quantity: item.quantity,
+        price: item.price,
+        addons: item.addons.map((a: any) => ({
+          name: a.name,
+          qty: a.qty,
+          price: a.price
+        }))
+      }))
     };
 
-    this.http.put(`/order/${updatedBill.billNumber}/update`, updatedBill).subscribe(
-      (response: any) => {
-        this.snackBar.open('Bill updated successfully!', 'Close', { duration: 3000 });
-        this.fetchBill();
-      },
-      (error) => {
-        console.error('Error updating bill:', error);
-        this.snackBar.open(error.error.message || 'Error updating bill', 'Close', { duration: 3000 });
-      }
+    this.http.put(`/order/${payload.billNumber}/update`, payload).subscribe(
+      () => this.snackBar.open('Bill updated successfully!', 'Close', { duration: 3000 }),
+      (err) => this.snackBar.open(err.error.message || 'Update failed', 'Close', { duration: 3000 })
     );
   }
-
-  updateTotal() {
-    let total = 0;
-    this.items.controls.forEach((item) => {
-      const quantity = item.get('quantity')?.value || 0;
-      const price = item.get('price')?.value || 0;
-      const totalPrice = quantity * price;
-
-      item.patchValue({
-        totalPrice: totalPrice
-      }, { emitEvent: false });
-
-      total += totalPrice;
-    });
-    this.totalAmount = total;
-  }
-
-  deletebill() {
-    const billNumber = this.billForm.get('billNumber')?.value;
-
-    if (!billNumber) {
-      this.snackBar.open('Please enter a Bill Number to delete', 'Close', { duration: 3000 });
-      return;
-    }
-
-    const confirmation = window.confirm(`Are you sure you want to delete bill ${billNumber}?`);
-
-    if (confirmation) {
-      this.http.delete(`/order/${billNumber}/delete`).subscribe(
-        (response: any) => {
-          this.snackBar.open('Bill deleted successfully!', 'Close', { duration: 3000 });
-          this.billForm.reset();
-          this.bill = null;
-        },
-        (error) => {
-          console.error('Error deleting bill:', error);
-          this.snackBar.open(error.error.message || 'Error deleting bill', 'Close', { duration: 3000 });
-        }
-      );
-    }
-  }
-
 }

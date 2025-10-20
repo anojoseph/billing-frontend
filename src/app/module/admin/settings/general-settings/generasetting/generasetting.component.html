@@ -1,71 +1,268 @@
-<mat-card class="data-card">
-  <mat-card-title class="card-title">General Settings</mat-card-title>
+<mat-card class="settings-card " style="max-height: 85%;overflow-y: auto;">
+  <mat-card-header>
+    <mat-card-title class="card-title">
+      <mat-icon class="title-icon">settings</mat-icon>
+      General Settings
+    </mat-card-title>
+    <mat-card-subtitle>Configure your store preferences</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-divider></mat-divider>
+
   <mat-card-content>
     <form [formGroup]="settingsForm" (ngSubmit)="saveSettings()">
+      <mat-tab-group mat-stretch-tabs class="settings-tab-group">
+        <!-- Store Settings Tab -->
+        <mat-tab label="Store">
+          <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">store</mat-icon>
+            Store
+          </ng-template>
 
-      <div class="logo-container">
-        <img *ngIf="logoUrl" [src]="logoUrl" alt="Store Logo" class="store-logo" />
+          <div class="tab-content">
+            <div class="logo-section">
+              <div class="logo-container">
+                <div class="logo-preview">
+                  <img *ngIf="logoUrl" [src]="logoUrl" alt="Store Logo" class="store-logo" />
+                  <mat-icon *ngIf="!logoUrl" class="logo-placeholder">photo_camera</mat-icon>
+                </div>
+                <div class="logo-actions">
+                  <button *ngIf="logoUrl" mat-stroked-button color="primary" (click)="removeImage()">
+                    <mat-icon>cached</mat-icon> Change
+                  </button>
+                  <button *ngIf="!logoUrl" mat-stroked-button color="primary" class="upload-btn">
+                    <label for="logoUpload" class="upload-label">
+                      <mat-icon>cloud_upload</mat-icon> Upload Logo
+                    </label>
+                    <input id="logoUpload" type="file" (change)="onFileChange($event)" accept=".png, .jpg, .jpeg" />
+                  </button>
+                </div>
+              </div>
+            </div>
 
-        <button *ngIf="logoUrl" mat-button color="primary" class="change-image-btn" (click)="removeImage()">
-          Change Image
-        </button>
-      </div>
+            <div class="form-grid">
+              <!-- Store Name -->
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Store Name</mat-label>
+                <input matInput type="text" formControlName="storeName" />
+                <mat-icon matSuffix>storefront</mat-icon>
+              </mat-form-field>
 
-      <div class="file-upload" *ngIf="!logoUrl">
-        <label for="logoUpload" class="upload-label">Upload Logo</label>
-        <input id="logoUpload" type="file" (change)="onFileChange($event)" accept=".png, .jpg, .jpeg" />
-      </div>
+              <!-- Status -->
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Status</mat-label>
+                <mat-select formControlName="status">
+                  <mat-option [value]="true">
+                    <span class="status-active">Active</span>
+                  </mat-option>
+                  <mat-option [value]="false">
+                    <span class="status-inactive">Inactive</span>
+                  </mat-option>
+                </mat-select>
+                <mat-icon matSuffix>power_settings_new</mat-icon>
+              </mat-form-field>
 
-      <hr />
+              <!-- Printer Port -->
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Printer Port</mat-label>
+                <mat-select formControlName="printerPort">
+                  <mat-option *ngFor="let port of availablePorts" [value]="port.path">
+                    {{ port.path }} — {{ port.friendlyName }}
+                  </mat-option>
+                  <mat-option [disabled]="true" *ngIf="availablePorts.length < 1">
+                    <span class="no-printer">No printer connected</span>
+                  </mat-option>
+                </mat-select>
+                <mat-icon matSuffix>print</mat-icon>
+              </mat-form-field>
 
-      <div class="form-grid">
+              <!-- Toggles -->
+              <div class="toggle-container">
+                <mat-slide-toggle formControlName="stockUpdate" color="primary">
+                  <div class="toggle-label">
+                    <mat-icon>inventory_2</mat-icon>
+                    Stock Update Needed
+                  </div>
+                </mat-slide-toggle>
+              </div>
 
-        
-        <mat-form-field appearance="outline">
-          <mat-label>Store Name</mat-label>
-          <input matInput type="text" formControlName="storeName" />
-        </mat-form-field>
+              <div class="toggle-container">
+                <mat-slide-toggle formControlName="accept_qr_booking" color="primary">
+                  <div class="toggle-label">
+                    <mat-icon>qr_code</mat-icon>
+                    Booking through QR
+                  </div>
+                </mat-slide-toggle>
+              </div>
 
-        <!-- Status -->
-        <mat-form-field appearance="outline">
-          <mat-label>Status</mat-label>
-          <mat-select formControlName="status">
-            <mat-option [value]="true">Active</mat-option>
-            <mat-option [value]="false">Inactive</mat-option>
-          </mat-select>
-        </mat-form-field>
+              <div class="toggle-container">
+                <mat-slide-toggle formControlName="show_available_qty" color="primary">
+                  <div class="toggle-label">
+                    <mat-icon>visibility</mat-icon>
+                    Show Available Qty
+                  </div>
+                </mat-slide-toggle>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Printer Port</mat-label>
-          <mat-select formControlName="printerPort">
-            <mat-option *ngFor="let port of availablePorts" [value]="port.path">
-              {{ port.path }} — {{ port.friendlyName }}
-            </mat-option>
+        <!-- Print Settings Tab -->
+        <mat-tab label="Print">
+          <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">print</mat-icon>
+            Print
+          </ng-template>
 
-            <mat-option [disabled]="true" *ngIf="availablePorts.length < 1">NO Printer connected </mat-option>
-          </mat-select>
-        </mat-form-field>
+          <div class="tab-content">
+            <div class="print-settings-grid">
+              <div class="toggle-container">
+                <mat-slide-toggle formControlName="auto_print_kot" color="primary">
+                  <div class="toggle-label">
+                    <mat-icon>receipt</mat-icon>
+                    Auto print KOT
+                  </div>
+                </mat-slide-toggle>
+              </div>
 
+              <div class="toggle-container">
+                <mat-slide-toggle formControlName="auto_print_bill" color="primary">
+                  <div class="toggle-label">
+                    <mat-icon>receipt_long</mat-icon>
+                    Auto print bill
+                  </div>
+                </mat-slide-toggle>
+              </div>
 
-        <!-- Stock Update -->
-        <br>
-        <mat-slide-toggle formControlName="stockUpdate">Stock Update Needed</mat-slide-toggle>
-        <mat-slide-toggle formControlName="accept_qr_booking">Booking through QR</mat-slide-toggle>
-        <mat-slide-toggle formControlName="show_available_qty">Show Available Qty</mat-slide-toggle>
-        <mat-slide-toggle formControlName="auto_print_kot">Auto print KOT</mat-slide-toggle>
-        <mat-slide-toggle formControlName="auto_print_bill">Auto print bill</mat-slide-toggle>
-      </div>
+              <div class="toggle-container">
+                <mat-slide-toggle formControlName="auto_print_token" color="primary">
+                  <div class="toggle-label">
+                    <mat-icon>confirmation_number</mat-icon>
+                    Auto print token
+                  </div>
+                </mat-slide-toggle>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
 
-      <hr />
+        <!-- Tax Settings Tab -->
+        <mat-tab label="Tax">
+          <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">receipt_long</mat-icon>
+            Tax
+          </ng-template>
 
-      <!-- Submit Button with Loader -->
+          <div class="tab-content">
+            <div class="tax-settings-grid">
+              <div class="toggle-container">
+                <mat-slide-toggle formControlName="tax_status" color="primary">
+                  <div class="toggle-label">
+                    <mat-icon>paid</mat-icon>
+                    Include Tax
+                  </div>
+                </mat-slide-toggle>
+              </div>
+
+              <mat-form-field appearance="outline" class="tax-field">
+                <mat-label>SGST %</mat-label>
+                <input matInput type="number" formControlName="sgst" placeholder="Enter sgst %" />
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="tax-field">
+                <mat-label>CGST %</mat-label>
+                <input matInput type="number" formControlName="cgst" placeholder="Enter cgst %" />
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="tax-field">
+                <mat-label>IGST %</mat-label>
+                <input matInput type="number" formControlName="igst" placeholder="Enter igst %" />
+              </mat-form-field>
+            </div>
+          </div>
+        </mat-tab>
+
+        <!-- Add this to your mat-tab-group after the existing tabs -->
+        <mat-tab label="Store Details">
+          <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">business</mat-icon>
+            Store Details
+          </ng-template>
+
+          <div class="tab-content">
+            <div class="form-grid">
+              <!-- Store Address -->
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Store Address</mat-label>
+                <textarea matInput formControlName="storeAddress" rows="3"></textarea>
+                <mat-icon matSuffix>location_on</mat-icon>
+              </mat-form-field>
+
+              <!-- Store Contact -->
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Store Contact</mat-label>
+                <input matInput type="text" formControlName="storeContact" />
+                <mat-icon matSuffix>phone</mat-icon>
+              </mat-form-field>
+
+              <!-- WhatsApp Number -->
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>WhatsApp Number</mat-label>
+                <input matInput type="number" min="1" formControlName="whatsapp" />
+                <mat-icon matSuffix>whatsapp</mat-icon>
+              </mat-form-field>
+
+              <!-- GST Available -->
+              <div class="toggle-container">
+                <mat-slide-toggle formControlName="gst_available" color="primary">
+                  <div class="toggle-label">
+                    <mat-icon>receipt</mat-icon>
+                    GST Available
+                  </div>
+                </mat-slide-toggle>
+              </div>
+
+              <!-- GST Number -->
+              <mat-form-field appearance="outline" class="form-field" *ngIf="settingsForm.get('gst_available')?.value">
+                <mat-label>GST Number</mat-label>
+                <input matInput type="text" formControlName="gstNumber" />
+                <mat-icon matSuffix>assignment</mat-icon>
+              </mat-form-field>
+
+              <!-- FSSAI Available -->
+              <div class="toggle-container">
+                <mat-slide-toggle formControlName="fssai_available" color="primary">
+                  <div class="toggle-label">
+                    <mat-icon>restaurant</mat-icon>
+                    FSSAI Available
+                  </div>
+                </mat-slide-toggle>
+              </div>
+
+              <!-- FSSAI Number -->
+              <mat-form-field appearance="outline" class="form-field"
+                *ngIf="settingsForm.get('fssai_available')?.value">
+                <mat-label>FSSAI Number</mat-label>
+                <input matInput type="text" formControlName="fssai_number" />
+                <mat-icon matSuffix>assignment</mat-icon>
+              </mat-form-field>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+
+      <mat-divider></mat-divider>
+
+      <!-- Submit Button -->
       <div class="button-container">
-        <button mat-raised-button color="primary" type="submit" [disabled]="settingsForm.invalid || isLoading">
+        <button mat-raised-button color="primary" type="submit" [disabled]="settingsForm.invalid || isLoading"
+          class="submit-btn">
           <mat-spinner *ngIf="isLoading" diameter="20"></mat-spinner>
-          <span *ngIf="!isLoading">Save Settings</span>
+          <span *ngIf="!isLoading">
+            <mat-icon>save</mat-icon> Save Settings
+          </span>
         </button>
       </div>
-
     </form>
   </mat-card-content>
 </mat-card>
