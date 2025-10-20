@@ -76,7 +76,7 @@ export class TableStatusComponent implements OnInit {
 
   markAsCompleted(orderIds: any[], tableId: string) {
     const dialogRef = this.dialog.open(PaymentTypeDialogComponent, {
-      width: '300px',
+      width: '400px',
       disableClose: true,
     });
 

@@ -57,9 +57,7 @@ export class PrinterConfigComponent implements OnInit {
     }
 
     checkprinter() {
-        console.log(this.printerAssignments.billing)
         if (this.printerAssignments.billing) {
-            console.log(this.printerAssignments.billing)
             this.checkPrinterStatus(this.printerAssignments.billing);
         }
         if (this.printerAssignments.token) {
@@ -72,7 +70,6 @@ export class PrinterConfigComponent implements OnInit {
     }
 
     checkPrinterStatus(printerName: string) {
-        console.log("it s")
         if (!printerName) return;
 
         this.http.get<{ available: boolean }>(`/settings/printer-config/status?name=${printerName}`).subscribe({

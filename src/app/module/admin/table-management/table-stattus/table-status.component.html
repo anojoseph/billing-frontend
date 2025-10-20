@@ -1,71 +1,72 @@
-<mat-card class="data-card">
+<mat-card class="data-card" style="max-height: 85%;">
   <div class="table-status-container">
-    <h2 style="text-align: center;">Table Status</h2>
+    <h2 class="page-title">🍽️ Table Status</h2>
+
     <div class="tables">
-      <mat-card *ngFor="let table of tables"
-                [ngClass]="{'occupied': table.status === 'occupied', 'free': table.status === 'free'}"
-                class="table-card">
+      <mat-card *ngFor="let table of tables" [ngClass]="{
+          occupied: table.status === 'occupied',
+          free: table.status === 'free'
+        }" class="table-card">
         <mat-card-header>
-          <mat-card-title>{{ table.tableName || table?.tableNumber }}</mat-card-title>
+          <mat-card-title>
+            {{ table.tableName || table?.tableNumber }}
+          </mat-card-title>
         </mat-card-header>
 
         <mat-card-content>
-          <p *ngIf="table.status === 'occupied'">
-            Current Bill: ₹{{ table.currentBill | number:'1.2-2' }}
+          <p *ngIf="table.status === 'occupied'" class="current-bill">
+            💰 Current Bill: <strong>₹{{ table.currentBill | number:'1.2-2' }}</strong>
           </p>
 
-          <!-- ✅ Discount Input -->
-          <div *ngIf="table.status === 'occupied'" style="margin-bottom: 10px;">
-            <label>Discount Type:</label>
-            <mat-button-toggle-group
-              [(ngModel)]="tableDiscounts[table.tableId].discountType"
-              appearance="legacy"
-              style="margin: 5px 0;">
-              <mat-button-toggle value="percentage">%</mat-button-toggle>
-              <mat-button-toggle value="amount">₹</mat-button-toggle>
-            </mat-button-toggle-group>
+          <!-- Discount Section -->
+          <div *ngIf="table.status === 'occupied'" class="discount-section">
+            <div class="discount-type">
+              <label>Discount Type:</label>
+              <mat-button-toggle-group [(ngModel)]="tableDiscounts[table.tableId].discountType" appearance="legacy">
+                <mat-button-toggle value="percentage">%</mat-button-toggle>
+                <mat-button-toggle value="amount">₹</mat-button-toggle>
+              </mat-button-toggle-group>
+            </div>
 
-            <div style="margin-top: 5px;">
+            <div class="discount-value">
               <label>Discount Value:</label>
-              <input type="number"
-                     [(ngModel)]="tableDiscounts[table.tableId].discountValue"
-                     min="0"
-                     class="form-control"
-                     style="width: 100px;" />
+              <input type="number" [(ngModel)]="tableDiscounts[table.tableId].discountValue" min="0"
+                class="form-control" placeholder="Enter value" />
             </div>
           </div>
 
-          <!-- ✅ Bill Breakdown -->
+          <!-- Bill Breakdown -->
           <ng-container *ngIf="table.status === 'occupied' && getBillBreakdown(table.currentBill, table.tableId) as b">
-            <p *ngIf="taxstatus">SGST ({{ sgst }}%): ₹{{ b.sgstAmount.toFixed(2) }}</p>
-            <p *ngIf="taxstatus">CGST ({{ cgst }}%): ₹{{ b.cgstAmount.toFixed(2) }}</p>
-            <p *ngIf="taxstatus"><strong>Tax Total:</strong> ₹{{ b.taxTotal.toFixed(2) }}</p>
+            <div class="bill-breakdown">
+              <p *ngIf="taxstatus">🧾 SGST ({{ sgst }}%): ₹{{ b.sgstAmount.toFixed(2) }}</p>
+              <p *ngIf="taxstatus">🧾 CGST ({{ cgst }}%): ₹{{ b.cgstAmount.toFixed(2) }}</p>
+              <p *ngIf="taxstatus"><strong>Total Tax:</strong> ₹{{ b.taxTotal.toFixed(2) }}</p>
 
-            <p *ngIf="b.discountAmount > 0">
-              Discount:
-              <span *ngIf="tableDiscounts[table.tableId]?.discountType === 'percentage'">
-                {{ tableDiscounts[table.tableId].discountValue }}% = ₹{{ b.discountAmount.toFixed(2) }}
-              </span>
-              <span *ngIf="tableDiscounts[table.tableId]?.discountType === 'amount'">
-                ₹{{ b.discountAmount.toFixed(2) }}
-              </span>
-            </p>
+              <p *ngIf="b.discountAmount > 0" class="discount-line">
+                💸 Discount:
+                <span *ngIf="tableDiscounts[table.tableId]?.discountType === 'percentage'">
+                  {{ tableDiscounts[table.tableId].discountValue }}% = ₹{{ b.discountAmount.toFixed(2) }}
+                </span>
+                <span *ngIf="tableDiscounts[table.tableId]?.discountType === 'amount'">
+                  ₹{{ b.discountAmount.toFixed(2) }}
+                </span>
+              </p>
 
-            <p><strong>Total after Discount:</strong> ₹{{ b.discountedAmount.toFixed(2) }}</p>
-            <p *ngIf="b.roundOff !== 0"><strong>Round Off:</strong> ₹{{ b.roundOff.toFixed(2) }}</p>
-            <p><strong>Total Payable:</strong> ₹{{ b.finalTotal.toFixed(2) }}</p>
+              <p><strong>Total after Discount:</strong> ₹{{ b.discountedAmount.toFixed(2) }}</p>
+              <p *ngIf="b.roundOff !== 0"><strong>Round Off:</strong> ₹{{ b.roundOff.toFixed(2) }}</p>
+              <p class="final-total"><strong>Total Payable:</strong> ₹{{ b.finalTotal.toFixed(2) }}</p>
+            </div>
           </ng-container>
         </mat-card-content>
 
-        <mat-card-actions *ngIf="table.status === 'occupied'">
-          <button class="btn btn-sm btn-success" style="width: 100%;"
-                  (click)="markAsCompleted(table.orderIds, table.tableId)"
-                  [disabled]="tableLoading[table.tableId]">
+        <mat-card-actions *ngIf="table.status === 'occupied'" class="card-actions">
+          <button style="width: 100%;" class="btn btn-primary" (click)="markAsCompleted(table.orderIds, table.tableId)"
+            [disabled]="tableLoading[table.tableId]">
             <span *ngIf="tableLoading[table.tableId]">
               <mat-progress-spinner diameter="20" mode="indeterminate"></mat-progress-spinner>
             </span>
             <span *ngIf="!tableLoading[table.tableId]">
-              Mark as Completed <i class="fa fa-check" aria-hidden="true"></i>
+              <i class="fa fa-check"></i> Mark as Completed
             </span>
           </button>
         </mat-card-actions>

@@ -14,12 +14,17 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule, NativeDateModule } from '@angular/material/core';
 import { ItemWiseSalesReportComponent } from './itemwise/sales-report.component';
 import { DayWiseReportComponent } from './day-wise/day-wise-report.component';
+import { BillEditReportComponent } from './bill-edit/bill-edit-report.component';
+import { BillHistoryModalComponent } from './bill-edit/bill-history-modal.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
     SalesReportComponent,
     ItemWiseSalesReportComponent,
-    DayWiseReportComponent
+    DayWiseReportComponent,
+    BillEditReportComponent,
+    BillHistoryModalComponent
   ],
   imports: [
     CommonModule,
@@ -34,7 +39,8 @@ import { DayWiseReportComponent } from './day-wise/day-wise-report.component';
     MatCardModule,
     MatTableModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatDialogModule
   ]
 })
 export class reportModule { }

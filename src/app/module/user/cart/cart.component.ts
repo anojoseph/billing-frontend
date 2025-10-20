@@ -150,7 +150,6 @@ export class CartComponent implements OnInit {
 
             this.cartService.printOrder(response.order._id).subscribe(
               (printResponse) => {
-                console.log(printResponse)
                 if (printResponse.printContent) {
                   this.toastr.success('Printed successfully.');
                 }

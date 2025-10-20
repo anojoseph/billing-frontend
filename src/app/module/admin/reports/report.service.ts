@@ -11,7 +11,7 @@ export class ReportService {
     return this.httpClient.get(`/reports/daily-report?startDate=${startDate}&endDate=${endDate}`);
   }
 
-  
+
   geitemwisetreport(startDate: string, endDate: string) {
     return this.httpClient.get(`/reports/item-report?startDate=${startDate}&endDate=${endDate}`);
   }
@@ -19,4 +19,14 @@ export class ReportService {
   getDaywisetreport(startDate: string, endDate: string) {
     return this.httpClient.get(`/reports/day-report?startDate=${startDate}&endDate=${endDate}`);
   }
+
+  getBillEditReport(startDate: string, endDate: string) {
+    return this.httpClient.get<any>(`/reports/bill-edit-report?startDate=${startDate}&endDate=${endDate}`);
+  }
+
+  getBillHistory(billNumber: string) {
+  return this.httpClient.get<any>(`/reports/edit/${billNumber}`);
+}
+
+
 }

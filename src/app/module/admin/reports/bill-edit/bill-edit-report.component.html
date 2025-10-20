@@ -1,0 +1,65 @@
+<mat-card class="data-table-card" style="margin: 10px; max-height: 85%; overflow-y: auto;">
+    <div class="container">
+        <h2>Bill Edit History Report</h2>
+        <form [formGroup]="filterForm" (ngSubmit)="generateReport()">
+            <div class="row">
+                <div class="col-md-3">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Start Date</mat-label>
+                        <input matInput [matDatepicker]="startPicker" formControlName="startDate" />
+                        <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+                        <mat-datepicker #startPicker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                    <mat-form-field appearance="outline">
+                        <mat-label>End Date</mat-label>
+                        <input matInput [matDatepicker]="endPicker" formControlName="endDate" />
+                        <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+                        <mat-datepicker #endPicker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-1" style="margin-top: 10px;">
+                    <button mat-raised-button style="width: 100%;" color="primary" type="submit" [disabled]="loading">
+                        <span *ngIf="!loading">Generate</span>
+                        <mat-spinner *ngIf="loading" diameter="20px" color="primary"></mat-spinner>
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <div *ngIf="showTable">
+            <hr>
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Bill No</th>
+                        <th>Edit Date</th>
+                        <th>Edited By</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="historyData.length > 0">
+                    <tr *ngFor="let item of historyData; let i=index">
+                        <td>{{i+1}}</td>
+                        <td>{{item.billNumber}}</td>
+                        <td>{{item.editedAt | date:'dd/MM/yyyy hh:mm:ss a'}}</td>
+                        <td>{{item.editedBy || '-'}}</td>
+                        <td>
+                            <button mat-raised-button color="primary" (click)="viewHistory(item?.billNumber)">
+                                View
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+                <tbody *ngIf="historyData.length < 1">
+                    <tr>
+                        <td colspan="5" style="text-align: center;color: red;">No edit history found</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</mat-card>

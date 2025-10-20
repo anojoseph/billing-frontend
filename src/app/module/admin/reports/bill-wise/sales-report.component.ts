@@ -43,7 +43,6 @@ export class SalesReportComponent implements OnInit {
     this.loading = true;
     this.reportService.getreport(startDate, endDate).subscribe((response: any) => {
 
-      console.log(response)
       this.billdata = response.bills;
       this.total = response.summary;
       this.loading = false;

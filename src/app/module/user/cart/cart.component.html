@@ -54,7 +54,7 @@
   <div class="checkout" *ngIf="cart && cart.length >= 1;">
 
     <div class="order-type">
-      <mat-radio-group [(ngModel)]="orderType">
+      <mat-radio-group [(ngModel)]="orderType" color="primary">
         <mat-radio-button value="Bill">Bill</mat-radio-button>
         <mat-radio-button value="Dine-in">Dine-in</mat-radio-button>
         <mat-radio-button value="Takeaway">Takeaway</mat-radio-button>
@@ -83,21 +83,14 @@
       </div>
 
       <div style="display: flex; align-items: center; gap: 10px;">
-        <mat-form-field appearance="outline" style="width: 100%;">
+        <mat-form-field style="width: 100%;">
           <mat-label>Discount Value</mat-label>
-
-          <!-- Use matPrefix for icon before input -->
           <mat-icon matPrefix *ngIf="discountType == 'percentage'">percentage</mat-icon>
           <mat-icon matPrefix *ngIf="discountType == 'amount'">currency_rupee</mat-icon>
-
           <input matInput type="number" placeholder="Discount Value" [(ngModel)]="discountValue" min="0" />
         </mat-form-field>
       </div>
 
-
-      <!-- <p style="margin-top: 10px;" *ngIf="(cartTotalPrice$ | async) as total">
-        <strong>Discounted Total:</strong> ₹{{ getDiscountedTotal(total).toFixed(2) }}
-      </p> -->
     </div>
 
 
@@ -105,13 +98,17 @@
       <div class="tax-breakdown" *ngIf="orderType !== 'Dine-in'">
         <ng-container *ngIf="getEstimatedTaxBreakdown(total) as estimate">
           <p><strong>Subtotal:</strong> ₹{{ total.toFixed(2) }}</p>
-          <p *ngIf="taxstatus" >
-            <strong>SGST ({{ sgst }}%):</strong> ₹{{ estimate.sgstAmount.toFixed(2) }}
-            <strong>CGST ({{ cgst }}%):</strong> ₹{{ estimate.cgstAmount.toFixed(2) }}
+          <p *ngIf="taxstatus">
+            <strong>SGST ({{ sgst }}%):</strong> <span style="color: green;"> + ₹{{ estimate.sgstAmount.toFixed(2)
+              }}</span>
           </p>
-          <p *ngIf="taxstatus"><strong>Total Tax:</strong> ₹{{ estimate.taxAmount.toFixed(2) }}</p>
-          <p *ngIf="discountValue"><strong>Discount:</strong> -₹{{ estimate.discountAmount.toFixed(2) }}</p>
-          <p><strong>Grand Total:</strong> ₹{{ estimate.grandTotal.toFixed(2) }}</p>
+          <p>
+            <strong>CGST ({{ cgst }}%):</strong> <span style="color: green;">
+              + ₹{{ estimate.cgstAmount.toFixed(2) }}
+            </span>
+          </p>
+          <p *ngIf="discountValue"><strong>Discount:</strong> <span style="color: red;"> -₹{{
+              estimate.discountAmount.toFixed(2) }}</span> </p>
           <p *ngIf="estimate.roundOff !== 0"><strong>Round Off:</strong> ₹{{ estimate.roundOff.toFixed(2) }}</p>
           <p class="g_total"><strong>Total Payable:</strong> <span class="g_total_amount"> ₹{{
               estimate.finalTotal.toFixed(2) }} </span> </p>
