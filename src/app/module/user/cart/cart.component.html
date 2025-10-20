@@ -102,7 +102,7 @@
             <strong>SGST ({{ sgst }}%):</strong> <span style="color: green;"> + ₹{{ estimate.sgstAmount.toFixed(2)
               }}</span>
           </p>
-          <p>
+          <p *ngIf="taxstatus">
             <strong>CGST ({{ cgst }}%):</strong> <span style="color: green;">
               + ₹{{ estimate.cgstAmount.toFixed(2) }}
             </span>
