@@ -6,7 +6,6 @@ import { selectCartCount, selectCartItems, selectCartTotal, selectCartTotalPrice
 import { clearCart, removeFromCart, updateCartItem } from './cart.actions';
 import { CartItem } from './cart.model';
 import { cartService } from './cart.service'
-import { BluetoothPrinterService } from '../../printer/bluetooth-printer.service';
 import { PaymentTypeDialogComponent } from '../payment-dialog/payment-type-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { AddonDialogComponent } from '../food-menu/addon-dialog.component';
@@ -47,7 +46,6 @@ export class CartComponent implements OnInit {
     private store: Store,
     private toastr: ToastrService,
     private cartService: cartService,
-    private btPrinter: BluetoothPrinterService,
     private dialog: MatDialog,
     private foodmenuservice: FoodMenuService,
     private settingsService: SettingsService
